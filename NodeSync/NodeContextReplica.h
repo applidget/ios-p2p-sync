@@ -6,16 +6,9 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "NodeContext.h"
+#import "NodeContextSecondary.h"
 
-@interface NodeContextReplica : NodeContext <NSNetServiceDelegate, NSNetServiceBrowserDelegate> {
-@private
-  NSNetServiceBrowser *serviceBrowser;
-  NSNetService *foundService;
-  
-}
+@interface NodeContextReplica : NodeContextSecondary
 
-@property (nonatomic, retain) NSNetServiceBrowser *serviceBrowser;
-@property (nonatomic, retain) NSNetService *foundService;
 
 @end

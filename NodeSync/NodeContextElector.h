@@ -1,13 +1,13 @@
 //
-//  NodeContextMaster.h
+//  NodeContextElector.h
 //  NodeSync
 //
 //  Created by Robin on 16/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "NodeContextPrimary.h"
+#import "NodeContextSecondary.h"
 
-@interface NodeContextMaster : NodeContextPrimary
+@interface NodeContextElector : NodeContextSecondary
 
 @end

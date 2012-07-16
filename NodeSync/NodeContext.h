@@ -9,11 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "NodeSync.h"
 #import "GCDAsyncSocket.h"
-#import "NodeData.h"
 
 #define DEFAULT_TIMEOUT 5
 
-@interface NodeContext : NSObject <GCDAsyncSocketDelegate> {
+@interface NodeContext : NSObject <GCDAsyncSocketDelegate, NSNetServiceDelegate> {
 @protected
   NodeSync *manager;
   GCDAsyncSocket *socket;
@@ -26,6 +25,6 @@
 - (id) initWithManager:(NodeSync *) _manager;
 - (void) activate;
 - (void) unactivate;
-- (void) pushData:(NSData *) data;
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag;
 
 @end

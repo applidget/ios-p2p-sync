@@ -19,38 +19,29 @@
   return self;
 }
 
-- (void) activate {
-
-}
-
-- (void) unactivate {
-  
-}
-
-- (void) pushData:(NSData *)data {
-  [self.socket writeData:data withTimeout:DEFAULT_TIMEOUT tag:0];
-}
-
 #pragma mark - GCDAsyncSocketDelegateProtcol
 - (void) socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  NSLog(@"writting data");
+  [self.manager didWritePartialDataOfLength:partialLength tag:tag];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
-  NSLog(@"data wrote");
+  [self.manager didWriteDataWithTag:tag];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
-  NSLog(@"Data read");
-  [self.manager didReadData:data];
+  [self.manager didReadData:data withTag:tag];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  NSLog(@"is reading data");
+  [self.manager didReadPartialDataOfLength:partialLength tag:tag];
 }
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-  NSLog(@"socket disconnected");
+  NSLog(@"socket did disconnect");
+}
+
+- (void) socketDidCloseReadStream:(GCDAsyncSocket *)sock {
+  NSLog(@"lost read stream");
 }
 
 #pragma mark - memory management

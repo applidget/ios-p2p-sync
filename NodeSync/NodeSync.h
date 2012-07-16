@@ -8,8 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+//Network information
 #define MASTER_SERVICE @"_master_service._tcp."
-#define DEFAULT_PORT 62320
+#define ARBITER_SERVICE @"_arbiter_service._tcp."
+#define DEFAULT_PORT 6320
+#define SERVICE_DOMAIN @"local."
+#define ELECTION_TIME 7
+
+//Packet tags
+#define PRIORITY_PACKET_TAG 1
 
 #define ERROR_DOMAIN @"nodesync.error"
 
@@ -18,17 +25,15 @@ typedef enum {
   kContextTypeMaster
 } kContextType;
 
-typedef enum {
-  kSessionStateConnect,
-  kSessionStateDisconnect
-} kSessionState;
-
-@class NodeSync, NodeContext, NodeData;
+@class NodeSync, NodeContext;
 
 @protocol NodeSyncDelegateProtocol <NSObject>
 
-- (void) nodeSync:(NodeSync *)_nodeSync sessionStateChangeForNode:(NodeData *) node;
-- (void) nodeSync:(NodeSync *)_nodeSync didReadData:(NSData *) data;
+@optional
+- (void) nodeSync:(NodeSync *)nodeSync didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
+- (void) nodeSync:(NodeSync *)nodeSync didWriteDataWithTag:(long)tag;
+- (void) nodeSync:(NodeSync *)nodeSync didReadData:(NSData *)data withTag:(long)tag;
+- (void) nodeSync:(NodeSync *)nodeSync didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
 
 @end
 
@@ -36,28 +41,28 @@ typedef enum {
 @private
   id<NodeSyncDelegateProtocol> delegate;
   NodeContext *context;
-  NSString *sessionId;
   NSInteger port;
-  NSMutableArray *nodesInSession;
-  
+  NSInteger priority;
 }
 
 @property (nonatomic, assign) id<NodeSyncDelegateProtocol> delegate;
 @property (nonatomic, retain) NodeContext *context;
-@property (nonatomic, retain) NSString *sessionId;
 @property (nonatomic, assign) NSInteger port;
-@property (nonatomic, retain) NSMutableArray *nodesInSession;
+@property (nonatomic, assign) NSInteger priority;
 
 - (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate;
-- (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate sessionId:(NSString *) _sessionId;
-- (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate sessionId:(NSString *)_sessionId port:(NSInteger) _port;
+- (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate port:(NSInteger) _port;
 
 //Client
 - (void) startSessionWithContextType:(kContextType) contextType;
-- (void) pushData:(NSData *) data;
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag;
 
 //Context
-- (void) sessionStateChangeForNode:(NodeData *) node;
-- (void) didReadData:(NSData *) data;
+- (void) changeToContext:(NodeContext *) newContext;
+
+- (void) didReadData:(NSData *) data withTag:(long)tag;
+- (void) didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
+- (void) didWriteDataWithTag:(long)tag;
+- (void) didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
 
 @end

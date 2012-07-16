@@ -1,0 +1,97 @@
+//
+//  NodeContextPrimary.m
+//  NodeSync
+//
+//  Created by Robin on 16/07/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "NodeContextPrimary.h"
+
+@implementation NodeContextPrimary
+
+@synthesize connectedNodes, netService;
+
+- (void) activateWithServiceType:(NSString *) type andName:(NSString *) name {
+  //Opening listening socket
+  GCDAsyncSocket *_socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
+  self.socket = _socket;
+  [_socket release];
+  
+  NSError *error = nil;
+  if (![self.socket acceptOnPort:self.manager.port error:&error]) {
+    NSLog(@"Failed to launch server: %@", error);
+  }
+  self.socket.delegate = self;
+  
+  self.connectedNodes = [NSMutableArray array];
+  
+  //Publishing Bonjour service
+  NSNetService *_service = [[NSNetService alloc] initWithDomain:SERVICE_DOMAIN type:type name:name port:self.manager.port];
+  self.netService = _service;
+  [_service release];
+  self.netService.delegate = self;
+  [self.netService publish];
+}
+
+
+- (void) unactivate {
+  [self.netService stop];
+  for(GCDAsyncSocket *sock in self.connectedNodes) {
+    [sock disconnect];
+  }
+  [self.connectedNodes removeAllObjects];
+  [self.socket disconnect];
+}
+
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag {
+  for (GCDAsyncSocket *nodeSocket in self.connectedNodes) {
+    [nodeSocket writeData:data withTimeout:interval tag:tag];
+  }
+}
+
+#pragma mark - GCDAsyncSocketDelegate
+- (void)socket:(GCDAsyncSocket *)sender didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
+  [self.connectedNodes addObject:newSocket];
+}
+
+- (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+  [self.connectedNodes removeObject:sock];
+}
+
+#pragma mark - NSNetServiceDelegate
+- (void)netServiceWillPublish:(NSNetService *)sender {
+  NSLog(@"Master publishing service");
+}
+
+- (void)netServiceDidPublish:(NSNetService *)sender {
+  NSLog(@"Master service published service");
+}
+
+- (void) netServiceDidStop:(NSNetService *)sender {
+  NSLog(@"Master service stopped");
+}
+
+- (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
+  NSLog(@"Master service failed to publish: %@", [errorDict objectForKey:NSNetServicesErrorCode]);
+  /*
+   typedef enum {
+   NSNetServicesUnknownError = -72000,
+   NSNetServicesCollisionError = -72001,
+   NSNetServicesNotFoundError    = -72002,
+   NSNetServicesActivityInProgress = -72003,
+   NSNetServicesBadArgumentError = -72004,
+   NSNetServicesCancelledError = -72005,
+   NSNetServicesInvalidError = -72006,
+   NSNetServicesTimeoutError = -72007,
+   } NSNetServicesError;
+   */  
+}
+
+#pragma mark - memory management
+- (void) dealloc {
+  [netService release];
+  [super dealloc];
+}
+
+@end
