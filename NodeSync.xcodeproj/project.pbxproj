@@ -7,16 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		002961A015B4108D005B02CD /* NodeContextMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 0029619E15B4108D005B02CD /* NodeContextMaster.h */; };
+		002961A115B4108D005B02CD /* NodeContextMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 0029619F15B4108D005B02CD /* NodeContextMaster.m */; };
 		0099257D15B401A60071E3F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0099257C15B401A60071E3F7 /* Foundation.framework */; };
 		0099258315B401A60071E3F7 /* NodeSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 0099258215B401A60071E3F7 /* NodeSync.m */; };
+		0099258C15B401DB0071E3F7 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 0099258A15B401DB0071E3F7 /* GCDAsyncSocket.h */; };
+		0099258D15B401DB0071E3F7 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 0099258B15B401DB0071E3F7 /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		0099259015B402EB0071E3F7 /* NodeContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 0099258E15B402EB0071E3F7 /* NodeContext.h */; };
+		0099259115B402EB0071E3F7 /* NodeContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 0099258F15B402EB0071E3F7 /* NodeContext.m */; };
+		0099259515B408C10071E3F7 /* NodeData.h in Headers */ = {isa = PBXBuildFile; fileRef = 0099259315B408C10071E3F7 /* NodeData.h */; };
+		0099259615B408C10071E3F7 /* NodeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0099259415B408C10071E3F7 /* NodeData.m */; };
+		0099259915B40B790071E3F7 /* NodeContextReplica.h in Headers */ = {isa = PBXBuildFile; fileRef = 0099259715B40B790071E3F7 /* NodeContextReplica.h */; };
+		0099259A15B40B790071E3F7 /* NodeContextReplica.m in Sources */ = {isa = PBXBuildFile; fileRef = 0099259815B40B790071E3F7 /* NodeContextReplica.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0029619E15B4108D005B02CD /* NodeContextMaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextMaster.h; sourceTree = "<group>"; };
+		0029619F15B4108D005B02CD /* NodeContextMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContextMaster.m; sourceTree = "<group>"; };
 		0099257915B401A60071E3F7 /* libNodeSync.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNodeSync.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0099257C15B401A60071E3F7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		0099258015B401A60071E3F7 /* NodeSync-Prefix.pch */ = {isa = PBXFileReference; path = "NodeSync-Prefix.pch"; sourceTree = "<group>"; };
-		0099258115B401A60071E3F7 /* NodeSync.h */ = {isa = PBXFileReference; path = NodeSync.h; sourceTree = "<group>"; };
+		0099258015B401A60071E3F7 /* NodeSync-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NodeSync-Prefix.pch"; sourceTree = "<group>"; };
+		0099258115B401A60071E3F7 /* NodeSync.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeSync.h; sourceTree = "<group>"; };
 		0099258215B401A60071E3F7 /* NodeSync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NodeSync.m; sourceTree = "<group>"; };
+		0099258A15B401DB0071E3F7 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = ../../CocoaAsyncSocket/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
+		0099258B15B401DB0071E3F7 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = ../../CocoaAsyncSocket/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
+		0099258E15B402EB0071E3F7 /* NodeContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContext.h; sourceTree = "<group>"; };
+		0099258F15B402EB0071E3F7 /* NodeContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContext.m; sourceTree = "<group>"; };
+		0099259315B408C10071E3F7 /* NodeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeData.h; sourceTree = "<group>"; };
+		0099259415B408C10071E3F7 /* NodeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeData.m; sourceTree = "<group>"; };
+		0099259715B40B790071E3F7 /* NodeContextReplica.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextReplica.h; sourceTree = "<group>"; };
+		0099259815B40B790071E3F7 /* NodeContextReplica.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContextReplica.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,9 +79,13 @@
 		0099257E15B401A60071E3F7 /* NodeSync */ = {
 			isa = PBXGroup;
 			children = (
+				0099258915B401CE0071E3F7 /* external */,
 				0099258115B401A60071E3F7 /* NodeSync.h */,
 				0099258215B401A60071E3F7 /* NodeSync.m */,
+				0099259215B408880071E3F7 /* Contexts */,
 				0099257F15B401A60071E3F7 /* Supporting Files */,
+				0099259315B408C10071E3F7 /* NodeData.h */,
+				0099259415B408C10071E3F7 /* NodeData.m */,
 			);
 			path = NodeSync;
 			sourceTree = "<group>";
@@ -74,6 +98,28 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		0099258915B401CE0071E3F7 /* external */ = {
+			isa = PBXGroup;
+			children = (
+				0099258A15B401DB0071E3F7 /* GCDAsyncSocket.h */,
+				0099258B15B401DB0071E3F7 /* GCDAsyncSocket.m */,
+			);
+			name = external;
+			sourceTree = "<group>";
+		};
+		0099259215B408880071E3F7 /* Contexts */ = {
+			isa = PBXGroup;
+			children = (
+				0099258E15B402EB0071E3F7 /* NodeContext.h */,
+				0099258F15B402EB0071E3F7 /* NodeContext.m */,
+				0099259715B40B790071E3F7 /* NodeContextReplica.h */,
+				0099259815B40B790071E3F7 /* NodeContextReplica.m */,
+				0029619E15B4108D005B02CD /* NodeContextMaster.h */,
+				0029619F15B4108D005B02CD /* NodeContextMaster.m */,
+			);
+			name = Contexts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -81,6 +127,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0099258C15B401DB0071E3F7 /* GCDAsyncSocket.h in Headers */,
+				0099259015B402EB0071E3F7 /* NodeContext.h in Headers */,
+				0099259515B408C10071E3F7 /* NodeData.h in Headers */,
+				0099259915B40B790071E3F7 /* NodeContextReplica.h in Headers */,
+				002961A015B4108D005B02CD /* NodeContextMaster.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,6 +186,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				0099258315B401A60071E3F7 /* NodeSync.m in Sources */,
+				0099258D15B401DB0071E3F7 /* GCDAsyncSocket.m in Sources */,
+				0099259115B402EB0071E3F7 /* NodeContext.m in Sources */,
+				0099259615B408C10071E3F7 /* NodeData.m in Sources */,
+				0099259A15B40B790071E3F7 /* NodeContextReplica.m in Sources */,
+				002961A115B4108D005B02CD /* NodeContextMaster.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,6 +280,7 @@
 				0099258815B401A60071E3F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
