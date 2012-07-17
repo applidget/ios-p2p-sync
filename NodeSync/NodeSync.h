@@ -56,6 +56,7 @@ typedef enum {
 //Client
 - (void) startSessionWithContextType:(kContextType) contextType;
 - (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag;
+- (void) startMaster;
 
 //Context
 - (void) changeToContext:(NodeContext *) newContext;

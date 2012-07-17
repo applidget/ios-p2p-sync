@@ -26,9 +26,12 @@
 
 - (void) socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
   [self.manager didWriteDataWithTag:tag];
+  NSLog(@"wrote data");
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
+  NSLog(@"read data");
+  [self.socket readDataWithTimeout:-1 tag:0];
   [self.manager didReadData:data withTag:tag];
 }
 

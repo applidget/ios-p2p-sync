@@ -93,6 +93,12 @@
   [self.context pushData:data withTimeout:interval tag:tag];
 }
 
+- (void) startMaster {
+  NodeContextMaster *_context = [[NodeContextMaster alloc] initWithManager:self];
+  [self changeToContext:_context];
+  [_context release];
+}
+
 
 
 @end

@@ -17,6 +17,7 @@
   GCDAsyncSocket *_socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
   self.socket = _socket;
   [_socket release];
+  [self.socket readDataWithTimeout:-1 tag:0];
   
   NSError *error = nil;
   if (![self.socket acceptOnPort:self.manager.port error:&error]) {
@@ -52,10 +53,12 @@
 
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
+  NSLog(@"new incoming connection");
   [self.connectedNodes addObject:newSocket];
 }
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+  NSLog(@"did disconnect");
   [self.connectedNodes removeObject:sock];
 }
 
@@ -90,6 +93,7 @@
 
 #pragma mark - memory management
 - (void) dealloc {
+  [connectedNodes release];
   [netService release];
   [super dealloc];
 }

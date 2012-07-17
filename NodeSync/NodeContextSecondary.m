@@ -59,7 +59,7 @@
 
 #pragma mark - GCDAsynSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
-  NSLog(@"Cool, I'm connected! That was easy.");
+  [self.socket readDataWithTimeout:-1  tag:0];
 }
 
 #pragma mark - memory management

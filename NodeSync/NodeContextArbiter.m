@@ -32,8 +32,7 @@
     NSLog(@"a repllicas won");
         
     NSData *priority = [[NSString stringWithFormat:@"%i", highestPrio] dataUsingEncoding:NSUTF8StringEncoding];
-    [self pushData:priority withTimeout:0 tag:PRIORITY_PACKET_TAG];
-    
+    [self pushData:priority withTimeout:-1 tag:PRIORITY_PACKET_TAG];
     
     NodeContextReplica *_context = [[NodeContextReplica alloc] initWithManager:self.manager];
     [self.manager changeToContext:_context];
