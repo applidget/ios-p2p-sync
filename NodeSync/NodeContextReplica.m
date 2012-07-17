@@ -18,9 +18,7 @@
 #pragma mark - GCDAsyncSocketDelegate protocol
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   //Lost connection to master -> trying to launch arbiter context
-  NodeContextArbiter *_context = [[NodeContextArbiter alloc] initWithManager:self.manager];
-  [self.manager changeToContext:_context];
-  [_context release];
+  [self.manager changeToContextType:kContextTypeArbiter];
 }
 
 

@@ -6,8 +6,20 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+/*
+ Elector is the context where devices send their priority to become master to an arbiter. Once they connect to
+ the arbiter they immediately send their priority. 
+ - If the connection with the arbiter get cut, it means that the arbiter won the election so they switch to the replica context.
+ - else if they received a priority packet:
+  - if the priority is equal to their own priority: won the election, switch to master context
+  - else, another elector won the election, switch to replica context
+*/
+
 #import "NodeContextSecondary.h"
 
-@interface NodeContextElector : NodeContextSecondary
+@interface NodeContextElector : NodeContextSecondary {
+@private
+  BOOL hasWonTheElection;
+}
 
 @end

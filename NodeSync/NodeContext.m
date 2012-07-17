@@ -19,6 +19,11 @@
   return self;
 }
 
+#warning abstract methods managed by subclasses
+- (void) activate {}
+- (void) unactivate {}
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag {}
+
 #pragma mark - GCDAsyncSocketDelegateProtcol
 - (void) socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
   [self.manager didWritePartialDataOfLength:partialLength tag:tag];
@@ -26,12 +31,10 @@
 
 - (void) socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
   [self.manager didWriteDataWithTag:tag];
-  NSLog(@"wrote data");
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
-  NSLog(@"read data");
-  [self.socket readDataWithTimeout:-1 tag:0];
+  [sock readDataWithTimeout:-1 tag:0];
   [self.manager didReadData:data withTag:tag];
 }
 
@@ -39,17 +42,12 @@
   [self.manager didReadPartialDataOfLength:partialLength tag:tag];
 }
 
-- (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-  NSLog(@"socket did disconnect");
-}
+- (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {}
 
-- (void) socketDidCloseReadStream:(GCDAsyncSocket *)sock {
-  NSLog(@"lost read stream");
-}
+- (void) socketDidCloseReadStream:(GCDAsyncSocket *)sock {}
 
 #pragma mark - memory management
 - (void) dealloc {
-  [manager release];
   [socket release];
   [super dealloc];
 }

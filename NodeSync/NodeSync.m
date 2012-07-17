@@ -10,6 +10,8 @@
 #import "NodeContext.h"
 #import "NodeContextMaster.h"
 #import "NodeContextReplica.h"
+#import "NodeContextArbiter.h"
+#import "NodeContextElector.h"
 
 @implementation NodeSync
 
@@ -33,10 +35,34 @@
 }
 
 #pragma mark - Context
-- (void) changeToContext:(NodeContext *) newContext {
+- (void) changeToContextType:(kContextType) newContext {
   [self.context unactivate];
-  self.context = newContext;
+  
+  NodeContext *_context;
+  
+  switch (newContext) {
+    case kContextTypeReplica:
+      _context = [[NodeContextReplica alloc] initWithManager:self];
+      break;
+    case kContextTypeMaster:
+      _context = [[NodeContextMaster alloc] initWithManager:self];
+      break;
+    case kContextTypeArbiter:
+      _context = [[NodeContextArbiter alloc] initWithManager:self];
+      break;
+    case kContextTypeElector:
+      _context = [[NodeContextElector alloc] initWithManager:self];
+    default:
+      break;
+  }
+  
+  self.context = _context;
+  [_context release];
   [self.context activate];
+  
+  if([self.delegate respondsToSelector:@selector(nodeSync:didChangeContextType:)]) {
+    [self.delegate nodeSync:self didChangeContextType:newContext];
+  }
 }
 
 
@@ -64,6 +90,7 @@
   }
 }
 
+
 #pragma mark - Client
 - (void) startSessionWithContextType:(kContextType)contextType {
   //Set default values if needed
@@ -72,21 +99,7 @@
   }
   
   //Activate the appropriate context
-  NodeContext *_context;
-  switch (contextType) {
-    case kContextTypeMaster:
-      _context = [[NodeContextMaster alloc] initWithManager:self];
-      NSLog(@"master context");
-      break;
-    case kContextTypeReplica:
-      _context = [[NodeContextReplica alloc] initWithManager:self];
-      break;
-    default:
-      break;
-  }
-  self.context = _context;
-  [_context release];
-  [self.context activate];
+  [self changeToContextType:contextType];
 }
 
 - (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag {
@@ -94,9 +107,7 @@
 }
 
 - (void) startMaster {
-  NodeContextMaster *_context = [[NodeContextMaster alloc] initWithManager:self];
-  [self changeToContext:_context];
-  [_context release];
+  [self changeToContext:kContextTypeMaster];
 }
 
 

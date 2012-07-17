@@ -13,7 +13,6 @@
 #define ARBITER_SERVICE @"_arbiter_service._tcp."
 #define DEFAULT_PORT 6320
 #define SERVICE_DOMAIN @"local."
-#define ELECTION_TIME 7
 
 //Packet tags
 #define PRIORITY_PACKET_TAG 1
@@ -22,8 +21,11 @@
 
 typedef enum {
   kContextTypeReplica,
-  kContextTypeMaster
+  kContextTypeMaster,
+  kContextTypeArbiter,
+  kContextTypeElector
 } kContextType;
+
 
 @class NodeSync, NodeContext;
 
@@ -34,6 +36,8 @@ typedef enum {
 - (void) nodeSync:(NodeSync *)nodeSync didWriteDataWithTag:(long)tag;
 - (void) nodeSync:(NodeSync *)nodeSync didReadData:(NSData *)data withTag:(long)tag;
 - (void) nodeSync:(NodeSync *)nodeSync didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
+
+- (void) nodeSync:(NodeSync *)nodeSync didChangeContextType:(kContextType)newContext;
 
 @end
 
@@ -59,7 +63,7 @@ typedef enum {
 - (void) startMaster;
 
 //Context
-- (void) changeToContext:(NodeContext *) newContext;
+- (void) changeToContextType:(kContextType) newContext;
 
 - (void) didReadData:(NSData *) data withTag:(long)tag;
 - (void) didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;

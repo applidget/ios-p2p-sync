@@ -13,11 +13,9 @@
 @synthesize connectedNodes, netService;
 
 - (void) activateWithServiceType:(NSString *) type andName:(NSString *) name {
-  //Opening listening socket
   GCDAsyncSocket *_socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
   self.socket = _socket;
   [_socket release];
-  [self.socket readDataWithTimeout:-1 tag:0];
   
   NSError *error = nil;
   if (![self.socket acceptOnPort:self.manager.port error:&error]) {
@@ -27,14 +25,12 @@
   
   self.connectedNodes = [NSMutableArray array];
   
-  //Publishing Bonjour service
   NSNetService *_service = [[NSNetService alloc] initWithDomain:SERVICE_DOMAIN type:type name:name port:self.manager.port];
   self.netService = _service;
   [_service release];
   self.netService.delegate = self;
   [self.netService publish];
 }
-
 
 - (void) unactivate {
   [self.netService stop];
@@ -53,30 +49,23 @@
 
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
-  NSLog(@"new incoming connection");
+  newSocket.delegate = self;
+  [newSocket readDataWithTimeout:-1 tag:0];
   [self.connectedNodes addObject:newSocket];
 }
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-  NSLog(@"did disconnect");
   [self.connectedNodes removeObject:sock];
 }
 
 #pragma mark - NSNetServiceDelegate
-- (void)netServiceWillPublish:(NSNetService *)sender {
-  NSLog(@"Master publishing service");
-}
+- (void)netServiceWillPublish:(NSNetService *)sender {}
 
-- (void)netServiceDidPublish:(NSNetService *)sender {
-  NSLog(@"Master service published service");
-}
+- (void)netServiceDidPublish:(NSNetService *)sender {}
 
-- (void) netServiceDidStop:(NSNetService *)sender {
-  NSLog(@"Master service stopped");
-}
+- (void) netServiceDidStop:(NSNetService *)sender {}
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
-  NSLog(@"Master service failed to publish: %@", [errorDict objectForKey:NSNetServicesErrorCode]);
   /*
    typedef enum {
    NSNetServicesUnknownError = -72000,

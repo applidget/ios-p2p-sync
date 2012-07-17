@@ -27,37 +27,28 @@
       highestPrio = currentPrio;
     }
   }
-  
+
   if(highestPrio > self.manager.priority) {
-    NSLog(@"a repllicas won");
-        
     NSData *priority = [[NSString stringWithFormat:@"%i", highestPrio] dataUsingEncoding:NSUTF8StringEncoding];
-    [self pushData:priority withTimeout:-1 tag:PRIORITY_PACKET_TAG];
-    
-    NodeContextReplica *_context = [[NodeContextReplica alloc] initWithManager:self.manager];
-    [self.manager changeToContext:_context];
-    [_context release];
+    [self pushData:priority withTimeout:DEFAULT_TIMEOUT tag:PRIORITY_PACKET_TAG];
+    [self.manager changeToContextType:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
-    NodeContextMaster *_context = [[NodeContextMaster alloc] initWithManager:self.manager]; 
-    [self.manager changeToContext:_context];
-    [_context release];
+    [self.manager changeToContextType:kContextTypeMaster];
   }
 }
 
 #pragma mark - NSNetServiceDelegate protocol
 - (void) netServiceDidPublish:(NSNetService *)sender {
-  //Officially became arbiter
-  self.receivedPriorities = [NSMutableArray array];
+  NSMutableArray *_receivedPriorities = [[NSMutableArray alloc] init];
+  self.receivedPriorities = _receivedPriorities;
+  [_receivedPriorities release];
   [self performSelector:@selector(announceNewMaster) withObject:nil afterDelay:ELECTION_TIME];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
-  NSLog(@"Arbiter service failed to publish: %@", [errorDict objectForKey:NSNetServicesErrorCode]);
   //an other arbiter service is already launched
-  NodeContextElector *_context = [[NodeContextElector alloc] initWithManager:self.manager];
-  [self.manager changeToContext:_context];
-  [_context release];
+  [self.manager changeToContextType:kContextTypeElector];
 }
 
 #pragma mark GCDAsyncSocketDelegate protocol
@@ -67,6 +58,7 @@
     [self.receivedPriorities addObject:strPriority];
     [strPriority release];
   }
+  [super socket:sock didReadData:(NSData *)data withTag:tag];
 }
 
 #pragma mark - GCDAsyncSocketDelegate protocol

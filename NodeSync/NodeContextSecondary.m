@@ -13,7 +13,6 @@
 @synthesize serviceBrowser, foundService;
 
 - (void) activateWithServiceType:(NSString *) type {
-  //A replica start by searching for master service
   NSNetServiceBrowser *_serviceBrowser = [[NSNetServiceBrowser alloc] init];
   self.serviceBrowser = _serviceBrowser;
   [_serviceBrowser release];
@@ -37,13 +36,9 @@
   [self.foundService resolveWithTimeout:0];
 }
 
-- (void) netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict {
-  NSLog(@"failed to search for service");
-}
+- (void) netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict {}
 
-- (void) netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didRemoveService:(NSNetService *)aNetService moreComing:(BOOL)moreComing {
-  NSLog(@"service disappeared: %@", aNetService.description);
-}
+- (void) netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didRemoveService:(NSNetService *)aNetService moreComing:(BOOL)moreComing {}
 
 #pragma mark - NSNetServiceDelegate
 - (void) netServiceDidResolveAddress:(NSNetService *)netService {
@@ -59,7 +54,7 @@
 
 #pragma mark - GCDAsynSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
-  [self.socket readDataWithTimeout:-1  tag:0];
+  [self.socket readDataWithTimeout:DEFAULT_TIMEOUT  tag:0];
 }
 
 #pragma mark - memory management

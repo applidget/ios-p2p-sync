@@ -11,7 +11,6 @@
 @implementation NodeContextMaster
 
 - (void) sendHeartBeat {
-  NSLog(@"heart beat");
   NSData *beat = [@"beat" dataUsingEncoding:NSUTF8StringEncoding];
   [self pushData:beat withTimeout:-1 tag:0];
 }
