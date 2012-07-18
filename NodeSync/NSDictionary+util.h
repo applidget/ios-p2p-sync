@@ -14,6 +14,8 @@
 
 #define DEFAULT_ARCHIVER_KEY @"default_key"
 
+#define END_PACKET [@"|||" dataUsingEncoding:NSUTF8StringEncoding]
+
 @interface NSDictionary (util)
 
 + (NSDictionary *) dictionaryWithPriorityPacket:(NSString *) priority;

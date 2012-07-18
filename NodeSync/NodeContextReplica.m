@@ -18,6 +18,7 @@
 #pragma mark - GCDAsyncSocketDelegate protocol
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {  
   //Lost connection to master -> trying to launch arbiter context
+  NSLog(@"disconnected !!");
   [self.manager changeToContextType:kContextTypeArbiter];
 }
 
@@ -27,7 +28,7 @@
   
   if(!receivedDict) {
     NSLog(@"data damaged");
-    [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
@@ -49,7 +50,7 @@
   else {
     NSLog(@"replica: unknown packet");
   }
-  [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 

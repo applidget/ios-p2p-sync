@@ -38,7 +38,7 @@
   
   if(!receivedDict) {
     NSLog(@"data damaged");
-    [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
@@ -59,7 +59,7 @@
   else {
     NSLog(@"master: unknown packet");
   }
-  [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 @end

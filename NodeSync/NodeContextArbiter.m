@@ -29,8 +29,8 @@
   }
 
   if(highestPrio > self.manager.priority) {
-    NSData *priority = [[NSString stringWithFormat:@"%i", highestPrio] dataUsingEncoding:NSUTF8StringEncoding];
-    [self pushData:priority withTimeout:DEFAULT_TIMEOUT];
+    NSDictionary *prioPacket = [NSDictionary dictionaryWithPriorityPacket:[NSString stringWithFormat:@"%i", highestPrio]];
+    [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
@@ -58,7 +58,7 @@
   
   if(!receivedDict) {
     NSLog(@"data damaged");
-    [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
@@ -81,7 +81,7 @@
   else {
     NSLog(@"arbiter: unknown packet");
   }
-  [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {

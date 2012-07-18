@@ -25,7 +25,10 @@
 
 + (NSDictionary *) dictionaryFromData:(NSData *) data {
   @try {
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    //Remove data separator
+    NSMutableData *mutableData = [NSMutableData dataWithData:data];
+    [mutableData setLength:(data.length - END_PACKET.length)];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mutableData];
     NSDictionary *dictionary = [[unarchiver decodeObjectForKey:DEFAULT_ARCHIVER_KEY] retain];
     [unarchiver finishDecoding];
     [unarchiver release];
@@ -42,6 +45,8 @@
   [archiver encodeObject:self forKey:DEFAULT_ARCHIVER_KEY];
   [archiver finishEncoding];
   [archiver release];
+  //Set the data separator
+  [data appendData:END_PACKET];
   return data;
 }
 

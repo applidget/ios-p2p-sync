@@ -24,13 +24,19 @@
   [self.manager changeToContextType:newContext];
 }
 
+- (void) socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
+  [super socket:sock didConnectToHost:host port:port];
+  NSDictionary *prioPacket = [NSDictionary dictionaryWithPriorityPacket:[NSString stringWithFormat:@"%i", self.manager.priority]];
+  [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
+}
+
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
   NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
   
   if(!receivedDict) {
     NSLog(@"data damaged");
-    [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
@@ -53,7 +59,7 @@
   else {
     NSLog(@"elector: unknown packet");
   }
-  [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 @end

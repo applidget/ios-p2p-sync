@@ -31,8 +31,7 @@
 
 #pragma mark - GCDAsynSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
-  NSLog(@"replica/elector connected");
-  [self.socket readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
+  [self.socket readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 #pragma mark - NSNetServiceBrowserDelegate

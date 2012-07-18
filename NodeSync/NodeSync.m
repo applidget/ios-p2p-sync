@@ -38,7 +38,6 @@
 #pragma mark - Context
 - (void) changeToContextType:(kContextType) newContext {
   [self.context unactivate];
- // [self.setMap removeAllObjects];
   
   NodeContext *_context;
   

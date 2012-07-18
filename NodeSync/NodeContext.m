@@ -39,7 +39,9 @@
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {}
 
-- (void) socketDidCloseReadStream:(GCDAsyncSocket *)sock {}
+- (void) socketDidCloseReadStream:(GCDAsyncSocket *)sock {
+  NSLog(@"closed read stream");
+}
 
 #pragma mark - memory management
 - (void) dealloc {
