@@ -24,6 +24,12 @@
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
   NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
+  
+  if(!receivedDict) {
+    NSLog(@"data damaged");
+    return;
+  }
+  
   NSString *packetId = [receivedDict packetKey];
   
   if([packetId isEqualToString:CLIENT_PACKET_KEY]) {

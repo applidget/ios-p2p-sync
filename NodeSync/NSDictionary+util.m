@@ -24,11 +24,16 @@
 
 
 + (NSDictionary *) dictionaryFromData:(NSData *) data {
-  NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-  NSDictionary *dictionary = [[unarchiver decodeObjectForKey:DEFAULT_ARCHIVER_KEY] retain];
-  [unarchiver finishDecoding];
-  [unarchiver release];
-  return dictionary;
+  @try {
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    NSDictionary *dictionary = [[unarchiver decodeObjectForKey:DEFAULT_ARCHIVER_KEY] retain];
+    [unarchiver finishDecoding];
+    [unarchiver release];
+    return dictionary;
+  }
+  @catch (NSException *exception) {
+    return nil;
+  }
 }
 
 - (NSData *) convertToData {
