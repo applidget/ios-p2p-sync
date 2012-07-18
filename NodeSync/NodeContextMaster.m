@@ -38,6 +38,7 @@
   
   if(!receivedDict) {
     NSLog(@"data damaged");
+    [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
