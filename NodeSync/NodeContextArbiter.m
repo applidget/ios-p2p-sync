@@ -11,12 +11,23 @@
 #import "NodeContextReplica.h"
 #import "NodeContextMaster.h"
 
+#define MAX_TIME_TO_ACTIVE 1.5
+
 @implementation NodeContextArbiter
 
 @synthesize receivedPriorities;
 
+- (void) didLaunchService {
+  if(tookTooLongToLaunchService) {
+    [self.manager changeToContextType:kContextTypeElector];
+  }
+}
+
 - (void) activate {  
   [super activateWithServiceType:ARBITER_SERVICE andName:@"arbiter"];
+  
+  tookTooLongToLaunchService = YES;
+  [self performSelector:@selector(didLaunchService) withObject:nil afterDelay:MAX_TIME_TO_ACTIVE];
 }
 
 - (void) announceNewMaster {
@@ -40,6 +51,8 @@
 
 #pragma mark - NSNetServiceDelegate protocol
 - (void) netServiceDidPublish:(NSNetService *)sender {
+  //Succeded to be arbiter, cancelling timer
+  tookTooLongToLaunchService = NO;
   NSMutableArray *_receivedPriorities = [[NSMutableArray alloc] init];
   self.receivedPriorities = _receivedPriorities;
   [_receivedPriorities release];

@@ -22,6 +22,7 @@
 @interface NodeContextArbiter : NodeContextPrimary {
 @private
   NSMutableArray *receivedPriorities;
+  BOOL tookTooLongToLaunchService;
 }
 
 @property (nonatomic, retain) NSMutableArray *receivedPriorities;
