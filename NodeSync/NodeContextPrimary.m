@@ -41,9 +41,9 @@
   [self.socket disconnect];
 }
 
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag {
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval {
   for (GCDAsyncSocket *nodeSocket in self.connectedNodes) {
-    [nodeSocket writeData:data withTimeout:interval tag:tag];
+    [nodeSocket writeData:data withTimeout:interval tag:0];
   }
 }
 
