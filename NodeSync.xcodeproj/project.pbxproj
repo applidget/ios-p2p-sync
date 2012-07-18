@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		002961A015B4108D005B02CD /* NodeContextMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 0029619E15B4108D005B02CD /* NodeContextMaster.h */; };
 		002961A115B4108D005B02CD /* NodeContextMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 0029619F15B4108D005B02CD /* NodeContextMaster.m */; };
+		00363CE915B5B207001C67B6 /* NSDictionary+util.h in Headers */ = {isa = PBXBuildFile; fileRef = 00363CE715B5B207001C67B6 /* NSDictionary+util.h */; };
+		00363CEA15B5B207001C67B6 /* NSDictionary+util.m in Sources */ = {isa = PBXBuildFile; fileRef = 00363CE815B5B207001C67B6 /* NSDictionary+util.m */; };
 		003966E015B44D4600794240 /* NodeContextPrimary.h in Headers */ = {isa = PBXBuildFile; fileRef = 003966DE15B44D4600794240 /* NodeContextPrimary.h */; };
 		003966E115B44D4600794240 /* NodeContextPrimary.m in Sources */ = {isa = PBXBuildFile; fileRef = 003966DF15B44D4600794240 /* NodeContextPrimary.m */; };
 		003966E415B44F8F00794240 /* NodeContextArbiter.h in Headers */ = {isa = PBXBuildFile; fileRef = 003966E215B44F8F00794240 /* NodeContextArbiter.h */; };
@@ -30,6 +32,8 @@
 /* Begin PBXFileReference section */
 		0029619E15B4108D005B02CD /* NodeContextMaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextMaster.h; sourceTree = "<group>"; };
 		0029619F15B4108D005B02CD /* NodeContextMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContextMaster.m; sourceTree = "<group>"; };
+		00363CE715B5B207001C67B6 /* NSDictionary+util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+util.h"; sourceTree = "<group>"; };
+		00363CE815B5B207001C67B6 /* NSDictionary+util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+util.m"; sourceTree = "<group>"; };
 		003966DE15B44D4600794240 /* NodeContextPrimary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextPrimary.h; sourceTree = "<group>"; };
 		003966DF15B44D4600794240 /* NodeContextPrimary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContextPrimary.m; sourceTree = "<group>"; };
 		003966E215B44F8F00794240 /* NodeContextArbiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextArbiter.h; sourceTree = "<group>"; };
@@ -63,6 +67,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		00363CE515B5B1EF001C67B6 /* categories */ = {
+			isa = PBXGroup;
+			children = (
+				00363CE715B5B207001C67B6 /* NSDictionary+util.h */,
+				00363CE815B5B207001C67B6 /* NSDictionary+util.m */,
+			);
+			name = categories;
+			sourceTree = "<group>";
+		};
 		003966D815B44BF800794240 /* PrimaryContext */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +130,7 @@
 		0099257E15B401A60071E3F7 /* NodeSync */ = {
 			isa = PBXGroup;
 			children = (
+				00363CE515B5B1EF001C67B6 /* categories */,
 				0099258915B401CE0071E3F7 /* external */,
 				0099258115B401A60071E3F7 /* NodeSync.h */,
 				0099258215B401A60071E3F7 /* NodeSync.m */,
@@ -169,6 +183,7 @@
 				003966E415B44F8F00794240 /* NodeContextArbiter.h in Headers */,
 				003966E815B4500600794240 /* NodeContextSecondary.h in Headers */,
 				003966EC15B450F500794240 /* NodeContextElector.h in Headers */,
+				00363CE915B5B207001C67B6 /* NSDictionary+util.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,6 +246,7 @@
 				003966E515B44F8F00794240 /* NodeContextArbiter.m in Sources */,
 				003966E915B4500600794240 /* NodeContextSecondary.m in Sources */,
 				003966ED15B450F500794240 /* NodeContextElector.m in Sources */,
+				00363CEA15B5B207001C67B6 /* NSDictionary+util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +272,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = "-all_load";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -272,6 +289,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = "-all_load";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

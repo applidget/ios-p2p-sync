@@ -15,6 +15,7 @@
 #import <Foundation/Foundation.h>
 #import "NodeSync.h"
 #import "GCDAsyncSocket.h"
+#import "NSDictionary+util.h"
 
 #define DEFAULT_TIMEOUT -1
 
@@ -30,6 +31,6 @@
 - (id) initWithManager:(NodeSync *) _manager;
 - (void) activate;
 - (void) unactivate;
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag;
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval;
 
 @end

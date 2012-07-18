@@ -50,7 +50,7 @@
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
   newSocket.delegate = self;
-  [newSocket readDataWithTimeout:-1 tag:0];
+  [newSocket readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
   [self.connectedNodes addObject:newSocket];
 }
 

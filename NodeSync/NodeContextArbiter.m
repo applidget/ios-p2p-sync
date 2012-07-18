@@ -30,7 +30,7 @@
 
   if(highestPrio > self.manager.priority) {
     NSData *priority = [[NSString stringWithFormat:@"%i", highestPrio] dataUsingEncoding:NSUTF8StringEncoding];
-    [self pushData:priority withTimeout:DEFAULT_TIMEOUT tag:PRIORITY_PACKET_TAG];
+    [self pushData:priority withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
@@ -53,15 +53,35 @@
 
 #pragma mark GCDAsyncSocketDelegate protocol
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
-  if(tag == PRIORITY_PACKET_TAG) {
-    NSString *strPriority = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [self.receivedPriorities addObject:strPriority];
-    [strPriority release];
+  
+  NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
+  NSString *packetId = [receivedDict packetKey];
+  
+  if([packetId isEqualToString:CLIENT_PACKET_KEY]) {
+    NSLog(@"arbiter: received client SHOULDNOT");
+    
   }
-  [super socket:sock didReadData:(NSData *)data withTag:tag];
+  else if([packetId isEqualToString:PRIO_PACKET_KEY]) {
+    NSLog(@"arbiter: prio packet");
+    
+    NSString *strPriority = [receivedDict objectForKey:packetId];
+    [self.receivedPriorities addObject:strPriority];
+  }
+  else if([packetId isEqualToString:HEARTBEAT_PACKET_KEY]) {
+    NSLog(@"arbiter: received heartbeat SHOULDNOT");
+    
+  }
+  else {
+    NSLog(@"arbiter: unknown packet");
+  }
+  [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
-#pragma mark - GCDAsyncSocketDelegate protocol
+- (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+  
+}
+
+#pragma mark - memory management
 - (void) dealloc {
   [receivedPriorities release];
   [super dealloc];

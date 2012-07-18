@@ -12,10 +12,11 @@
 #import "NodeContextReplica.h"
 #import "NodeContextArbiter.h"
 #import "NodeContextElector.h"
+#import "NSDictionary+util.h"
 
 @implementation NodeSync
 
-@synthesize delegate, context, port, priority;
+@synthesize delegate, context, setMap, port, priority;
 
 #pragma mark - Constructors
 - (id) initWithDelegate:(id<NodeSyncDelegateProtocol>) _delegate {
@@ -37,6 +38,7 @@
 #pragma mark - Context
 - (void) changeToContextType:(kContextType) newContext {
   [self.context unactivate];
+ // [self.setMap removeAllObjects];
   
   NodeContext *_context;
   
@@ -58,7 +60,7 @@
   
   self.context = _context;
   [_context release];
-  [self.context activate];
+  [self.context performSelector:@selector(activate) withObject:nil afterDelay:0.2];
   
   if([self.delegate respondsToSelector:@selector(nodeSync:didChangeContextType:)]) {
     [self.delegate nodeSync:self didChangeContextType:newContext];
@@ -67,26 +69,29 @@
 
 
 - (void) didReadData:(NSData *) data withTag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didReadData:withTag:)]) {
-    [self.delegate nodeSync:self didReadData:data withTag:tag];
+  if([self.delegate respondsToSelector:@selector(nodeSync:didReadData:)]) {
+    //Remove the extra header packet
+    NSDictionary *dict = [NSDictionary dictionaryFromData:data];
+    NSData *originalData = [dict objectForKey:[dict packetKey]];
+    [self.delegate nodeSync:self didReadData:originalData];
   }
 }
 
 - (void) didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didReadPartialDataOfLength:tag:)]) {
-    [self.delegate nodeSync:self didReadPartialDataOfLength:partialLength tag:tag];
+  if([self.delegate respondsToSelector:@selector(nodeSync:didReadPartialDataOfLength:)]) {
+    [self.delegate nodeSync:self didReadPartialDataOfLength:partialLength ];
   }
 }
 
 - (void) didWriteDataWithTag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didWriteDataWithTag:)]) {
-    [self.delegate nodeSync:self didWriteDataWithTag:tag];
+  if([self.delegate respondsToSelector:@selector(nodeSyncDidWriteData:)]) {
+    [self.delegate nodeSyncDidWriteData:self];
   }
 }
 
 - (void) didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didWritePartialDataOfLength:tag:)]) {
-    [self.delegate nodeSync:self didWritePartialDataOfLength:partialLength tag:tag];
+  if([self.delegate respondsToSelector:@selector(nodeSync:didWritePartialDataOfLength:)]) {
+    [self.delegate nodeSync:self didWritePartialDataOfLength:partialLength];
   }
 }
 
@@ -97,17 +102,17 @@
   if(!self.port) {
     self.port = DEFAULT_PORT;
   }
-  
-  //Activate the appropriate context
   [self changeToContextType:contextType];
 }
 
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag {
-  [self.context pushData:data withTimeout:interval tag:tag];
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval {
+  //Encapsulate the data      
+  NSDictionary *clientPacket = [NSDictionary dictionaryWithClientPacket:data];
+  [self.context pushData:[clientPacket convertToData] withTimeout:interval];
 }
 
 - (void) startMaster {
-  [self changeToContext:kContextTypeMaster];
+  [self changeToContextType:kContextTypeMaster];
 }
 
 

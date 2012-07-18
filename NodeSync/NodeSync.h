@@ -14,9 +14,6 @@
 #define DEFAULT_PORT 6320
 #define SERVICE_DOMAIN @"local."
 
-//Packet tags
-#define PRIORITY_PACKET_TAG 1
-
 #define ERROR_DOMAIN @"nodesync.error"
 
 typedef enum {
@@ -32,10 +29,10 @@ typedef enum {
 @protocol NodeSyncDelegateProtocol <NSObject>
 
 @optional
-- (void) nodeSync:(NodeSync *)nodeSync didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
-- (void) nodeSync:(NodeSync *)nodeSync didWriteDataWithTag:(long)tag;
-- (void) nodeSync:(NodeSync *)nodeSync didReadData:(NSData *)data withTag:(long)tag;
-- (void) nodeSync:(NodeSync *)nodeSync didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
+- (void) nodeSync:(NodeSync *)nodeSync didWritePartialDataOfLength:(NSUInteger)partialLength;
+- (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;
+- (void) nodeSync:(NodeSync *)nodeSync didReadData:(NSData *)data;
+- (void) nodeSync:(NodeSync *)nodeSync didReadPartialDataOfLength:(NSUInteger)partialLength;
 
 - (void) nodeSync:(NodeSync *)nodeSync didChangeContextType:(kContextType)newContext;
 
@@ -45,12 +42,14 @@ typedef enum {
 @private
   id<NodeSyncDelegateProtocol> delegate;
   NodeContext *context;
+  NSMutableArray *setMap;
   NSInteger port;
   NSInteger priority;
 }
 
 @property (nonatomic, assign) id<NodeSyncDelegateProtocol> delegate;
 @property (nonatomic, retain) NodeContext *context;
+@property (nonatomic, retain) NSMutableArray *setMap;
 @property (nonatomic, assign) NSInteger port;
 @property (nonatomic, assign) NSInteger priority;
 
@@ -59,7 +58,7 @@ typedef enum {
 
 //Client
 - (void) startSessionWithContextType:(kContextType) contextType;
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag;
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval;
 - (void) startMaster;
 
 //Context
@@ -69,5 +68,6 @@ typedef enum {
 - (void) didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
 - (void) didWriteDataWithTag:(long)tag;
 - (void) didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
+
 
 @end

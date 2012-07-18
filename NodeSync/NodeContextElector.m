@@ -18,11 +18,6 @@
 }
 
 #pragma mark - GCDAsyncSocketDelegate protocol
-- (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
-  NSData *priority = [[NSString stringWithFormat:@"%i", self.manager.priority] dataUsingEncoding:NSUTF8StringEncoding];
-  [self.socket writeData:priority withTimeout:0 tag:PRIORITY_PACKET_TAG];
-}
-
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   //No more connected arbiter shut down
   kContextType newContext = hasWonTheElection ? kContextTypeMaster : kContextTypeReplica;
@@ -30,13 +25,28 @@
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
-  if(tag == PRIORITY_PACKET_TAG) {
-    NSString *strPriority = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  
+  NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
+  NSString *packetId = [receivedDict packetKey];
+  
+  if([packetId isEqualToString:CLIENT_PACKET_KEY]) {
+    NSLog(@"elector: received client SHOULDNOT");
+    
+  }
+  else if([packetId isEqualToString:PRIO_PACKET_KEY]) {
+    NSLog(@"elector: prio packet");
+    NSString *strPriority = [receivedDict objectForKey:packetId];
     NSInteger priority = [strPriority intValue];
-    [strPriority release];
     hasWonTheElection = (priority == self.manager.priority);
   }
+  else if([packetId isEqualToString:HEARTBEAT_PACKET_KEY]) {
+    NSLog(@"elector: received heartbeat SHOULDNOT");
+    
+  }
+  else {
+    NSLog(@"elector: unknown packet");
+  }
+  [sock readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
 }
-
 
 @end

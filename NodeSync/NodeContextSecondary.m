@@ -25,8 +25,14 @@
   [self.socket disconnect];
 }
 
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag {
-  [self.socket writeData:data withTimeout:interval tag:tag];
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval {
+  [self.socket writeData:data withTimeout:interval tag:0];
+}
+
+#pragma mark - GCDAsynSocketDelegate
+- (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
+  NSLog(@"replica/elector connected");
+  [self.socket readDataWithTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 #pragma mark - NSNetServiceBrowserDelegate
@@ -52,10 +58,7 @@
   }
 }
 
-#pragma mark - GCDAsynSocketDelegate
-- (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
-  [self.socket readDataWithTimeout:DEFAULT_TIMEOUT  tag:0];
-}
+
 
 #pragma mark - memory management
 - (void) dealloc {

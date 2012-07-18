@@ -22,7 +22,7 @@
 #warning abstract methods managed by subclasses
 - (void) activate {}
 - (void) unactivate {}
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval tag:(long)tag {}
+- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval {}
 
 #pragma mark - GCDAsyncSocketDelegateProtcol
 - (void) socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
@@ -31,11 +31,6 @@
 
 - (void) socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
   [self.manager didWriteDataWithTag:tag];
-}
-
-- (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
-  [sock readDataWithTimeout:-1 tag:0];
-  [self.manager didReadData:data withTag:tag];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
