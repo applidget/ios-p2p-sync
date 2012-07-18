@@ -8,6 +8,8 @@
 
 #import "NodeContextMaster.h"
 
+#define HEART_BEAT_FREQUENCY 2
+
 @implementation NodeContextMaster
 
 - (NSMutableArray *) generateSetMap {
@@ -30,7 +32,17 @@
 
 - (void) activate {  
   [super activateWithServiceType:MASTER_SERVICE andName:@"master"];
-  [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(sendHeartBeat) userInfo:nil repeats:YES];
+}
+
+#pragma mark - NSNetServiceDelegate protocol
+- (void) netServiceDidPublish:(NSNetService *)sender {
+  //Succeded to be master, start heartbeat
+  [NSTimer scheduledTimerWithTimeInterval:HEART_BEAT_FREQUENCY target:self selector:@selector(sendHeartBeat) userInfo:nil repeats:YES];
+}
+
+- (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
+  //maybe another master service already exist (a tie in the election ??)
+  [self.manager changeToContextType:kContextTypeReplica];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
