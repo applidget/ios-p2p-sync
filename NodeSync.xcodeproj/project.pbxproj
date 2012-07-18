@@ -53,6 +53,7 @@
 		0099258F15B402EB0071E3F7 /* NodeContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContext.m; sourceTree = "<group>"; };
 		0099259715B40B790071E3F7 /* NodeContextReplica.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextReplica.h; sourceTree = "<group>"; };
 		0099259815B40B790071E3F7 /* NodeContextReplica.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContextReplica.m; sourceTree = "<group>"; };
+		00BB7AE715B71E4300A5283A /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +106,7 @@
 		0099256E15B401A60071E3F7 = {
 			isa = PBXGroup;
 			children = (
+				00BB7AE715B71E4300A5283A /* README.txt */,
 				0099257E15B401A60071E3F7 /* NodeSync */,
 				0099257B15B401A60071E3F7 /* Frameworks */,
 				0099257A15B401A60071E3F7 /* Products */,
