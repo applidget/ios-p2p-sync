@@ -35,9 +35,11 @@
 - (void) unactivate {
   [self.netService stop];
   for(GCDAsyncSocket *sock in self.connectedNodes) {
-    [sock disconnect];
+    sock.delegate = nil;
+    [sock disconnectAfterWriting];
   }
   [self.connectedNodes removeAllObjects];
+  self.socket.delegate = nil;
   [self.socket disconnect];
 }
 
@@ -56,6 +58,7 @@
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   [self.connectedNodes removeObject:sock];
+  sock.delegate = nil;
   NSLog(@"socket disconnected: %@", sock.connectedHost);
 }
 

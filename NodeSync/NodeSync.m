@@ -48,6 +48,11 @@
   return self;
 }
 
+- (void) activateContext:(NodeContext *) newContext {
+  self.context = newContext;
+  [self.context activate];
+}
+
 #pragma mark - Context
 - (void) changeToContextType:(kContextType) newContext {
   [self.context unactivate];
@@ -70,9 +75,9 @@
       break;
   }
   
-  self.context = _context;
+  
+  [self performSelector:@selector(activateContext:) withObject:_context afterDelay:0.5];
   [_context release];
-  [self.context performSelector:@selector(activate) withObject:nil afterDelay:0.1];
 }
 
 - (void) didChangetState:(kNodeState) newState {

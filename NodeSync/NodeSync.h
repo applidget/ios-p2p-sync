@@ -10,10 +10,10 @@
 #import "Packet.h"
 
 //Network information
-#define MASTER_SERVICE @"_master_service._tcp."
-#define ARBITER_SERVICE @"_arbiter_service._tcp."
+#define MASTER_SERVICE @"M._tcp."
+#define ARBITER_SERVICE @"A._tcp."
 #define DEFAULT_PORT 6320
-#define DEFAULT_SESSION_ID @"_default_session"
+#define DEFAULT_SESSION_ID @"_DS"
 #define SERVICE_DOMAIN @"local."
 
 #define ERROR_DOMAIN @"nodesync.error"

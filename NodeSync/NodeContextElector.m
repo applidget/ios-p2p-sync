@@ -33,6 +33,7 @@
 #pragma mark - GCDAsyncSocketDelegate protocol
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   //No more connected arbiter shut down
+  self.socket.delegate = nil;
   kContextType newContextType;
   switch (electionResult) {
     case kElectionResultWon:
