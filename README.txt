@@ -8,3 +8,4 @@ TODO (developper)
 - manage errors (with NSError, error domain name ...)
 - advertise client when the set map change (new device, device disappear ...)
 - allow client to decide on which criteria the election is based (maybe use blocks or stuff, need more thought)
+- allow client to add packet type within the library
