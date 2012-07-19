@@ -107,6 +107,12 @@
 }
 
 - (void) push:(id) object forId:(NSString *) objId withTimeout:(NSTimeInterval)interval {
+  
+  if([self.context isKindOfClass:[NodeContextArbiter class]] || [self.context isKindOfClass:[NodeContextElector class]]) {
+    NSLog(@"not in a context that allow client to push data");
+    return;
+  }
+  
   Packet *clientPacket = [Packet packetWithId:objId andContent:object];
   NSData *internalPacketData = [[Packet packetWithId:kClientPacket andContent:clientPacket] convertToData];
   [self.context pushData:internalPacketData withTimeout:interval];
