@@ -54,6 +54,7 @@
 		00BB7AE715B71E4300A5283A /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		00BB7AF115B7FC9600A5283A /* Packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Packet.h; sourceTree = "<group>"; };
 		00BB7AF215B7FC9600A5283A /* Packet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Packet.m; sourceTree = "<group>"; };
+		00EF839A15B83EF100BF9B1F /* wiki.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wiki.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +107,7 @@
 		0099256E15B401A60071E3F7 = {
 			isa = PBXGroup;
 			children = (
+				00EF839A15B83EF100BF9B1F /* wiki.txt */,
 				00BB7AE715B71E4300A5283A /* README.txt */,
 				0099257E15B401A60071E3F7 /* NodeSync */,
 				0099257B15B401A60071E3F7 /* Frameworks */,

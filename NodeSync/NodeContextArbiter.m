@@ -28,6 +28,8 @@
   
   tookTooLongToLaunchService = YES;
   [self performSelector:@selector(didLaunchService) withObject:nil afterDelay:MAX_TIME_TO_ACTIVE];
+  
+  [self.manager didChangetState:kNodeStateFightingToBeArbiter];
 }
 
 - (void) announceNewMaster {
@@ -57,6 +59,7 @@
   self.receivedPriorities = _receivedPriorities;
   [_receivedPriorities release];
   [self performSelector:@selector(announceNewMaster) withObject:nil afterDelay:ELECTION_TIME];
+  [self.manager didChangetState:kNodeStateArbiter];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {

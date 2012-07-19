@@ -39,7 +39,7 @@
 - (void) netServiceDidPublish:(NSNetService *)sender {
   //Succeded to be master, start heartbeat
   [NSTimer scheduledTimerWithTimeInterval:HEART_BEAT_FREQUENCY target:self selector:@selector(sendHeartBeat) userInfo:nil repeats:YES];
-///  [self.manager.sessionMap addObject:[NSDictionary dictionaryWithObject:@"master" forKey:self.socket.localHost]];
+  [self.manager didChangetState:kNodeStateMaster];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {

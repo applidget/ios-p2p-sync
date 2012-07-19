@@ -73,9 +73,11 @@
   self.context = _context;
   [_context release];
   [self.context performSelector:@selector(activate) withObject:nil afterDelay:0.1];
-  
-  if([self.delegate respondsToSelector:@selector(nodeSync:didChangeContextType:)]) {
-    [self.delegate nodeSync:self didChangeContextType:newContext];
+}
+
+- (void) didChangetState:(kNodeState) newState {
+  if([self.delegate respondsToSelector:@selector(nodeSync:didChangeState:)]) {
+    [self.delegate nodeSync:self didChangeState:newState];
   }
 }
 

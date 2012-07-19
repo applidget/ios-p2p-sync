@@ -17,6 +17,11 @@
   hasWonTheElection = NO;
 }
 
+#pragma mark - NSNetServiceBrowserDelegate
+- (void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)netServiceBrowser {
+  [self.manager didChangetState:kNodeStateElectorSearching];
+}
+
 #pragma mark - GCDAsyncSocketDelegate protocol
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   //No more connected arbiter shut down
@@ -26,6 +31,7 @@
 
 - (void) socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
   [super socket:sock didConnectToHost:host port:port];
+  [self.manager didChangetState:kNodeStateElectorConnected];
   Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority]];
   [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
 }

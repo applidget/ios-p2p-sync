@@ -15,7 +15,17 @@
   [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId ,MASTER_SERVICE]];
 }
 
+#pragma mark - NSNetServiceBrowserDelegate
+- (void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)netServiceBrowser {
+  [self.manager didChangetState:kNodeStateReplicaSearching];
+}
+
 #pragma mark - GCDAsyncSocketDelegate protocol
+- (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
+  [super socket:sender didConnectToHost:host port:port];
+  [self.manager didChangetState:kNodeStateReplicaConnected];
+}
+
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {  
   //Lost connection to master -> trying to launch arbiter context
   NSLog(@"disconnected !!");

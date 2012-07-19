@@ -25,6 +25,15 @@ typedef enum {
   kContextTypeElector
 } kContextType;
 
+typedef enum {
+  kNodeStateMaster,
+  kNodeStateArbiter,
+  kNodeStateFightingToBeArbiter,
+  kNodeStateReplicaSearching,
+  kNodeStateReplicaConnected,
+  kNodeStateElectorSearching,
+  kNodeStateElectorConnected
+} kNodeState;
 
 @class NodeSync, NodeContext;
 
@@ -32,9 +41,10 @@ typedef enum {
 
 - (void) nodeSync:(NodeSync *)nodeSync didRead:(id) objectRead forId:(NSString *) ide;
 
+
 @optional
 - (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;
-- (void) nodeSync:(NodeSync *)nodeSync didChangeContextType:(kContextType)newContext;
+- (void) nodeSync:(NodeSync *)nodeSync didChangeState:(kNodeState)newState;
 
 @end
 
@@ -64,6 +74,7 @@ typedef enum {
 - (void) push:(id) object forId:(NSString *) objId withTimeout:(NSTimeInterval)interval;
 
 //Context
+- (void) didChangetState:(kNodeState) newState;
 - (void) changeToContextType:(kContextType) newContext;
 - (void) didReadClientPacket:(Packet *) packet;
 - (void) didWriteDataWithTag:(long)tag;
