@@ -12,7 +12,12 @@
 #import "NodeContextReplica.h"
 #import "NodeContextArbiter.h"
 #import "NodeContextElector.h"
-#import "NSDictionary+util.h"
+
+@interface NodeSync()
+
+@property (nonatomic, retain) NodeContext *context;
+
+@end
 
 @implementation NodeSync
 
@@ -59,38 +64,23 @@
   
   self.context = _context;
   [_context release];
-  [self.context performSelector:@selector(activate) withObject:nil afterDelay:0.2];
+  [self.context performSelector:@selector(activate) withObject:nil afterDelay:0.1];
   
   if([self.delegate respondsToSelector:@selector(nodeSync:didChangeContextType:)]) {
     [self.delegate nodeSync:self didChangeContextType:newContext];
   }
 }
 
-
-- (void) didReadData:(NSData *) data withTag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didReadData:)]) {
-    //Remove the extra header packet
-    NSDictionary *dict = [NSDictionary dictionaryFromData:data];
-    NSData *originalData = [dict objectForKey:[dict packetKey]];
-    [self.delegate nodeSync:self didReadData:originalData];
-  }
-}
-
-- (void) didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didReadPartialDataOfLength:)]) {
-    [self.delegate nodeSync:self didReadPartialDataOfLength:partialLength ];
+- (void) didReadClientPacket:(Packet *) packet {
+  if([self.delegate respondsToSelector:@selector(nodeSync:didRead:forId:)]) {
+    Packet *clientPacket = (Packet*)packet.packetContent;
+    [self.delegate nodeSync:self didRead:clientPacket.packetContent forId:clientPacket.packetId];
   }
 }
 
 - (void) didWriteDataWithTag:(long)tag {
   if([self.delegate respondsToSelector:@selector(nodeSyncDidWriteData:)]) {
     [self.delegate nodeSyncDidWriteData:self];
-  }
-}
-
-- (void) didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didWritePartialDataOfLength:)]) {
-    [self.delegate nodeSync:self didWritePartialDataOfLength:partialLength];
   }
 }
 
@@ -104,16 +94,22 @@
   [self changeToContextType:contextType];
 }
 
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval {
-  //Encapsulate the data      
-  NSDictionary *clientPacket = [NSDictionary dictionaryWithClientPacket:data];
-  [self.context pushData:[clientPacket convertToData] withTimeout:interval];
+- (void) push:(id) object forId:(NSString *) objId withTimeout:(NSTimeInterval)interval {
+  Packet *clientPacket = [Packet packetWithId:objId andContent:object];
+  NSData *internalPacketData = [[Packet packetWithId:kClientPacket andContent:clientPacket] convertToData];
+  [self.context pushData:internalPacketData withTimeout:interval];
 }
 
 - (void) startMaster {
   [self changeToContextType:kContextTypeMaster];
 }
 
+#pragma mark - memory management
+- (void) dealloc {
+  [setMap release];
+  [context release];
+  [super dealloc];
+}
 
 
 @end

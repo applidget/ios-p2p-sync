@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Packet.h"
 
 //Network information
 #define MASTER_SERVICE @"_master_service._tcp."
@@ -29,12 +30,10 @@ typedef enum {
 @protocol NodeSyncDelegateProtocol <NSObject>
 
 @optional
-- (void) nodeSync:(NodeSync *)nodeSync didWritePartialDataOfLength:(NSUInteger)partialLength;
-- (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;
-- (void) nodeSync:(NodeSync *)nodeSync didReadData:(NSData *)data;
-- (void) nodeSync:(NodeSync *)nodeSync didReadPartialDataOfLength:(NSUInteger)partialLength;
 
+- (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;
 - (void) nodeSync:(NodeSync *)nodeSync didChangeContextType:(kContextType)newContext;
+- (void) nodeSync:(NodeSync *)nodeSync didRead:(id) objectRead forId:(NSString *) ide;
 
 @end
 
@@ -48,7 +47,6 @@ typedef enum {
 }
 
 @property (nonatomic, assign) id<NodeSyncDelegateProtocol> delegate;
-@property (nonatomic, retain) NodeContext *context;
 @property (nonatomic, retain) NSMutableArray *setMap;
 @property (nonatomic, assign) NSInteger port;
 @property (nonatomic, assign) NSInteger priority;
@@ -58,16 +56,12 @@ typedef enum {
 
 //Client
 - (void) startSessionWithContextType:(kContextType) contextType;
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval;
 - (void) startMaster;
+- (void) push:(id) object forId:(NSString *) objId withTimeout:(NSTimeInterval)interval;
 
 //Context
 - (void) changeToContextType:(kContextType) newContext;
-
-- (void) didReadData:(NSData *) data withTag:(long)tag;
-- (void) didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
+- (void) didReadClientPacket:(Packet *) packet;
 - (void) didWriteDataWithTag:(long)tag;
-- (void) didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
-
 
 @end

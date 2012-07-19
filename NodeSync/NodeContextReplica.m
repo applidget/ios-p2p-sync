@@ -24,33 +24,30 @@
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
-  NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
+  Packet *readPacket = [Packet packetFromData:data];
   
-  if(!receivedDict) {
+  if(!readPacket) {
     NSLog(@"data damaged");
-    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
-  NSString *packetId = [receivedDict packetKey];
-  
-  if([packetId isEqualToString:CLIENT_PACKET_KEY]) {
+  if([readPacket.packetId isEqualToString:kClientPacket]) {
     NSLog(@"replica: received client");
-    [self.manager didReadData:data withTag:tag];
+    [self.manager didReadClientPacket:readPacket];
   }
-  else if([packetId isEqualToString:PRIO_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
     NSLog(@"replica: prio packet SHOULDNOT");
     
   }
-  else if([packetId isEqualToString:HEARTBEAT_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
     NSLog(@"replica: received heartbeat");
-    NSDictionary *dict = [NSDictionary dictionaryFromData:data];
-    self.manager.setMap = [dict objectForKey:[dict packetKey]];
+    self.manager.setMap = readPacket.packetContent;
   }
   else {
     NSLog(@"replica: unknown packet");
   }
-  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 

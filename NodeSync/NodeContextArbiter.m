@@ -40,7 +40,7 @@
   }
 
   if(highestPrio > self.manager.priority) {
-    NSDictionary *prioPacket = [NSDictionary dictionaryWithPriorityPacket:[NSString stringWithFormat:@"%i", highestPrio]];
+    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", highestPrio]];
     [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeReplica];
   }
@@ -67,34 +67,32 @@
 #pragma mark GCDAsyncSocketDelegate protocol
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
-  NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
+  Packet *readPacket = [Packet packetFromData:data];
   
-  if(!receivedDict) {
+  if(!readPacket) {
     NSLog(@"data damaged");
-    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
-  NSString *packetId = [receivedDict packetKey];
-  
-  if([packetId isEqualToString:CLIENT_PACKET_KEY]) {
+  if([readPacket.packetId isEqualToString:kClientPacket]) {
     NSLog(@"arbiter: received client SHOULDNOT");
     
   }
-  else if([packetId isEqualToString:PRIO_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
     NSLog(@"arbiter: prio packet");
     
-    NSString *strPriority = [receivedDict objectForKey:packetId];
+    NSString *strPriority = readPacket.packetContent;
     [self.receivedPriorities addObject:strPriority];
   }
-  else if([packetId isEqualToString:HEARTBEAT_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
     NSLog(@"arbiter: received heartbeat SHOULDNOT");
     
   }
   else {
     NSLog(@"arbiter: unknown packet");
   }
-  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {

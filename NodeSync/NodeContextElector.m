@@ -26,40 +26,38 @@
 
 - (void) socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
   [super socket:sock didConnectToHost:host port:port];
-  NSDictionary *prioPacket = [NSDictionary dictionaryWithPriorityPacket:[NSString stringWithFormat:@"%i", self.manager.priority]];
+  Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority]];
   [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
-  NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
+  Packet *readPacket = [Packet packetFromData:data];
   
-  if(!receivedDict) {
+  if(!readPacket) {
     NSLog(@"data damaged");
-    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
-  NSString *packetId = [receivedDict packetKey];
-  
-  if([packetId isEqualToString:CLIENT_PACKET_KEY]) {
+  if([readPacket.packetId isEqualToString:kClientPacket]) {
     NSLog(@"elector: received client SHOULDNOT");
     
   }
-  else if([packetId isEqualToString:PRIO_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
     NSLog(@"elector: prio packet");
-    NSString *strPriority = [receivedDict objectForKey:packetId];
+    NSString *strPriority = readPacket.packetContent;
     NSInteger priority = [strPriority intValue];
     hasWonTheElection = (priority == self.manager.priority);
   }
-  else if([packetId isEqualToString:HEARTBEAT_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
     NSLog(@"elector: received heartbeat SHOULDNOT");
     
   }
   else {
     NSLog(@"elector: unknown packet");
   }
-  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 @end

@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		002961A015B4108D005B02CD /* NodeContextMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 0029619E15B4108D005B02CD /* NodeContextMaster.h */; };
 		002961A115B4108D005B02CD /* NodeContextMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 0029619F15B4108D005B02CD /* NodeContextMaster.m */; };
-		00363CE915B5B207001C67B6 /* NSDictionary+util.h in Headers */ = {isa = PBXBuildFile; fileRef = 00363CE715B5B207001C67B6 /* NSDictionary+util.h */; };
-		00363CEA15B5B207001C67B6 /* NSDictionary+util.m in Sources */ = {isa = PBXBuildFile; fileRef = 00363CE815B5B207001C67B6 /* NSDictionary+util.m */; };
 		003966E015B44D4600794240 /* NodeContextPrimary.h in Headers */ = {isa = PBXBuildFile; fileRef = 003966DE15B44D4600794240 /* NodeContextPrimary.h */; };
 		003966E115B44D4600794240 /* NodeContextPrimary.m in Sources */ = {isa = PBXBuildFile; fileRef = 003966DF15B44D4600794240 /* NodeContextPrimary.m */; };
 		003966E415B44F8F00794240 /* NodeContextArbiter.h in Headers */ = {isa = PBXBuildFile; fileRef = 003966E215B44F8F00794240 /* NodeContextArbiter.h */; };
@@ -27,13 +25,13 @@
 		0099259115B402EB0071E3F7 /* NodeContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 0099258F15B402EB0071E3F7 /* NodeContext.m */; };
 		0099259915B40B790071E3F7 /* NodeContextReplica.h in Headers */ = {isa = PBXBuildFile; fileRef = 0099259715B40B790071E3F7 /* NodeContextReplica.h */; };
 		0099259A15B40B790071E3F7 /* NodeContextReplica.m in Sources */ = {isa = PBXBuildFile; fileRef = 0099259815B40B790071E3F7 /* NodeContextReplica.m */; };
+		00BB7AF315B7FC9600A5283A /* Packet.h in Headers */ = {isa = PBXBuildFile; fileRef = 00BB7AF115B7FC9600A5283A /* Packet.h */; };
+		00BB7AF415B7FC9600A5283A /* Packet.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BB7AF215B7FC9600A5283A /* Packet.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0029619E15B4108D005B02CD /* NodeContextMaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextMaster.h; sourceTree = "<group>"; };
 		0029619F15B4108D005B02CD /* NodeContextMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContextMaster.m; sourceTree = "<group>"; };
-		00363CE715B5B207001C67B6 /* NSDictionary+util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+util.h"; sourceTree = "<group>"; };
-		00363CE815B5B207001C67B6 /* NSDictionary+util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+util.m"; sourceTree = "<group>"; };
 		003966DE15B44D4600794240 /* NodeContextPrimary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextPrimary.h; sourceTree = "<group>"; };
 		003966DF15B44D4600794240 /* NodeContextPrimary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContextPrimary.m; sourceTree = "<group>"; };
 		003966E215B44F8F00794240 /* NodeContextArbiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextArbiter.h; sourceTree = "<group>"; };
@@ -54,6 +52,8 @@
 		0099259715B40B790071E3F7 /* NodeContextReplica.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeContextReplica.h; sourceTree = "<group>"; };
 		0099259815B40B790071E3F7 /* NodeContextReplica.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeContextReplica.m; sourceTree = "<group>"; };
 		00BB7AE715B71E4300A5283A /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		00BB7AF115B7FC9600A5283A /* Packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Packet.h; sourceTree = "<group>"; };
+		00BB7AF215B7FC9600A5283A /* Packet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Packet.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +71,8 @@
 		00363CE515B5B1EF001C67B6 /* categories */ = {
 			isa = PBXGroup;
 			children = (
-				00363CE715B5B207001C67B6 /* NSDictionary+util.h */,
-				00363CE815B5B207001C67B6 /* NSDictionary+util.m */,
+				00BB7AF115B7FC9600A5283A /* Packet.h */,
+				00BB7AF215B7FC9600A5283A /* Packet.m */,
 			);
 			name = categories;
 			sourceTree = "<group>";
@@ -185,7 +185,7 @@
 				003966E415B44F8F00794240 /* NodeContextArbiter.h in Headers */,
 				003966E815B4500600794240 /* NodeContextSecondary.h in Headers */,
 				003966EC15B450F500794240 /* NodeContextElector.h in Headers */,
-				00363CE915B5B207001C67B6 /* NSDictionary+util.h in Headers */,
+				00BB7AF315B7FC9600A5283A /* Packet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,7 +248,7 @@
 				003966E515B44F8F00794240 /* NodeContextArbiter.m in Sources */,
 				003966E915B4500600794240 /* NodeContextSecondary.m in Sources */,
 				003966ED15B450F500794240 /* NodeContextElector.m in Sources */,
-				00363CEA15B5B207001C67B6 /* NSDictionary+util.m in Sources */,
+				00BB7AF415B7FC9600A5283A /* Packet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
