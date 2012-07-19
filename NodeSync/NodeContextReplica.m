@@ -12,7 +12,7 @@
 @implementation NodeContextReplica
 
 - (void) activate {
-  [super activateWithServiceType:MASTER_SERVICE];
+  [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId ,MASTER_SERVICE]];
 }
 
 #pragma mark - GCDAsyncSocketDelegate protocol
@@ -42,7 +42,7 @@
   }
   else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
     NSLog(@"replica: received heartbeat");
-    self.manager.setMap = readPacket.packetContent;
+    self.manager.sessionMap = readPacket.packetContent;
   }
   else {
     NSLog(@"replica: unknown packet");

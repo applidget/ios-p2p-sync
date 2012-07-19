@@ -23,29 +23,32 @@
 
 - (void) sendHeartBeat {
   
-  self.manager.setMap = [self generateSetMap];
+  self.manager.sessionMap = [self generateSetMap];
   
-  NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.setMap] convertToData];
+  NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.sessionMap] convertToData];
   
   [self pushData:data withTimeout:DEFAULT_TIMEOUT];
 }
 
 
 - (void) activate {  
-  [super activateWithServiceType:MASTER_SERVICE andName:@"master"];
+  [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId ,MASTER_SERVICE] andName:@"master"];
 }
 
 #pragma mark - NSNetServiceDelegate protocol
 - (void) netServiceDidPublish:(NSNetService *)sender {
   //Succeded to be master, start heartbeat
   [NSTimer scheduledTimerWithTimeInterval:HEART_BEAT_FREQUENCY target:self selector:@selector(sendHeartBeat) userInfo:nil repeats:YES];
+///  [self.manager.sessionMap addObject:[NSDictionary dictionaryWithObject:@"master" forKey:self.socket.localHost]];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
   //maybe another master service already exist (a tie in the election ??)
+  [super netService:sender didNotPublish:errorDict];
   [self.manager changeToContextType:kContextTypeReplica];
 }
 
+#pragma mark - GCDAsyncSocket delegate
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   Packet *readPacket = [Packet packetFromData:data];
   

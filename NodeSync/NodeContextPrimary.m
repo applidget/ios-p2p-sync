@@ -52,10 +52,11 @@
   newSocket.delegate = self;
   [newSocket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
   [self.connectedNodes addObject:newSocket];
-}
+} 
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   [self.connectedNodes removeObject:sock];
+  NSLog(@"socket disconnected: %@", sock.connectedHost);
 }
 
 #pragma mark - NSNetServiceDelegate
@@ -66,6 +67,8 @@
 - (void) netServiceDidStop:(NSNetService *)sender {}
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
+  NSLog(@"%@", errorDict);
+  NSLog(@"bad session name. Use _xxxxxxxx");
   /*
    typedef enum {
    NSNetServicesUnknownError = -72000,

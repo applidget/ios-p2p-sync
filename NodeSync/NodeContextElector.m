@@ -13,7 +13,7 @@
 @implementation NodeContextElector
 
 - (void) activate {
-  [super activateWithServiceType:ARBITER_SERVICE];
+  [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId, ARBITER_SERVICE]];
   hasWonTheElection = NO;
 }
 

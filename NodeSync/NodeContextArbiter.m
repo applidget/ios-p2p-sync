@@ -24,7 +24,7 @@
 }
 
 - (void) activate {  
-  [super activateWithServiceType:ARBITER_SERVICE andName:@"arbiter"];
+  [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId ,ARBITER_SERVICE] andName:@"arbiter"];
   
   tookTooLongToLaunchService = YES;
   [self performSelector:@selector(didLaunchService) withObject:nil afterDelay:MAX_TIME_TO_ACTIVE];
@@ -61,6 +61,7 @@
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
   //an other arbiter service is already launched
+    [super netService:sender didNotPublish:errorDict];
   [self.manager changeToContextType:kContextTypeElector];
 }
 

@@ -21,12 +21,13 @@
 
 @implementation NodeSync
 
-@synthesize delegate, context, setMap, port, priority;
+@synthesize delegate, context, sessionMap, port, priority, sessionId;
 
 #pragma mark - Constructors
 - (id) initWithDelegate:(id<NodeSyncDelegateProtocol>) _delegate {
   if(self = [super init]) {
     self.delegate = _delegate;
+    self.sessionMap = [NSMutableArray array];
     //Random priority
     self.priority = arc4random() % 10000;
   }
@@ -36,6 +37,13 @@
 - (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate port:(NSInteger) _port {
   if(self = [self initWithDelegate:_delegate]) {
     self.port = _port;
+  }
+  return self;
+}
+
+- (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate port:(NSInteger)_port sessionId:(NSString *)_sessionId {
+  if(self = [self initWithDelegate:_delegate port:_port]) {
+    self.sessionId = _sessionId;
   }
   return self;
 }
@@ -73,7 +81,7 @@
 
 - (void) didReadClientPacket:(Packet *) packet {
   if([self.delegate respondsToSelector:@selector(nodeSync:didRead:forId:)]) {
-    Packet *clientPacket = (Packet*)packet.packetContent;
+    Packet *clientPacket = packet.packetContent;
     [self.delegate nodeSync:self didRead:clientPacket.packetContent forId:clientPacket.packetId];
   }
 }
@@ -87,9 +95,11 @@
 
 #pragma mark - Client
 - (void) startSessionWithContextType:(kContextType)contextType {
-  //Set default values if needed
   if(!self.port) {
     self.port = DEFAULT_PORT;
+  }
+  if(!self.sessionId) {
+    self.sessionId = DEFAULT_SESSION_ID;
   }
   [self changeToContextType:contextType];
 }
@@ -106,7 +116,8 @@
 
 #pragma mark - memory management
 - (void) dealloc {
-  [setMap release];
+  [sessionId release];
+  [sessionMap release];
   [context release];
   [super dealloc];
 }
