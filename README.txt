@@ -5,6 +5,8 @@ How to use the lib:
 - Becauses an Objective-C categorie is used, the -all_load flag is needed (also in the "Other linker flags")
 - add Security and CFNetwork framework
 
+#warning: sessionId can't be longer than 15 char sor for client must be 12 + _ maximum (otherwise crash !!) => check it with an assertion
+
 TODO (developper)
 - manage errors (with NSError, error domain name ...)
 - advertise client when the set map change (new device, device disappear ...)
@@ -12,5 +14,6 @@ TODO (developper)
 
 - add state replica connected / non connected
 - disable push data and stuff while arbiter or elector
+
 
 - crash of the wining elector before it becomes master !!
