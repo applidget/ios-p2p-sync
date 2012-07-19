@@ -17,9 +17,16 @@
 
 #import "NodeContextSecondary.h"
 
+typedef enum {
+  kElectionResultWon,
+  kElectionResultLost,
+  kElectionResultUnknown
+}kElectionResult;
+
 @interface NodeContextElector : NodeContextSecondary {
 @private
-  BOOL hasWonTheElection;
+  kElectionResult electionResult;
+  NSTimer *timeOutTimer;
 }
 
 @end

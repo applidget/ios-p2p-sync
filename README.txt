@@ -12,3 +12,5 @@ TODO (developper)
 
 - add state replica connected / non connected
 - disable push data and stuff while arbiter or elector
+
+- crash of the wining elector before it becomes master !!
