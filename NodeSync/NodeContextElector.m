@@ -74,7 +74,6 @@
     
   }
   else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
-    NSLog(@"elector: prio packet");
     NSString *strPriority = readPacket.packetContent;
     NSInteger priority = [strPriority intValue];
     if (priority == self.manager.priority) {

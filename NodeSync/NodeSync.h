@@ -41,7 +41,6 @@ typedef enum {
 
 - (void) nodeSync:(NodeSync *)nodeSync didRead:(id) objectRead forId:(NSString *) ide;
 
-
 @optional
 - (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;
 - (void) nodeSync:(NodeSync *)nodeSync didChangeState:(kNodeState)newState;
