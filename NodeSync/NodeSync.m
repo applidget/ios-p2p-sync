@@ -117,9 +117,12 @@
     NSLog(@"not in a context that allow client to push data");
     return;
   }
-  
   Packet *clientPacket = [Packet packetWithId:objId andContent:object];
-  NSData *internalPacketData = [[Packet packetWithId:kClientPacket andContent:clientPacket] convertToData];
+  Packet *internalPacket = [Packet packetWithId:kClientPacket andContent:clientPacket];
+  if([self.context isKindOfClass:[NodeContextMaster class]]) {
+    [self didReadClientPacket:internalPacket]; //write on master, master manage the packet for itself
+  }
+  NSData *internalPacketData = [internalPacket convertToData];
   [self.context pushData:internalPacketData withTimeout:interval];
 }
 

@@ -59,8 +59,9 @@
   }
   
   if([readPacket.packetId isEqualToString:kClientPacket]) {
-    NSLog(@"master: received client");
     [self.manager didReadClientPacket:readPacket];
+    //Forward the packet to every other nodes
+    [self pushData:data withTimeout:DEFAULT_TIMEOUT];
   }
   else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
     NSLog(@"master: prio packet SHOULDNOT");
