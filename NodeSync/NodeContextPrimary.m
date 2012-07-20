@@ -35,9 +35,11 @@
 - (void) unactivate {
   [self.netService stop];
   for(GCDAsyncSocket *sock in self.connectedNodes) {
-    [sock disconnect];
+    sock.delegate = nil;
+    [sock disconnectAfterWriting];
   }
   [self.connectedNodes removeAllObjects];
+  self.socket.delegate = nil;
   [self.socket disconnect];
 }
 
@@ -50,12 +52,14 @@
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
   newSocket.delegate = self;
-  [newSocket readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+  [newSocket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
   [self.connectedNodes addObject:newSocket];
-}
+} 
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   [self.connectedNodes removeObject:sock];
+  sock.delegate = nil;
+  NSLog(@"socket disconnected: %@", sock.connectedHost);
 }
 
 #pragma mark - NSNetServiceDelegate
@@ -66,6 +70,8 @@
 - (void) netServiceDidStop:(NSNetService *)sender {}
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
+  NSLog(@"%@", errorDict);
+  NSLog(@"bad session name. Use _xxxxxxxx");
   /*
    typedef enum {
    NSNetServicesUnknownError = -72000,

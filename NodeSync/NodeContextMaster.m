@@ -23,55 +23,57 @@
 
 - (void) sendHeartBeat {
   
-  self.manager.setMap = [self generateSetMap];
+  self.manager.sessionMap = [self generateSetMap];
   
-  NSDictionary *dict = [NSDictionary dictionaryWithHeartBeatPacket:self.manager.setMap];
-  [self pushData:[dict convertToData] withTimeout:DEFAULT_TIMEOUT];
+  NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.sessionMap] convertToData];
+  
+  [self pushData:data withTimeout:DEFAULT_TIMEOUT];
 }
 
 
 - (void) activate {  
-  [super activateWithServiceType:MASTER_SERVICE andName:@"master"];
+  [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId ,MASTER_SERVICE] andName:@"master"];
 }
 
 #pragma mark - NSNetServiceDelegate protocol
 - (void) netServiceDidPublish:(NSNetService *)sender {
   //Succeded to be master, start heartbeat
   [NSTimer scheduledTimerWithTimeInterval:HEART_BEAT_FREQUENCY target:self selector:@selector(sendHeartBeat) userInfo:nil repeats:YES];
+  [self.manager didChangetState:kNodeStateMaster];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
   //maybe another master service already exist (a tie in the election ??)
+  [super netService:sender didNotPublish:errorDict];
   [self.manager changeToContextType:kContextTypeReplica];
 }
 
+#pragma mark - GCDAsyncSocket delegate
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
-  NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
+  Packet *readPacket = [Packet packetFromData:data];
   
-  if(!receivedDict) {
+  if(!readPacket) {
     NSLog(@"data damaged");
-    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
-  NSString *packetId = [receivedDict packetKey];
-  
-  if([packetId isEqualToString:CLIENT_PACKET_KEY]) {
+  if([readPacket.packetId isEqualToString:kClientPacket]) {
     NSLog(@"master: received client");
-    [self.manager didReadData:data withTag:tag];
+    [self.manager didReadClientPacket:readPacket];
   }
-  else if([packetId isEqualToString:PRIO_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
     NSLog(@"master: prio packet SHOULDNOT");
 
   }
-  else if([packetId isEqualToString:HEARTBEAT_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
     NSLog(@"MASTER: received heartbeat SHOULDNOT");
     
   }
   else {
     NSLog(@"master: unknown packet");
   }
-  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 @end

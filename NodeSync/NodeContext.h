@@ -15,7 +15,7 @@
 #import <Foundation/Foundation.h>
 #import "NodeSync.h"
 #import "GCDAsyncSocket.h"
-#import "NSDictionary+util.h"
+#import "Packet.h"
 
 #define DEFAULT_TIMEOUT -1
 

@@ -1,0 +1,47 @@
+
+Create a NodeSync instance
+
+- (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate;
+- (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate port:(NSInteger) _port;
+- (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate port:(NSInteger) _port sessionId:(NSString *)_sessionId;
+
+The delegate must implement the NodeSyncDelegateProtocol. If the first method is used, a default port and a default session id are
+automatically chosen. The sessionId is a string that allow to differentiate a "network of nodes". This means that a node will interact
+only with nodes that are in the same session. This allow to create separate independent "network of nodes" on the same network.
+
+Acessible methods
+
+- (void) startSessionWithContextType:(kContextType) contextType;
+
+Once a NodeSync instance is inbitialized, the node enter the session using this method. A node can join a session in 2 different contexts:
+- kContextTypeReplica : the node will look for a master within the session and connect to it whenever it's possible
+- kContextTypeMaster : the node will open a listening socket and publish a Bonjour service to allow other nodes to connect to it. If a master
+service already exist in the node's session, the context of the node will automatically switch to the replica context.
+
+
+- (void) push:(id) object forId:(NSString *) objId withTimeout:(NSTimeInterval)interval;
+
+This method allow you to send data over the network. You don't have to care about converting your object (i.e NSString, NSDictionary ...) into
+NSData, the library takes care or that for you. When sending an object, you have to pass an objectId. This id will be sent along with your object.
+See examples to understand how handy the id parameter can be.
+The interval parameter means: you have 'interval' seconds to send the data before an error is raised. Set this parameter < 0 not to have a timeout
+
+#WARNING: object passed to this method must implement the NSCoding protocol. This protocol is implemented by all Objective-C existent objects.
+However, if you want to send custom object using this method, you must ensure that your object follows the NSCoding protocol.
+
+NodeSyncDelegateProtocol
+
+- (void) nodeSync:(NodeSync *)nodeSync didRead:(id) objectRead forId:(NSString *) ide;
+
+This method is called when an object is received. The objectRead is the object sent and the ide is its id.
+
+- (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;
+
+Method called when a write operation has been completed.
+
+- (void) nodeSync:(NodeSync *)nodeSync didChangeContextType:(kContextType)newContext;
+
+Method called when the context of the node changed. A node can be in 4 contexts:
+- kContextTypeMaster: acts as a server
+- kContextTypeReplica: connected to a node in the kContextTypeMaster or looking for a node in kContextTypeMaster
+- kContextTypeArbiter: act as a server for 7 seconds maximum.

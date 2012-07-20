@@ -12,16 +12,22 @@
 #import "NodeContextReplica.h"
 #import "NodeContextArbiter.h"
 #import "NodeContextElector.h"
-#import "NSDictionary+util.h"
+
+@interface NodeSync()
+
+@property (nonatomic, retain) NodeContext *context;
+
+@end
 
 @implementation NodeSync
 
-@synthesize delegate, context, setMap, port, priority;
+@synthesize delegate, context, sessionMap, port, priority, sessionId;
 
 #pragma mark - Constructors
 - (id) initWithDelegate:(id<NodeSyncDelegateProtocol>) _delegate {
   if(self = [super init]) {
     self.delegate = _delegate;
+    self.sessionMap = [NSMutableArray array];
     //Random priority
     self.priority = arc4random() % 10000;
   }
@@ -33,6 +39,18 @@
     self.port = _port;
   }
   return self;
+}
+
+- (id) initWithDelegate:(id<NodeSyncDelegateProtocol>)_delegate port:(NSInteger)_port sessionId:(NSString *)_sessionId {
+  if(self = [self initWithDelegate:_delegate port:_port]) {
+    self.sessionId = _sessionId;
+  }
+  return self;
+}
+
+- (void) activateContext:(NodeContext *) newContext {
+  self.context = newContext;
+  [self.context activate];
 }
 
 #pragma mark - Context
@@ -57,28 +75,21 @@
       break;
   }
   
-  self.context = _context;
-  [_context release];
-  [self.context performSelector:@selector(activate) withObject:nil afterDelay:0.2];
   
-  if([self.delegate respondsToSelector:@selector(nodeSync:didChangeContextType:)]) {
-    [self.delegate nodeSync:self didChangeContextType:newContext];
+  [self performSelector:@selector(activateContext:) withObject:_context afterDelay:0.5];
+  [_context release];
+}
+
+- (void) didChangetState:(kNodeState) newState {
+  if([self.delegate respondsToSelector:@selector(nodeSync:didChangeState:)]) {
+    [self.delegate nodeSync:self didChangeState:newState];
   }
 }
 
-
-- (void) didReadData:(NSData *) data withTag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didReadData:)]) {
-    //Remove the extra header packet
-    NSDictionary *dict = [NSDictionary dictionaryFromData:data];
-    NSData *originalData = [dict objectForKey:[dict packetKey]];
-    [self.delegate nodeSync:self didReadData:originalData];
-  }
-}
-
-- (void) didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didReadPartialDataOfLength:)]) {
-    [self.delegate nodeSync:self didReadPartialDataOfLength:partialLength ];
+- (void) didReadClientPacket:(Packet *) packet {
+  if([self.delegate respondsToSelector:@selector(nodeSync:didRead:forId:)]) {
+    Packet *clientPacket = packet.packetContent;
+    [self.delegate nodeSync:self didRead:clientPacket.packetContent forId:clientPacket.packetId];
   }
 }
 
@@ -88,32 +99,41 @@
   }
 }
 
-- (void) didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didWritePartialDataOfLength:)]) {
-    [self.delegate nodeSync:self didWritePartialDataOfLength:partialLength];
-  }
-}
-
 
 #pragma mark - Client
 - (void) startSessionWithContextType:(kContextType)contextType {
-  //Set default values if needed
   if(!self.port) {
     self.port = DEFAULT_PORT;
+  }
+  if(!self.sessionId) {
+    self.sessionId = DEFAULT_SESSION_ID;
   }
   [self changeToContextType:contextType];
 }
 
-- (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval {
-  //Encapsulate the data      
-  NSDictionary *clientPacket = [NSDictionary dictionaryWithClientPacket:data];
-  [self.context pushData:[clientPacket convertToData] withTimeout:interval];
+- (void) push:(id) object forId:(NSString *) objId withTimeout:(NSTimeInterval)interval {
+  
+  if([self.context isKindOfClass:[NodeContextArbiter class]] || [self.context isKindOfClass:[NodeContextElector class]]) {
+    NSLog(@"not in a context that allow client to push data");
+    return;
+  }
+  
+  Packet *clientPacket = [Packet packetWithId:objId andContent:object];
+  NSData *internalPacketData = [[Packet packetWithId:kClientPacket andContent:clientPacket] convertToData];
+  [self.context pushData:internalPacketData withTimeout:interval];
 }
 
 - (void) startMaster {
   [self changeToContextType:kContextTypeMaster];
 }
 
+#pragma mark - memory management
+- (void) dealloc {
+  [sessionId release];
+  [sessionMap release];
+  [context release];
+  [super dealloc];
+}
 
 
 @end

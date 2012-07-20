@@ -12,45 +12,52 @@
 @implementation NodeContextReplica
 
 - (void) activate {
-  [super activateWithServiceType:MASTER_SERVICE];
+  [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId ,MASTER_SERVICE]];
+}
+
+#pragma mark - NSNetServiceBrowserDelegate
+- (void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)netServiceBrowser {
+  [self.manager didChangetState:kNodeStateReplicaSearching];
 }
 
 #pragma mark - GCDAsyncSocketDelegate protocol
+- (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
+  [super socket:sender didConnectToHost:host port:port];
+  [self.manager didChangetState:kNodeStateReplicaConnected];
+}
+
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {  
   //Lost connection to master -> trying to launch arbiter context
-  NSLog(@"disconnected !!");
+  self.socket.delegate = nil;
   [self.manager changeToContextType:kContextTypeArbiter];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
-  NSDictionary *receivedDict = [NSDictionary dictionaryFromData:data];
+  Packet *readPacket = [Packet packetFromData:data];
   
-  if(!receivedDict) {
+  if(!readPacket) {
     NSLog(@"data damaged");
-    [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+    [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
     return;
   }
   
-  NSString *packetId = [receivedDict packetKey];
-  
-  if([packetId isEqualToString:CLIENT_PACKET_KEY]) {
+  if([readPacket.packetId isEqualToString:kClientPacket]) {
     NSLog(@"replica: received client");
-    [self.manager didReadData:data withTag:tag];
+    [self.manager didReadClientPacket:readPacket];
   }
-  else if([packetId isEqualToString:PRIO_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
     NSLog(@"replica: prio packet SHOULDNOT");
     
   }
-  else if([packetId isEqualToString:HEARTBEAT_PACKET_KEY]) {
+  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
     NSLog(@"replica: received heartbeat");
-    NSDictionary *dict = [NSDictionary dictionaryFromData:data];
-    self.manager.setMap = [dict objectForKey:[dict packetKey]];
+    self.manager.sessionMap = readPacket.packetContent;
   }
   else {
     NSLog(@"replica: unknown packet");
   }
-  [sock readDataToData:END_PACKET withTimeout:DEFAULT_TIMEOUT tag:0];
+  [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
 }
 
 

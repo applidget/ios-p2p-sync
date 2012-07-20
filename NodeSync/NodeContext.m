@@ -25,16 +25,8 @@
 - (void) pushData:(NSData *)data withTimeout:(NSTimeInterval)interval {}
 
 #pragma mark - GCDAsyncSocketDelegateProtcol
-- (void) socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  [self.manager didWritePartialDataOfLength:partialLength tag:tag];
-}
-
 - (void) socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
   [self.manager didWriteDataWithTag:tag];
-}
-
-- (void) socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-  [self.manager didReadPartialDataOfLength:partialLength tag:tag];
 }
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {}
