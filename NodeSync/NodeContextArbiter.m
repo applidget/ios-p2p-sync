@@ -30,6 +30,7 @@
   [self performSelector:@selector(didLaunchService) withObject:nil afterDelay:MAX_TIME_TO_ACTIVE];
   
   [self.manager didChangetState:kNodeStateFightingToBeArbiter];
+  NSLog(@"activated arbiter");
 }
 
 - (void) announceNewMaster {
@@ -42,12 +43,12 @@
   }
 
   if(highestPrio > self.manager.priority) {
-    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", highestPrio] emitingHost:self.socket.localHost];
+    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", highestPrio] emittingHost:self.socket.localHost];
     [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
-    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority] emitingHost:self.socket.localHost];
+    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority] emittingHost:self.socket.localHost];
     [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeMaster];
   }

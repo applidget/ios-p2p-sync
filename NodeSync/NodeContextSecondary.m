@@ -32,6 +32,7 @@
 #pragma mark - GCDAsynSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
   [self.socket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
+  [self.serviceBrowser stop];
 }
 
 #pragma mark - NSNetServiceBrowserDelegate

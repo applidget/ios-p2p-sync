@@ -67,7 +67,9 @@
 
 - (void)netServiceDidPublish:(NSNetService *)sender {}
 
-- (void) netServiceDidStop:(NSNetService *)sender {}
+- (void) netServiceDidStop:(NSNetService *)sender {
+  NSLog(@"service stopped ------------------------------------");
+}
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
   NSLog(@"%@", errorDict);

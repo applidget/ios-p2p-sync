@@ -23,6 +23,7 @@
   [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId, ARBITER_SERVICE]];
   electionResult = kElectionResultUnknown;
   timeOutTimer = [NSTimer scheduledTimerWithTimeInterval:ELECTOR_TIMEOUT target:self selector:@selector(electorContextTimedOut) userInfo:nil repeats:NO];
+  NSLog(@"activated elector");
 }
 
 #pragma mark - NSNetServiceBrowserDelegate
@@ -55,7 +56,7 @@
   [super socket:sock didConnectToHost:host port:port];
   [timeOutTimer invalidate];
   [self.manager didChangetState:kNodeStateElectorConnected];
-  Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority] emitingHost:self.socket.localHost];
+  Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority] emittingHost:self.socket.localHost];
   [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
 }
 

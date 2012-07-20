@@ -89,7 +89,7 @@
 - (void) didReadClientPacket:(Packet *) packet {
   if([self.delegate respondsToSelector:@selector(nodeSync:didRead:forId:fromHost:)]) {
     Packet *clientPacket = packet.packetContent;
-    [self.delegate nodeSync:self didRead:clientPacket.packetContent forId:clientPacket.packetId fromHost:clientPacket.emitingHost];
+    [self.delegate nodeSync:self didRead:clientPacket.packetContent forId:clientPacket.packetId fromHost:clientPacket.emittingHost];
   }
 }
 
@@ -117,8 +117,8 @@
     NSLog(@"not in a context that allow client to push data");
     return;
   }
-  Packet *clientPacket = [Packet packetWithId:objId andContent:object emitingHost:self.context.socket.localHost];
-  Packet *internalPacket = [Packet packetWithId:kClientPacket andContent:clientPacket emitingHost:self.context.socket.localHost];
+  Packet *clientPacket = [Packet packetWithId:objId andContent:object emittingHost:self.context.socket.localHost];
+  Packet *internalPacket = [Packet packetWithId:kClientPacket andContent:clientPacket emittingHost:self.context.socket.localHost];
   if([self.context isKindOfClass:[NodeContextMaster class]]) {
     [self didReadClientPacket:internalPacket]; //write on master, master manage the packet for itself
   }

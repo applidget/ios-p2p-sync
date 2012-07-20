@@ -25,7 +25,7 @@
   
   self.manager.sessionMap = [self generateSetMap];
   
-  NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.sessionMap emitingHost:self.socket.localHost] convertToData];
+  NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.sessionMap emittingHost:self.socket.localHost] convertToData];
   
   [self pushData:data withTimeout:DEFAULT_TIMEOUT];
 }
@@ -33,6 +33,7 @@
 
 - (void) activate {  
   [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId ,MASTER_SERVICE] andName:@"master"];
+  NSLog(@"activated master");
 }
 
 #pragma mark - NSNetServiceDelegate protocol

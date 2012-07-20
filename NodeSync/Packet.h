@@ -18,18 +18,18 @@
 @private
   NSString *packetId;
   id<NSCoding> packetContent;
-  NSString *emitingHost;
+  NSString *emittingHost;
 }
 
 @property (nonatomic, retain) NSString *packetId;
 @property (nonatomic, retain) id packetContent;
-@property (nonatomic, retain) NSString *emitingHost;
+@property (nonatomic, retain) NSString *emittingHost;
 
 //Constructor
-- (id) initWithPacketId:(NSString *) _packetId andContent:(id) _packetContent emitingHost:(NSString *)_emitingHost;
+- (id) initWithPacketId:(NSString *) _packetId andContent:(id) _packetContent emittingHost:(NSString *)_emittingHost;
 
 //Static initializer
-+ (Packet *) packetWithId:(NSString *) _packetId andContent:(id) _packetContent emitingHost:(NSString *)_emitingHost;
++ (Packet *) packetWithId:(NSString *) _packetId andContent:(id) _packetContent emittingHost:(NSString *)_emittingHost;
 + (Packet *) packetFromData:(NSData *) data;
 
 - (NSData *) convertToData;

@@ -11,25 +11,25 @@
 #define kArchiveKey @"archive_key"
 #define kIdKey @"packet_id_key"
 #define kContentKey @"packet_content_key"
-#define kEmitingHostKey @"packet_emiting_host"
+#define kEmittingHostKey @"packet_emitting_host"
 
 @implementation Packet
 
-@synthesize packetId, packetContent, emitingHost;
+@synthesize packetId, packetContent, emittingHost;
 
-- (id) initWithPacketId:(NSString *) _packetId andContent:(id) _packetContent emitingHost:(NSString *)_emitingHost {
+- (id) initWithPacketId:(NSString *) _packetId andContent:(id) _packetContent emittingHost:(NSString *)_emittingHost {
   if(self = [super init]) {
     NSAssert([_packetContent respondsToSelector:@selector(encodeWithCoder:)], @"packet content object must implement the NSCoding protocol");
     NSAssert([_packetContent respondsToSelector:@selector(initWithCoder:)], @"packet content object must implement the NSCoding protocol");
     self.packetId = _packetId;
     self.packetContent = _packetContent;
-    self.emitingHost = _emitingHost;
+    self.emittingHost = _emittingHost;
   }
   return self;
 }
 
-+ (Packet *) packetWithId:(NSString *) packetId andContent:(id) content emitingHost:(NSString *)_emitingHost {
-  return [[self alloc] initWithPacketId:packetId andContent:content emitingHost:_emitingHost];
++ (Packet *) packetWithId:(NSString *) packetId andContent:(id) content emittingHost:(NSString *)_emittingHost {
+  return [[self alloc] initWithPacketId:packetId andContent:content emittingHost:_emittingHost];
 }
 
 + (Packet *) packetFromData:(NSData *) data {
@@ -63,14 +63,14 @@
 - (void) encodeWithCoder:(NSCoder*)encoder {
   [encoder encodeObject:self.packetId forKey:kIdKey];
   [encoder encodeObject:self.packetContent forKey:kContentKey];
-  [encoder encodeObject:self.emitingHost forKey:kEmitingHostKey];
+  [encoder encodeObject:self.emittingHost forKey:kEmittingHostKey];
 }
 
 - (id) initWithCoder:(NSCoder*)decoder {
   if (self = [super init]) {
     self.packetId = [decoder decodeObjectForKey:kIdKey];
     self.packetContent = [decoder decodeObjectForKey:kContentKey];
-    self.emitingHost = [decoder decodeObjectForKey:kEmitingHostKey];
+    self.emittingHost = [decoder decodeObjectForKey:kEmittingHostKey];
   }
   return self;
 }
@@ -78,7 +78,7 @@
 #pragma mark - memory management
 - (void) dealloc {
   [packetId release];
-  [emitingHost release];
+  [emittingHost release];
   [super dealloc];
 }
 
