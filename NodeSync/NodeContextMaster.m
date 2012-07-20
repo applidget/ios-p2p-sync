@@ -25,7 +25,7 @@
   
   self.manager.sessionMap = [self generateSetMap];
   
-  NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.sessionMap] convertToData];
+  NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.sessionMap emitingHost:self.socket.localHost] convertToData];
   
   [self pushData:data withTimeout:DEFAULT_TIMEOUT];
 }

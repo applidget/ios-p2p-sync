@@ -42,12 +42,12 @@
   }
 
   if(highestPrio > self.manager.priority) {
-    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", highestPrio]];
+    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", highestPrio] emitingHost:self.socket.localHost];
     [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
-    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority]];
+    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority] emitingHost:self.socket.localHost];
     [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeMaster];
   }

@@ -39,7 +39,7 @@ typedef enum {
 
 @protocol NodeSyncDelegateProtocol <NSObject>
 
-- (void) nodeSync:(NodeSync *)nodeSync didRead:(id) objectRead forId:(NSString *) ide;
+- (void) nodeSync:(NodeSync *)nodeSync didRead:(id) objectRead forId:(NSString *) ide fromHost:(NSString *) emitingHost;
 
 @optional
 - (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;

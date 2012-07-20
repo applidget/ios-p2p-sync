@@ -11,23 +11,25 @@
 #define kArchiveKey @"archive_key"
 #define kIdKey @"packet_id_key"
 #define kContentKey @"packet_content_key"
+#define kEmitingHostKey @"packet_emiting_host"
 
 @implementation Packet
 
-@synthesize packetId, packetContent;
+@synthesize packetId, packetContent, emitingHost;
 
-- (id) initWithPacketId:(NSString *) _packetId andContent:(id) _packetContent {
+- (id) initWithPacketId:(NSString *) _packetId andContent:(id) _packetContent emitingHost:(NSString *)_emitingHost {
   if(self = [super init]) {
     NSAssert([_packetContent respondsToSelector:@selector(encodeWithCoder:)], @"packet content object must implement the NSCoding protocol");
     NSAssert([_packetContent respondsToSelector:@selector(initWithCoder:)], @"packet content object must implement the NSCoding protocol");
     self.packetId = _packetId;
     self.packetContent = _packetContent;
+    self.emitingHost = _emitingHost;
   }
   return self;
 }
 
-+ (Packet *) packetWithId:(NSString *) packetId andContent:(id) content {
-  return [[self alloc] initWithPacketId:packetId andContent:content];
++ (Packet *) packetWithId:(NSString *) packetId andContent:(id) content emitingHost:(NSString *)_emitingHost {
+  return [[self alloc] initWithPacketId:packetId andContent:content emitingHost:_emitingHost];
 }
 
 + (Packet *) packetFromData:(NSData *) data {
@@ -61,14 +63,23 @@
 - (void) encodeWithCoder:(NSCoder*)encoder {
   [encoder encodeObject:self.packetId forKey:kIdKey];
   [encoder encodeObject:self.packetContent forKey:kContentKey];
+  [encoder encodeObject:self.emitingHost forKey:kEmitingHostKey];
 }
 
 - (id) initWithCoder:(NSCoder*)decoder {
   if (self = [super init]) {
     self.packetId = [decoder decodeObjectForKey:kIdKey];
     self.packetContent = [decoder decodeObjectForKey:kContentKey];
+    self.emitingHost = [decoder decodeObjectForKey:kEmitingHostKey];
   }
   return self;
+}
+
+#pragma mark - memory management
+- (void) dealloc {
+  [packetId release];
+  [emitingHost release];
+  [super dealloc];
 }
 
 @end

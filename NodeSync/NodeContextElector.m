@@ -55,7 +55,7 @@
   [super socket:sock didConnectToHost:host port:port];
   [timeOutTimer invalidate];
   [self.manager didChangetState:kNodeStateElectorConnected];
-  Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority]];
+  Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority] emitingHost:self.socket.localHost];
   [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
 }
 
