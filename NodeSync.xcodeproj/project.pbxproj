@@ -69,15 +69,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00363CE515B5B1EF001C67B6 /* categories */ = {
-			isa = PBXGroup;
-			children = (
-				00BB7AF115B7FC9600A5283A /* Packet.h */,
-				00BB7AF215B7FC9600A5283A /* Packet.m */,
-			);
-			name = categories;
-			sourceTree = "<group>";
-		};
 		003966D815B44BF800794240 /* PrimaryContext */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,10 +125,11 @@
 		0099257E15B401A60071E3F7 /* NodeSync */ = {
 			isa = PBXGroup;
 			children = (
-				00363CE515B5B1EF001C67B6 /* categories */,
 				0099258915B401CE0071E3F7 /* external */,
 				0099258115B401A60071E3F7 /* NodeSync.h */,
 				0099258215B401A60071E3F7 /* NodeSync.m */,
+				00BB7AF115B7FC9600A5283A /* Packet.h */,
+				00BB7AF215B7FC9600A5283A /* Packet.m */,
 				0099259215B408880071E3F7 /* Contexts */,
 				0099257F15B401A60071E3F7 /* Supporting Files */,
 			);
