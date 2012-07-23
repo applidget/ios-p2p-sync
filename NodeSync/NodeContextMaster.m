@@ -70,6 +70,9 @@
     //Reiceived a client packet from a replica (forwarded)
     //Updating oplog
     OplogEntry *newEntry = [OplogEntry oplogEntryWithPacket:readPacket];
+    if(self.manager.oplog.count > OPLOG_MAX_SIZE) {
+      [self.manager.oplog removeObjectAtIndex:0];
+    }
     [self.manager.oplog addObject:newEntry];
     [self.manager didAddOplogEntry:newEntry];
   }

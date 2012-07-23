@@ -13,7 +13,7 @@
 @implementation NodeContextReplica
 
 - (void) activate {
-  [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId ,MASTER_SERVICE]];
+  [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.sessionId, MASTER_SERVICE]];
   NSLog(@"activated replica");
 }
 
@@ -52,14 +52,15 @@
     //Compare own oplog with master's
     NSArray *masterOplog = readPacket.content;
     for(OplogEntry *oplogEntry in masterOplog) {
-      NSLog(@"packet id = %@", oplogEntry.packet.identifier);
       if(![self.manager oplogContainsEntry:oplogEntry.identifier]) {
+        if(self.manager.oplog.count > OPLOG_MAX_SIZE) {
+          [self.manager.oplog removeObjectAtIndex:0];
+        }
         [self.manager.oplog addObject:oplogEntry];
         [self.manager didAddOplogEntry:oplogEntry];
       }
     }
   }
-  
   else if([readPacket.identifier isEqualToString:kPriorityPacket]) {
     NSLog(@"replica: prio packet SHOULDNOT");
     

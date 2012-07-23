@@ -138,6 +138,9 @@
   if([self.context isKindOfClass:[NodeContextMaster class]]) {
     //The write occurs on master updating oplog
     OplogEntry *newEntry = [OplogEntry oplogEntryWithPacket:internalPacket]; 
+    if(self.oplog.count > OPLOG_MAX_SIZE) {
+      [self.oplog removeObjectAtIndex:0];
+    }
     [self.oplog addObject:newEntry];
     
     [self didAddOplogEntry:newEntry];

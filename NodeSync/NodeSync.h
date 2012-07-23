@@ -17,6 +17,8 @@
 #define DEFAULT_SESSION_ID @"_DS"
 #define SERVICE_DOMAIN @"local."
 
+#define OPLOG_MAX_SIZE 30
+
 #define ERROR_DOMAIN @"nodesync.error"
 
 typedef enum {
@@ -40,6 +42,9 @@ typedef enum {
 
 @protocol NodeSyncDelegateProtocol <NSObject>
 
+/*
+ The time value is not the time it has been received but the time (based on master's clock) the master creted the entry
+*/
 - (void) nodeSync:(NodeSync *)nodeSync didRead:(id)objectRead identifier:(NSString *)identifier time:(NSDate *)time;
 
 @optional
