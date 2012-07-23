@@ -27,6 +27,10 @@
 		0099259A15B40B790071E3F7 /* NodeContextReplica.m in Sources */ = {isa = PBXBuildFile; fileRef = 0099259815B40B790071E3F7 /* NodeContextReplica.m */; };
 		00BB7AF315B7FC9600A5283A /* Packet.h in Headers */ = {isa = PBXBuildFile; fileRef = 00BB7AF115B7FC9600A5283A /* Packet.h */; };
 		00BB7AF415B7FC9600A5283A /* Packet.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BB7AF215B7FC9600A5283A /* Packet.m */; };
+		00E9892615BD550200C2045A /* OplogEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 00E9892415BD550200C2045A /* OplogEntry.h */; };
+		00E9892715BD550200C2045A /* OplogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E9892515BD550200C2045A /* OplogEntry.m */; };
+		00E9893B15BD595D00C2045A /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 00E9893915BD595D00C2045A /* NSString+Utils.h */; };
+		00E9893C15BD595D00C2045A /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E9893A15BD595D00C2045A /* NSString+Utils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +58,10 @@
 		00BB7AE715B71E4300A5283A /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		00BB7AF115B7FC9600A5283A /* Packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Packet.h; sourceTree = "<group>"; };
 		00BB7AF215B7FC9600A5283A /* Packet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Packet.m; sourceTree = "<group>"; };
+		00E9892415BD550200C2045A /* OplogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OplogEntry.h; sourceTree = "<group>"; };
+		00E9892515BD550200C2045A /* OplogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OplogEntry.m; sourceTree = "<group>"; };
+		00E9893915BD595D00C2045A /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
+		00E9893A15BD595D00C2045A /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
 		00EF839A15B83EF100BF9B1F /* wiki.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wiki.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,11 +133,14 @@
 		0099257E15B401A60071E3F7 /* NodeSync */ = {
 			isa = PBXGroup;
 			children = (
+				00E9893815BD594500C2045A /* Addition */,
 				0099258915B401CE0071E3F7 /* external */,
 				0099258115B401A60071E3F7 /* NodeSync.h */,
 				0099258215B401A60071E3F7 /* NodeSync.m */,
 				00BB7AF115B7FC9600A5283A /* Packet.h */,
 				00BB7AF215B7FC9600A5283A /* Packet.m */,
+				00E9892415BD550200C2045A /* OplogEntry.h */,
+				00E9892515BD550200C2045A /* OplogEntry.m */,
 				0099259215B408880071E3F7 /* Contexts */,
 				0099257F15B401A60071E3F7 /* Supporting Files */,
 			);
@@ -164,6 +175,15 @@
 			name = Contexts;
 			sourceTree = "<group>";
 		};
+		00E9893815BD594500C2045A /* Addition */ = {
+			isa = PBXGroup;
+			children = (
+				00E9893915BD595D00C2045A /* NSString+Utils.h */,
+				00E9893A15BD595D00C2045A /* NSString+Utils.m */,
+			);
+			name = Addition;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -180,6 +200,8 @@
 				003966E815B4500600794240 /* NodeContextSecondary.h in Headers */,
 				003966EC15B450F500794240 /* NodeContextElector.h in Headers */,
 				00BB7AF315B7FC9600A5283A /* Packet.h in Headers */,
+				00E9892615BD550200C2045A /* OplogEntry.h in Headers */,
+				00E9893B15BD595D00C2045A /* NSString+Utils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +265,8 @@
 				003966E915B4500600794240 /* NodeContextSecondary.m in Sources */,
 				003966ED15B450F500794240 /* NodeContextElector.m in Sources */,
 				00BB7AF415B7FC9600A5283A /* Packet.m in Sources */,
+				00E9892715BD550200C2045A /* OplogEntry.m in Sources */,
+				00E9893C15BD595D00C2045A /* NSString+Utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

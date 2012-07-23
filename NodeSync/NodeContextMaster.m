@@ -7,6 +7,7 @@
 //
 
 #import "NodeContextMaster.h"
+#import "OplogEntry.h"
 
 #define HEART_BEAT_FREQUENCY 2
 
@@ -22,11 +23,13 @@
 }
 
 - (void) sendHeartBeat {
-  
   self.manager.sessionMap = [self generateSetMap];
-  
   NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.sessionMap emittingHost:self.socket.localHost] convertToData];
-  
+  [self pushData:data withTimeout:DEFAULT_TIMEOUT];
+}
+
+- (void) sendOplog {
+  NSData *data = [[Packet packetWithId:kOplogPacket andContent:self.manager.oplog emittingHost:self.socket.localHost] convertToData];
   [self pushData:data withTimeout:DEFAULT_TIMEOUT];
 }
 
@@ -40,6 +43,10 @@
 - (void) netServiceDidPublish:(NSNetService *)sender {
   //Succeded to be master, start heartbeat
   [NSTimer scheduledTimerWithTimeInterval:HEART_BEAT_FREQUENCY target:self selector:@selector(sendHeartBeat) userInfo:nil repeats:YES];
+  
+  //Periodically send oplogs aswell
+  [NSTimer scheduledTimerWithTimeInterval:HEART_BEAT_FREQUENCY target:self selector:@selector(sendOplog) userInfo:nil repeats:YES];
+  
   [self.manager didChangetState:kNodeStateMaster];
 }
 
@@ -60,9 +67,10 @@
   }
   
   if([readPacket.packetId isEqualToString:kClientPacket]) {
-    [self.manager didReadClientPacket:readPacket];
-    //Forward the packet to every other nodes
-    [self pushData:data withTimeout:DEFAULT_TIMEOUT];
+    //Reiceived a client packet from a replica (forwarded)
+    //Updating oplog
+    [self.manager.oplog addObject:[OplogEntry oplogEntryWithPacket:readPacket]];
+    [self.manager didReadPacket:readPacket];
   }
   else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
     NSLog(@"master: prio packet SHOULDNOT");

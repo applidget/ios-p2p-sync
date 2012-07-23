@@ -12,6 +12,7 @@
 #import "NodeContextReplica.h"
 #import "NodeContextArbiter.h"
 #import "NodeContextElector.h"
+#import "OplogEntry.h"
 
 @interface NodeSync()
 
@@ -21,13 +22,14 @@
 
 @implementation NodeSync
 
-@synthesize delegate, context, sessionMap, port, priority, sessionId;
+@synthesize delegate, context, sessionMap, oplog, port, priority, sessionId;
 
 #pragma mark - Constructors
 - (id) initWithDelegate:(id<NodeSyncDelegateProtocol>) _delegate {
   if(self = [super init]) {
     self.delegate = _delegate;
     self.sessionMap = [NSMutableArray array];
+    self.oplog = [NSMutableArray array];
     //Random priority
     self.priority = arc4random() % 10000;
   }
@@ -86,10 +88,11 @@
   }
 }
 
-- (void) didReadClientPacket:(Packet *) packet {
-  if([self.delegate respondsToSelector:@selector(nodeSync:didRead:forId:fromHost:)]) {
-    Packet *clientPacket = packet.packetContent;
-    [self.delegate nodeSync:self didRead:clientPacket.packetContent forId:clientPacket.packetId fromHost:clientPacket.emittingHost];
+- (void) didReadPacket:(Packet *)packet {
+  NSAssert([packet.packetId isEqualToString:kClientPacket],@"should only read client packet here");
+  Packet *originalPacket = packet.packetContent;
+  if([self.delegate respondsToSelector:@selector(nodeSync:didRead:identifier:)]){
+    [self.delegate nodeSync:self didRead:originalPacket.packetContent identifier:originalPacket.packetId];
   }
 }
 
@@ -98,7 +101,6 @@
     [self.delegate nodeSyncDidWriteData:self];
   }
 }
-
 
 #pragma mark - Client
 - (void) startSessionWithContextType:(kContextType)contextType {
@@ -117,13 +119,24 @@
     NSLog(@"not in a context that allow client to push data");
     return;
   }
+  
+  //Write operation
   Packet *clientPacket = [Packet packetWithId:objId andContent:object emittingHost:self.context.socket.localHost];
+  
+  //Wrapping original packet to use it within the library
   Packet *internalPacket = [Packet packetWithId:kClientPacket andContent:clientPacket emittingHost:self.context.socket.localHost];
+  
   if([self.context isKindOfClass:[NodeContextMaster class]]) {
-    [self didReadClientPacket:internalPacket]; //write on master, master manage the packet for itself
+    //The write occurs on master updating oplog
+    [self.oplog addObject:[OplogEntry oplogEntryWithPacket:internalPacket]];
+    
+    [self didReadPacket:internalPacket];
   }
-  NSData *internalPacketData = [internalPacket convertToData];
-  [self.context pushData:internalPacketData withTimeout:interval];
+  else {
+    //The write occurs on a replica, forward it to the master
+    [self.context pushData:[internalPacket convertToData] withTimeout:interval];
+  }
+
 }
 
 - (void) startMaster {
@@ -134,6 +147,7 @@
 - (void) dealloc {
   [sessionId release];
   [sessionMap release];
+  [oplog release];
   [context release];
   [super dealloc];
 }

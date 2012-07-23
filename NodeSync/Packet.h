@@ -13,6 +13,7 @@
 #define kPriorityPacket @"prio_packet"
 #define kHeartBeatPacket @"heart_beat_packet"
 #define kClientPacket @"client_packet"
+#define kOplogPacket @"oplog_packet"
 
 @interface Packet : NSObject <NSCoding> {
 @private

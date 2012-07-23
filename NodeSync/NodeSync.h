@@ -39,11 +39,12 @@ typedef enum {
 
 @protocol NodeSyncDelegateProtocol <NSObject>
 
-- (void) nodeSync:(NodeSync *)nodeSync didRead:(id) objectRead forId:(NSString *) ide fromHost:(NSString *) emittingHost;
+- (void) nodeSync:(NodeSync *)nodeSync didRead:(id)objectRead identifier:(NSString *)_identifier;
 
 @optional
 - (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;
 - (void) nodeSync:(NodeSync *)nodeSync didChangeState:(kNodeState)newState;
+
 
 @end
 
@@ -52,6 +53,7 @@ typedef enum {
   id<NodeSyncDelegateProtocol> delegate;
   NodeContext *context;
   NSMutableArray *sessionMap;
+  NSMutableArray *oplog;
   NSInteger port;
   NSInteger priority;
   NSString *sessionId;
@@ -59,6 +61,7 @@ typedef enum {
 
 @property (nonatomic, assign) id<NodeSyncDelegateProtocol> delegate;
 @property (nonatomic, retain) NSMutableArray *sessionMap;
+@property (nonatomic, retain) NSMutableArray *oplog;
 @property (nonatomic, assign) NSInteger port;
 @property (nonatomic, assign) NSInteger priority;
 @property (nonatomic, retain) NSString *sessionId;
@@ -75,7 +78,7 @@ typedef enum {
 //Context
 - (void) didChangetState:(kNodeState) newState;
 - (void) changeToContextType:(kContextType) newContext;
-- (void) didReadClientPacket:(Packet *) packet;
 - (void) didWriteDataWithTag:(long)tag;
+- (void) didReadPacket:(Packet *)packet;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "NodeContextReplica.h"
 #import "NodeContextArbiter.h"
+#import "OplogEntry.h"
 
 @implementation NodeContextReplica
 
@@ -33,6 +34,17 @@
   [self.manager changeToContextType:kContextTypeArbiter];
 }
 
+- (BOOL) oplogContainsEntry:(NSString *) entry {
+  BOOL found = NO;
+  for(OplogEntry *oplogEntry in self.manager.oplog) {
+    found = [oplogEntry.identifier isEqualToString:entry];
+    if(found) {
+      break;
+    }
+  }
+  return found;
+}
+
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
   Packet *readPacket = [Packet packetFromData:data];
@@ -44,9 +56,21 @@
   }
   
   if([readPacket.packetId isEqualToString:kClientPacket]) {
-    NSLog(@"replica: received client");
-    [self.manager didReadClientPacket:readPacket];
+    NSLog(@"replica: received client SHOULDNOT, every client packet are forwarded to master");
   }
+  else if ([readPacket.packetId isEqualToString:kOplogPacket]) {
+    NSLog(@"replica get oplog change from master");
+    //Compare own oplog with master's
+    NSArray *masterOplog = readPacket.packetContent;
+    for(OplogEntry *oplogEntry in masterOplog) {
+      NSLog(@"packet id = %@", oplogEntry.packet.packetId);
+      if(![self oplogContainsEntry:oplogEntry.identifier]) {
+        [self.manager.oplog addObject:oplogEntry];
+        [self.manager didReadPacket:oplogEntry.packet];
+      }
+    }
+  }
+  
   else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
     NSLog(@"replica: prio packet SHOULDNOT");
     
