@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Packet.h"
+#import "OplogEntry.h"
 
 //Network information
 #define MASTER_SERVICE @"M._tcp."
@@ -39,7 +40,7 @@ typedef enum {
 
 @protocol NodeSyncDelegateProtocol <NSObject>
 
-- (void) nodeSync:(NodeSync *)nodeSync didRead:(id)objectRead identifier:(NSString *)_identifier;
+- (void) nodeSync:(NodeSync *)nodeSync didRead:(id)objectRead identifier:(NSString *)identifier time:(NSDate *)time;
 
 @optional
 - (void) nodeSyncDidWriteData:(NodeSync *)nodeSync;
@@ -79,6 +80,7 @@ typedef enum {
 - (void) didChangetState:(kNodeState) newState;
 - (void) changeToContextType:(kContextType) newContext;
 - (void) didWriteDataWithTag:(long)tag;
-- (void) didReadPacket:(Packet *)packet;
+- (void) didAddOplogEntry:(OplogEntry *)entry;
+- (BOOL) oplogContainsEntry:(NSString *)entry;
 
 @end

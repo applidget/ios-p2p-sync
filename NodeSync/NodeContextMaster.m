@@ -24,12 +24,12 @@
 
 - (void) sendHeartBeat {
   self.manager.sessionMap = [self generateSetMap];
-  NSData *data = [[Packet packetWithId:kHeartBeatPacket andContent:self.manager.sessionMap emittingHost:self.socket.localHost] convertToData];
+  NSData *data = [[Packet packetWithIdentifier:kHeartBeatPacket content:self.manager.sessionMap emittingHost:self.socket.localHost] convertToData];
   [self pushData:data withTimeout:DEFAULT_TIMEOUT];
 }
 
 - (void) sendOplog {
-  NSData *data = [[Packet packetWithId:kOplogPacket andContent:self.manager.oplog emittingHost:self.socket.localHost] convertToData];
+  NSData *data = [[Packet packetWithIdentifier:kOplogPacket content:self.manager.oplog emittingHost:self.socket.localHost] convertToData];
   [self pushData:data withTimeout:DEFAULT_TIMEOUT];
 }
 
@@ -66,17 +66,18 @@
     return;
   }
   
-  if([readPacket.packetId isEqualToString:kClientPacket]) {
+  if([readPacket.identifier isEqualToString:kClientPacket]) {
     //Reiceived a client packet from a replica (forwarded)
     //Updating oplog
-    [self.manager.oplog addObject:[OplogEntry oplogEntryWithPacket:readPacket]];
-    [self.manager didReadPacket:readPacket];
+    OplogEntry *newEntry = [OplogEntry oplogEntryWithPacket:readPacket];
+    [self.manager.oplog addObject:newEntry];
+    [self.manager didAddOplogEntry:newEntry];
   }
-  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
+  else if([readPacket.identifier isEqualToString:kPriorityPacket]) {
     NSLog(@"master: prio packet SHOULDNOT");
 
   }
-  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
+  else if([readPacket.identifier isEqualToString:kHeartBeatPacket]) {
     NSLog(@"MASTER: received heartbeat SHOULDNOT");
     
   }

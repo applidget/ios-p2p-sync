@@ -34,17 +34,6 @@
   [self.manager changeToContextType:kContextTypeArbiter];
 }
 
-- (BOOL) oplogContainsEntry:(NSString *) entry {
-  BOOL found = NO;
-  for(OplogEntry *oplogEntry in self.manager.oplog) {
-    found = [oplogEntry.identifier isEqualToString:entry];
-    if(found) {
-      break;
-    }
-  }
-  return found;
-}
-
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
   Packet *readPacket = [Packet packetFromData:data];
@@ -55,29 +44,29 @@
     return;
   }
   
-  if([readPacket.packetId isEqualToString:kClientPacket]) {
+  if([readPacket.identifier isEqualToString:kClientPacket]) {
     NSLog(@"replica: received client SHOULDNOT, every client packet are forwarded to master");
   }
-  else if ([readPacket.packetId isEqualToString:kOplogPacket]) {
+  else if ([readPacket.identifier isEqualToString:kOplogPacket]) {
     NSLog(@"replica get oplog change from master");
     //Compare own oplog with master's
-    NSArray *masterOplog = readPacket.packetContent;
+    NSArray *masterOplog = readPacket.content;
     for(OplogEntry *oplogEntry in masterOplog) {
-      NSLog(@"packet id = %@", oplogEntry.packet.packetId);
-      if(![self oplogContainsEntry:oplogEntry.identifier]) {
+      NSLog(@"packet id = %@", oplogEntry.packet.identifier);
+      if(![self.manager oplogContainsEntry:oplogEntry.identifier]) {
         [self.manager.oplog addObject:oplogEntry];
-        [self.manager didReadPacket:oplogEntry.packet];
+        [self.manager didAddOplogEntry:oplogEntry];
       }
     }
   }
   
-  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
+  else if([readPacket.identifier isEqualToString:kPriorityPacket]) {
     NSLog(@"replica: prio packet SHOULDNOT");
     
   }
-  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
+  else if([readPacket.identifier isEqualToString:kHeartBeatPacket]) {
     NSLog(@"replica: received heartbeat");
-    self.manager.sessionMap = readPacket.packetContent;
+    self.manager.sessionMap = readPacket.content;
   }
   else {
     NSLog(@"replica: unknown packet");

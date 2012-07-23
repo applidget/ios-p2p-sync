@@ -43,12 +43,12 @@
   }
 
   if(highestPrio > self.manager.priority) {
-    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", highestPrio] emittingHost:self.socket.localHost];
+    Packet *prioPacket = [Packet packetWithIdentifier:kPriorityPacket content:[NSString stringWithFormat:@"%i", highestPrio] emittingHost:self.socket.localHost];
     [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
-    Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority] emittingHost:self.socket.localHost];
+    Packet *prioPacket = [Packet packetWithIdentifier:kPriorityPacket content:[NSString stringWithFormat:@"%i", self.manager.priority] emittingHost:self.socket.localHost];
     [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
     [self.manager changeToContextType:kContextTypeMaster];
   }
@@ -82,17 +82,17 @@
     return;
   }
   
-  if([readPacket.packetId isEqualToString:kClientPacket]) {
+  if([readPacket.identifier isEqualToString:kClientPacket]) {
     NSLog(@"arbiter: received client SHOULDNOT");
     
   }
-  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
+  else if([readPacket.identifier isEqualToString:kPriorityPacket]) {
     NSLog(@"arbiter: prio packet");
     
-    NSString *strPriority = readPacket.packetContent;
+    NSString *strPriority = readPacket.content;
     [self.receivedPriorities addObject:strPriority];
   }
-  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
+  else if([readPacket.identifier isEqualToString:kHeartBeatPacket]) {
     NSLog(@"arbiter: received heartbeat SHOULDNOT");
     
   }

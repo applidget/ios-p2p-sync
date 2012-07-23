@@ -12,7 +12,6 @@
 #import "NodeContextReplica.h"
 #import "NodeContextArbiter.h"
 #import "NodeContextElector.h"
-#import "OplogEntry.h"
 
 @interface NodeSync()
 
@@ -88,11 +87,10 @@
   }
 }
 
-- (void) didReadPacket:(Packet *)packet {
-  NSAssert([packet.packetId isEqualToString:kClientPacket],@"should only read client packet here");
-  Packet *originalPacket = packet.packetContent;
-  if([self.delegate respondsToSelector:@selector(nodeSync:didRead:identifier:)]){
-    [self.delegate nodeSync:self didRead:originalPacket.packetContent identifier:originalPacket.packetId];
+- (void) didAddOplogEntry:(OplogEntry *)entry {
+  Packet *originalPacket = entry.packet.content;
+  if([self.delegate respondsToSelector:@selector(nodeSync:didRead:identifier:time:)]){
+    [self.delegate nodeSync:self didRead:originalPacket.content identifier:originalPacket.identifier time:entry.operationTime];
   }
 }
 
@@ -100,6 +98,17 @@
   if([self.delegate respondsToSelector:@selector(nodeSyncDidWriteData:)]) {
     [self.delegate nodeSyncDidWriteData:self];
   }
+}
+
+- (BOOL) oplogContainsEntry:(NSString *) entry {
+  BOOL found = NO;
+  for(OplogEntry *oplogEntry in self.oplog) {
+    found = [oplogEntry.identifier isEqualToString:entry];
+    if(found) {
+      break;
+    }
+  }
+  return found;
 }
 
 #pragma mark - Client
@@ -121,16 +130,17 @@
   }
   
   //Write operation
-  Packet *clientPacket = [Packet packetWithId:objId andContent:object emittingHost:self.context.socket.localHost];
+  Packet *clientPacket = [Packet packetWithIdentifier:objId content:object emittingHost:self.context.socket.localHost];
   
   //Wrapping original packet to use it within the library
-  Packet *internalPacket = [Packet packetWithId:kClientPacket andContent:clientPacket emittingHost:self.context.socket.localHost];
+  Packet *internalPacket = [Packet packetWithIdentifier:kClientPacket content:clientPacket emittingHost:self.context.socket.localHost];
   
   if([self.context isKindOfClass:[NodeContextMaster class]]) {
     //The write occurs on master updating oplog
-    [self.oplog addObject:[OplogEntry oplogEntryWithPacket:internalPacket]];
+    OplogEntry *newEntry = [OplogEntry oplogEntryWithPacket:internalPacket]; 
+    [self.oplog addObject:newEntry];
     
-    [self didReadPacket:internalPacket];
+    [self didAddOplogEntry:newEntry];
   }
   else {
     //The write occurs on a replica, forward it to the master

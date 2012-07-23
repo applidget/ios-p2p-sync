@@ -56,7 +56,7 @@
   [super socket:sock didConnectToHost:host port:port];
   [timeOutTimer invalidate];
   [self.manager didChangetState:kNodeStateElectorConnected];
-  Packet *prioPacket = [Packet packetWithId:kPriorityPacket andContent:[NSString stringWithFormat:@"%i", self.manager.priority] emittingHost:self.socket.localHost];
+  Packet *prioPacket = [Packet packetWithIdentifier:kPriorityPacket content:[NSString stringWithFormat:@"%i", self.manager.priority] emittingHost:self.socket.localHost];
   [self pushData:[prioPacket convertToData] withTimeout:DEFAULT_TIMEOUT];
 }
 
@@ -70,12 +70,12 @@
     return;
   }
   
-  if([readPacket.packetId isEqualToString:kClientPacket]) {
+  if([readPacket.identifier isEqualToString:kClientPacket]) {
     NSLog(@"elector: received client SHOULDNOT");
     
   }
-  else if([readPacket.packetId isEqualToString:kPriorityPacket]) {
-    NSString *strPriority = readPacket.packetContent;
+  else if([readPacket.identifier isEqualToString:kPriorityPacket]) {
+    NSString *strPriority = readPacket.content;
     NSInteger priority = [strPriority intValue];
     if (priority == self.manager.priority) {
       electionResult = kElectionResultWon;
@@ -84,7 +84,7 @@
       electionResult = kElectionResultLost;
     }
   }
-  else if([readPacket.packetId isEqualToString:kHeartBeatPacket]) {
+  else if([readPacket.identifier isEqualToString:kHeartBeatPacket]) {
     NSLog(@"elector: received heartbeat SHOULDNOT");
     
   }

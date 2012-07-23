@@ -17,20 +17,20 @@
 
 @interface Packet : NSObject <NSCoding> {
 @private
-  NSString *packetId;
-  id<NSCoding> packetContent;
+  NSString *identifier;
+  id<NSCoding> content;
   NSString *emittingHost;
 }
 
-@property (nonatomic, retain) NSString *packetId;
-@property (nonatomic, retain) id packetContent;
+@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, retain) id content;
 @property (nonatomic, retain) NSString *emittingHost;
 
 //Constructor
-- (id) initWithPacketId:(NSString *) _packetId andContent:(id) _packetContent emittingHost:(NSString *)_emittingHost;
+- (id) initWithIdentifier:(NSString *)_identifier content:(id) _content emittingHost:(NSString *)_emittingHost;
 
 //Static initializer
-+ (Packet *) packetWithId:(NSString *) _packetId andContent:(id) _packetContent emittingHost:(NSString *)_emittingHost;
++ (Packet *) packetWithIdentifier:(NSString *) _identifier content:(id) _content emittingHost:(NSString *)_emittingHost;
 + (Packet *) packetFromData:(NSData *) data;
 
 - (NSData *) convertToData;
