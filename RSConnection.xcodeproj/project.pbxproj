@@ -1,0 +1,231 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00AF416615BEFAF0000C1C0D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AF416515BEFAF0000C1C0D /* Foundation.framework */; };
+		00AF416C15BEFAF0000C1C0D /* RSConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF416B15BEFAF0000C1C0D /* RSConnection.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00AF416215BEFAF0000C1C0D /* libRSConnection.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRSConnection.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		00AF416515BEFAF0000C1C0D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		00AF416915BEFAF0000C1C0D /* RSConnection-Prefix.pch */ = {isa = PBXFileReference; path = "RSConnection-Prefix.pch"; sourceTree = "<group>"; };
+		00AF416A15BEFAF0000C1C0D /* RSConnection.h */ = {isa = PBXFileReference; path = RSConnection.h; sourceTree = "<group>"; };
+		00AF416B15BEFAF0000C1C0D /* RSConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSConnection.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		00AF415F15BEFAF0000C1C0D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00AF416615BEFAF0000C1C0D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00AF415715BEFAF0000C1C0D = {
+			isa = PBXGroup;
+			children = (
+				00AF416715BEFAF0000C1C0D /* RSConnection */,
+				00AF416415BEFAF0000C1C0D /* Frameworks */,
+				00AF416315BEFAF0000C1C0D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		00AF416315BEFAF0000C1C0D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00AF416215BEFAF0000C1C0D /* libRSConnection.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		00AF416415BEFAF0000C1C0D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				00AF416515BEFAF0000C1C0D /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		00AF416715BEFAF0000C1C0D /* RSConnection */ = {
+			isa = PBXGroup;
+			children = (
+				00AF416A15BEFAF0000C1C0D /* RSConnection.h */,
+				00AF416B15BEFAF0000C1C0D /* RSConnection.m */,
+				00AF416815BEFAF0000C1C0D /* Supporting Files */,
+			);
+			path = RSConnection;
+			sourceTree = "<group>";
+		};
+		00AF416815BEFAF0000C1C0D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				00AF416915BEFAF0000C1C0D /* RSConnection-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		00AF416015BEFAF0000C1C0D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		00AF416115BEFAF0000C1C0D /* RSConnection */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00AF416F15BEFAF0000C1C0D /* Build configuration list for PBXNativeTarget "RSConnection" */;
+			buildPhases = (
+				00AF415E15BEFAF0000C1C0D /* Sources */,
+				00AF415F15BEFAF0000C1C0D /* Frameworks */,
+				00AF416015BEFAF0000C1C0D /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RSConnection;
+			productName = RSConnection;
+			productReference = 00AF416215BEFAF0000C1C0D /* libRSConnection.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		00AF415915BEFAF0000C1C0D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 00AF415C15BEFAF0000C1C0D /* Build configuration list for PBXProject "RSConnection" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 00AF415715BEFAF0000C1C0D;
+			productRefGroup = 00AF416315BEFAF0000C1C0D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				00AF416115BEFAF0000C1C0D /* RSConnection */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00AF415E15BEFAF0000C1C0D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00AF416C15BEFAF0000C1C0D /* RSConnection.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		00AF416D15BEFAF0000C1C0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		00AF416E15BEFAF0000C1C0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		00AF417015BEFAF0000C1C0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/RSConnection.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RSConnection/RSConnection-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		00AF417115BEFAF0000C1C0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/RSConnection.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RSConnection/RSConnection-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00AF415C15BEFAF0000C1C0D /* Build configuration list for PBXProject "RSConnection" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00AF416D15BEFAF0000C1C0D /* Debug */,
+				00AF416E15BEFAF0000C1C0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00AF416F15BEFAF0000C1C0D /* Build configuration list for PBXNativeTarget "RSConnection" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00AF417015BEFAF0000C1C0D /* Debug */,
+				00AF417115BEFAF0000C1C0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 00AF415915BEFAF0000C1C0D /* Project object */;
+}
