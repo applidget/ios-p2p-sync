@@ -12,9 +12,15 @@
 #import "RSContextMaster.h"
 #import "RSContextReplica.h"
 
+@interface RSConnection()
+
+@property (nonatomic, retain) RSContext *context;
+
+@end
+
 @implementation RSConnection
 
-@synthesize delegate, port, replicaSetName, context;
+@synthesize delegate, port, replicaSetName, context, currentContextType;
 
 #pragma mark - Context
 - (void) activateContext:(RSContext *) newContext {
@@ -22,28 +28,32 @@
   [self.context activate];
 }
 
-- (void) changeContextWithNewContext:(kContextType)newContextType {
+- (void) changeContextWithNewContextType:(kContextType)newContextType {
   [self.context unactivate];
   
   RSContext *newContext;
   
   switch (newContextType) {
     case kContextTypeReplica:
+      currentContextType = kContextTypeReplica;
       newContext = [[RSContextReplica alloc] initWithManager:self];
       break;
     case kContextTypeMaster:
+      currentContextType = kContextTypeMaster;
       newContext = [[RSContextMaster alloc] initWithManager:self];
       break;
     case kContextTypeArbiter:
+      currentContextType = kContextTypeArbiter;
       newContext = [[RSContextArbiter alloc] initWithManager:self];
       break;
     case kContextTypeElector:
+      currentContextType = kContextTypeElector;
       newContext = [[RSContextElector alloc] initWithManager:self];
     default:
       break;
   }
-  
-  [self performSelector:@selector(activateContext:) withObject:newContext afterDelay:0.5];
+
+  [self performSelector:@selector(activateContext:) withObject:newContext afterDelay:0.2]; //Timeout needed here otherwise from arbiter to master will crash (server close is asynchronous)
   [newContext release];
 }
 
@@ -80,7 +90,7 @@
     self.replicaSetName = DEFAULT_REPLICA_SET_NAME;
   }
   
-  [self changeContextWithNewContext:contextType];
+  [self changeContextWithNewContextType:contextType];
 }
 
 - (void) sendObject:(id)object onChannel:(NSString *)channelName {
@@ -111,7 +121,7 @@
 
 //Garbage
 - (void) startMaster {
-  [self changeContextWithNewContext:kContextTypeMaster];
+  [self changeContextWithNewContextType:kContextTypeMaster];
 }
 
 - (void) dealloc {

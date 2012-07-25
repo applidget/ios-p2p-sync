@@ -28,7 +28,7 @@
 
 - (void) didLaunchService {
   if(self.tookTooLongToLaunchService) {
-    [self.manager changeContextWithNewContext:kContextTypeElector];
+    [self.manager changeContextWithNewContextType:kContextTypeElector];
   }
 }
 
@@ -55,14 +55,14 @@
                                           emittingHost:self.socket.localHost];
 
     [self writeData:[prioPacket representingData]];
-    [self.manager changeContextWithNewContext:kContextTypeReplica];
+    [self.manager changeContextWithNewContextType:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
     RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
                                              onChannel:kPriorityPacket
                                           emittingHost:self.socket.localHost];
     [self writeData:[prioPacket representingData]];
-    [self.manager changeContextWithNewContext:kContextTypeMaster];
+    [self.manager changeContextWithNewContextType:kContextTypeMaster];
   }
 }
 
@@ -80,7 +80,7 @@
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
   //an other arbiter service is already launched
-  [self.manager changeContextWithNewContext:kContextTypeElector];
+  [self.manager changeContextWithNewContextType:kContextTypeElector];
 }
 
 #pragma mark GCDAsyncSocketDelegate protocol

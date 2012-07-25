@@ -16,7 +16,7 @@
 
 - (void) electorContextTimedOut {
   //Manage the case where the network was shut down for a sec but the master didn't crash
-  [self.manager changeContextWithNewContext:kContextTypeReplica];
+  [self.manager changeContextWithNewContextType:kContextTypeReplica];
 }
 
 - (void) activate {
@@ -47,7 +47,7 @@
     default:
       break;
   }
-  [self.manager changeContextWithNewContext:newContextType];
+  [self.manager changeContextWithNewContextType:newContextType];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {

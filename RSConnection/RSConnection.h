@@ -16,8 +16,6 @@
 #define DEFAULT_REPLICA_SET_NAME @"_DS"
 #define SERVICE_DOMAIN @"local."
 
-#define DEFAULT_PACKET_QUEUE_SIZE 30
-
 #define ERROR_DOMAIN @"rsconnection.error"
 
 typedef enum {
@@ -55,12 +53,13 @@ typedef enum {
   RSContext *context;
   NSInteger port;
   NSString *replicaSetName;
+  kContextType currentContextType;
 }
 
 @property (nonatomic, assign) id<RSConnectionDelegateProtocol> delegate;
 @property (nonatomic, assign) NSInteger port;
 @property (nonatomic, retain) NSString *replicaSetName;
-@property (nonatomic, retain) RSContext *context;
+@property (nonatomic, assign) kContextType currentContextType;
 
 //Client
 - (void) startSessionWithContextType:(kContextType) contextType;
@@ -69,7 +68,7 @@ typedef enum {
 
 
 //Context
-- (void) changeContextWithNewContext:(kContextType)newContext;
+- (void) changeContextWithNewContextType:(kContextType)newContext;
 - (void) didUpdateStateInto:(kConnectionState)newState;
 - (NSInteger) getPriorityOfElector;
 - (void) didReceivedPacket:(RSPacket *)packet;

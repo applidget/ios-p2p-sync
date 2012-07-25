@@ -29,7 +29,7 @@
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {  
   //Lost connection to master -> trying to launch arbiter context
   [self.socket setDelegate:nil delegateQueue:NULL];
-  [self.manager changeContextWithNewContext:kContextTypeArbiter];
+  [self.manager changeContextWithNewContextType:kContextTypeArbiter];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {

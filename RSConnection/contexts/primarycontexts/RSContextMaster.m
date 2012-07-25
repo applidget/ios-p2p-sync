@@ -23,7 +23,7 @@
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
   //maybe another master service already exist (a tie in the election ??)
-  [self.manager changeContextWithNewContext:kContextTypeReplica];
+  [self.manager changeContextWithNewContextType:kContextTypeReplica];
 }
 
 #pragma mark - GCDAsyncSocket delegate
