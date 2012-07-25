@@ -27,6 +27,8 @@
 		00AF419515BEFCB4000C1C0D /* RSContextSecondary.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418F15BEFCB4000C1C0D /* RSContextSecondary.m */; };
 		00AF419815BEFCF7000C1C0D /* RSPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF419615BEFCF7000C1C0D /* RSPacket.h */; };
 		00AF419915BEFCF7000C1C0D /* RSPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF419715BEFCF7000C1C0D /* RSPacket.m */; };
+		00BB4C4D15BFF11C0026499F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BB4C4C15BFF11C0026499F /* Security.framework */; };
+		00BB4C4F15BFF1220026499F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BB4C4E15BFF1220026499F /* CFNetwork.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +55,8 @@
 		00AF418F15BEFCB4000C1C0D /* RSContextSecondary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSContextSecondary.m; sourceTree = "<group>"; };
 		00AF419615BEFCF7000C1C0D /* RSPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSPacket.h; sourceTree = "<group>"; };
 		00AF419715BEFCF7000C1C0D /* RSPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSPacket.m; sourceTree = "<group>"; };
+		00BB4C4C15BFF11C0026499F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		00BB4C4E15BFF1220026499F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00BB4C4F15BFF1220026499F /* CFNetwork.framework in Frameworks */,
+				00BB4C4D15BFF11C0026499F /* Security.framework in Frameworks */,
 				00AF416615BEFAF0000C1C0D /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,6 +76,8 @@
 		00AF415715BEFAF0000C1C0D = {
 			isa = PBXGroup;
 			children = (
+				00BB4C4E15BFF1220026499F /* CFNetwork.framework */,
+				00BB4C4C15BFF11C0026499F /* Security.framework */,
 				00AF416715BEFAF0000C1C0D /* RSConnection */,
 				00AF416415BEFAF0000C1C0D /* Frameworks */,
 				00AF416315BEFAF0000C1C0D /* Products */,
@@ -267,7 +275,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -283,7 +291,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

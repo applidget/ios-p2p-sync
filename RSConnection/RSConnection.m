@@ -14,24 +14,12 @@
 
 @implementation RSConnection
 
-@synthesize delegate, port, replicaSetName, context, packetQueue, packetQueueMaxSize;
+@synthesize delegate, port, replicaSetName, context;
 
 #pragma mark - Context
-- (void) flushPacketQueue {
-  if([self.context isKindOfClass:[RSContextArbiter class]] || [self.context isKindOfClass:[RSContextElector class]]) {
-    return;
-  }
-  for (RSPacket *packet in self.packetQueue) {
-    [self.context writeData:[packet representingData]];
-  }
-  [self.packetQueue removeAllObjects];
-}
-
 - (void) activateContext:(RSContext *) newContext {
   self.context = newContext;
   [self.context activate];
-  //Try to flush packet queue
-  [self flushPacketQueue];
 }
 
 - (void) changeContextWithNewContext:(kContextType)newContextType {
@@ -70,6 +58,7 @@
 }
 
 - (void) didReceivedPacket:(RSPacket *)packet {
+  NSLog(@"client packet");
   RSPacket *originalPacket = packet.content;
   if([packet.channel isEqualToString:kClientPacket]) {
     [self.delegate connection:self didReceivedObject:originalPacket.content onChannel:originalPacket.channel];
@@ -90,10 +79,7 @@
   if(!self.replicaSetName) {
     self.replicaSetName = DEFAULT_REPLICA_SET_NAME;
   }
-  if(!self.packetQueueMaxSize) {
-    self.packetQueueMaxSize = DEFAULT_PACKET_QUEUE_SIZE;
-  }
-  self.packetQueue = [NSMutableArray array];
+  
   [self changeContextWithNewContext:contextType];
 }
 
@@ -104,10 +90,7 @@
   //Wrapping original packet to use it within the library
   RSPacket *internalPacket = [RSPacket packetWithContent:clientPacket onChannel:kClientPacket emittingHost:self.context.socket.localHost];
   if([self.context isKindOfClass:[RSContextArbiter class]] || [self.context isKindOfClass:[RSContextElector class]]) {
-    if(self.packetQueue.count >= self.packetQueueMaxSize) {
-      [self.packetQueue removeObjectAtIndex:0];
-    }
-    [self.packetQueue addObject:internalPacket];
+    NSLog(@"can't send packet during election");
   }
   else {
     [self.context writeData:[internalPacket representingData]];
@@ -126,11 +109,15 @@
   [self.context writeData:[internalPacket representingData]];
 }
 
+//Garbage
+- (void) startMaster {
+  [self changeContextWithNewContext:kContextTypeMaster];
+}
+
 - (void) dealloc {
   [replicaSetName release];
   [context unactivate];
   [context release];
-  [packetQueue release];
   [super dealloc];
 }
 

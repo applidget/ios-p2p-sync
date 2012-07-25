@@ -30,11 +30,13 @@
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
   
+  NSLog(@"master received packet on channel: %@", receivedPacket.channel);
+  
   if([receivedPacket.channel isEqualToString:kClientPacket]) {
     [self.manager didReceivedPacket:receivedPacket];
   }
-  if([receivedPacket.channel isEqualToString:kUpdateRequestPacket]) {
-    
+  else if([receivedPacket.channel isEqualToString:kUpdateRequestPacket]) {
+    [self.manager didReceivedPacket:receivedPacket];
   }
   else {
     NSAssert(NO ,@"Master received a packet on a channel he shouldn't");

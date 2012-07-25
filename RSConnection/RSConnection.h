@@ -55,16 +55,12 @@ typedef enum {
   RSContext *context;
   NSInteger port;
   NSString *replicaSetName;
-  NSMutableArray *packetQueue;
-  NSInteger packetQueueMaxSize;
 }
 
 @property (nonatomic, assign) id<RSConnectionDelegateProtocol> delegate;
 @property (nonatomic, assign) NSInteger port;
 @property (nonatomic, retain) NSString *replicaSetName;
 @property (nonatomic, retain) RSContext *context;
-@property (nonatomic, retain) NSMutableArray *packetQueue;
-@property (nonatomic, assign) NSInteger packetQueueMaxSize;
 
 //Client
 - (void) startSessionWithContextType:(kContextType) contextType;
@@ -77,5 +73,8 @@ typedef enum {
 - (void) didUpdateStateInto:(kConnectionState)newState;
 - (NSInteger) getPriorityOfElector;
 - (void) didReceivedPacket:(RSPacket *)packet;
+
+//Garbage
+- (void) startMaster;
 
 @end

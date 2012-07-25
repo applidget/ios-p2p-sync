@@ -54,7 +54,8 @@
   [super socket:sock didConnectToHost:host port:port];
   [timeOutTimer invalidate];
   [self.manager didUpdateStateInto:kConnectionStateElectorConnected];
-  RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", [self.manager getPriorityOfElector]]
+  priorityForElection = [self.manager getPriorityOfElector];
+  RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
                                            onChannel:kPriorityPacket
                                         emittingHost:self.socket.localHost];
   
@@ -68,7 +69,7 @@
   if([receivedPacket.channel isEqualToString:kPriorityPacket]) {
     NSString *strPriority = receivedPacket.content;
     NSInteger priority = [strPriority intValue];
-    if (priority == [self.manager getPriorityOfElector]) {
+    if (priority == priorityForElection) {
       electionResult = kElectionResultWon;
     }
     else {

@@ -27,6 +27,7 @@ typedef enum {
 @private
   kElectionResult electionResult;
   NSTimer *timeOutTimer;
+  NSInteger priorityForElection;
 }
 
 @end

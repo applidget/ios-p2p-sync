@@ -22,6 +22,7 @@
 
 #pragma mark - GCDAsyncSocketDelegate protocol
 - (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
+  [super socket:sender didConnectToHost:host port:port];
   [self.manager didUpdateStateInto:kConnectionStateReplicaConnected];
 }
 
@@ -35,6 +36,8 @@
   
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
 
+    NSLog(@"replica received packet on channel: %@", receivedPacket.channel);
+  
   if([receivedPacket.channel isEqualToString:kClientPacket]) {
     [self.manager didReceivedPacket:receivedPacket];
   }

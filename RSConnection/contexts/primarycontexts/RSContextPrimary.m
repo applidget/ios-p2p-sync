@@ -44,8 +44,8 @@
 }
 
 - (void) writeData:(NSData *)data {
-  for (GCDAsyncSocket *nodeSocket in self.connectedReplicas) {
-    [nodeSocket writeData:data withTimeout:DEFAULT_TIMEOUT tag:0];
+  for (GCDAsyncSocket *replicaSocket in self.connectedReplicas) {
+    [replicaSocket writeData:data withTimeout:DEFAULT_TIMEOUT tag:0];
   }
 }
 

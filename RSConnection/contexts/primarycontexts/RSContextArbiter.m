@@ -49,7 +49,7 @@
     }
   }
 
-  if(highestPrio > [self.manager getPriorityOfElector]) {
+  if(highestPrio > priorityForElection) {
     RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", highestPrio]
                                              onChannel:kPriorityPacket
                                           emittingHost:self.socket.localHost];
@@ -58,7 +58,7 @@
     [self.manager changeContextWithNewContext:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
-    RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", [self.manager getPriorityOfElector]]
+    RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
                                              onChannel:kPriorityPacket
                                           emittingHost:self.socket.localHost];
     [self writeData:[prioPacket representingData]];
@@ -74,7 +74,8 @@
   self.receivedPriorities = contextReceivedPriorities;
   [contextReceivedPriorities release];
   [self performSelector:@selector(announceNewMaster) withObject:nil afterDelay:ELECTION_TIME];
-  [self.manager didUpdateStateInto:kContextTypeArbiter];
+  [self.manager didUpdateStateInto:kConnectionStateArbiter];
+  priorityForElection = [self.manager getPriorityOfElector];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {

@@ -23,6 +23,7 @@
 @private
   NSMutableArray *receivedPriorities;
   BOOL tookTooLongToLaunchService;
+  NSInteger priorityForElection;
 }
 
 @end
