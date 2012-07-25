@@ -9,14 +9,50 @@
 /* Begin PBXBuildFile section */
 		00AF416615BEFAF0000C1C0D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AF416515BEFAF0000C1C0D /* Foundation.framework */; };
 		00AF416C15BEFAF0000C1C0D /* RSConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF416B15BEFAF0000C1C0D /* RSConnection.m */; };
+		00AF417515BEFB75000C1C0D /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417315BEFB75000C1C0D /* GCDAsyncSocket.h */; };
+		00AF417615BEFB75000C1C0D /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF417415BEFB75000C1C0D /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		00AF417C15BEFC9F000C1C0D /* RSContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417A15BEFC9F000C1C0D /* RSContext.h */; };
+		00AF417D15BEFC9F000C1C0D /* RSContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF417B15BEFC9F000C1C0D /* RSContext.m */; };
+		00AF418415BEFCAA000C1C0D /* RSContextArbiter.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417E15BEFCAA000C1C0D /* RSContextArbiter.h */; };
+		00AF418515BEFCAA000C1C0D /* RSContextArbiter.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF417F15BEFCAA000C1C0D /* RSContextArbiter.m */; };
+		00AF418615BEFCAA000C1C0D /* RSContextMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418015BEFCAA000C1C0D /* RSContextMaster.h */; };
+		00AF418715BEFCAA000C1C0D /* RSContextMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418115BEFCAA000C1C0D /* RSContextMaster.m */; };
+		00AF418815BEFCAA000C1C0D /* RSContextPrimary.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418215BEFCAA000C1C0D /* RSContextPrimary.h */; };
+		00AF418915BEFCAA000C1C0D /* RSContextPrimary.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418315BEFCAA000C1C0D /* RSContextPrimary.m */; };
+		00AF419015BEFCB4000C1C0D /* RSContextElector.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418A15BEFCB4000C1C0D /* RSContextElector.h */; };
+		00AF419115BEFCB4000C1C0D /* RSContextElector.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418B15BEFCB4000C1C0D /* RSContextElector.m */; };
+		00AF419215BEFCB4000C1C0D /* RSContextReplica.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418C15BEFCB4000C1C0D /* RSContextReplica.h */; };
+		00AF419315BEFCB4000C1C0D /* RSContextReplica.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418D15BEFCB4000C1C0D /* RSContextReplica.m */; };
+		00AF419415BEFCB4000C1C0D /* RSContextSecondary.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418E15BEFCB4000C1C0D /* RSContextSecondary.h */; };
+		00AF419515BEFCB4000C1C0D /* RSContextSecondary.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418F15BEFCB4000C1C0D /* RSContextSecondary.m */; };
+		00AF419815BEFCF7000C1C0D /* RSPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF419615BEFCF7000C1C0D /* RSPacket.h */; };
+		00AF419915BEFCF7000C1C0D /* RSPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF419715BEFCF7000C1C0D /* RSPacket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		00AF416215BEFAF0000C1C0D /* libRSConnection.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRSConnection.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AF416515BEFAF0000C1C0D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		00AF416915BEFAF0000C1C0D /* RSConnection-Prefix.pch */ = {isa = PBXFileReference; path = "RSConnection-Prefix.pch"; sourceTree = "<group>"; };
-		00AF416A15BEFAF0000C1C0D /* RSConnection.h */ = {isa = PBXFileReference; path = RSConnection.h; sourceTree = "<group>"; };
+		00AF416915BEFAF0000C1C0D /* RSConnection-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RSConnection-Prefix.pch"; sourceTree = "<group>"; };
+		00AF416A15BEFAF0000C1C0D /* RSConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSConnection.h; sourceTree = "<group>"; };
 		00AF416B15BEFAF0000C1C0D /* RSConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSConnection.m; sourceTree = "<group>"; };
+		00AF417315BEFB75000C1C0D /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = ../../../CocoaAsyncSocket/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
+		00AF417415BEFB75000C1C0D /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = ../../../CocoaAsyncSocket/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
+		00AF417A15BEFC9F000C1C0D /* RSContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSContext.h; sourceTree = "<group>"; };
+		00AF417B15BEFC9F000C1C0D /* RSContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSContext.m; sourceTree = "<group>"; };
+		00AF417E15BEFCAA000C1C0D /* RSContextArbiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSContextArbiter.h; sourceTree = "<group>"; };
+		00AF417F15BEFCAA000C1C0D /* RSContextArbiter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSContextArbiter.m; sourceTree = "<group>"; };
+		00AF418015BEFCAA000C1C0D /* RSContextMaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSContextMaster.h; sourceTree = "<group>"; };
+		00AF418115BEFCAA000C1C0D /* RSContextMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSContextMaster.m; sourceTree = "<group>"; };
+		00AF418215BEFCAA000C1C0D /* RSContextPrimary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSContextPrimary.h; sourceTree = "<group>"; };
+		00AF418315BEFCAA000C1C0D /* RSContextPrimary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSContextPrimary.m; sourceTree = "<group>"; };
+		00AF418A15BEFCB4000C1C0D /* RSContextElector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSContextElector.h; sourceTree = "<group>"; };
+		00AF418B15BEFCB4000C1C0D /* RSContextElector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSContextElector.m; sourceTree = "<group>"; };
+		00AF418C15BEFCB4000C1C0D /* RSContextReplica.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSContextReplica.h; sourceTree = "<group>"; };
+		00AF418D15BEFCB4000C1C0D /* RSContextReplica.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSContextReplica.m; sourceTree = "<group>"; };
+		00AF418E15BEFCB4000C1C0D /* RSContextSecondary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSContextSecondary.h; sourceTree = "<group>"; };
+		00AF418F15BEFCB4000C1C0D /* RSContextSecondary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSContextSecondary.m; sourceTree = "<group>"; };
+		00AF419615BEFCF7000C1C0D /* RSPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSPacket.h; sourceTree = "<group>"; };
+		00AF419715BEFCF7000C1C0D /* RSPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSPacket.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,8 +95,12 @@
 		00AF416715BEFAF0000C1C0D /* RSConnection */ = {
 			isa = PBXGroup;
 			children = (
+				00AF417215BEFB5F000C1C0D /* external */,
 				00AF416A15BEFAF0000C1C0D /* RSConnection.h */,
 				00AF416B15BEFAF0000C1C0D /* RSConnection.m */,
+				00AF419615BEFCF7000C1C0D /* RSPacket.h */,
+				00AF419715BEFCF7000C1C0D /* RSPacket.m */,
+				00AF417715BEFB98000C1C0D /* contexts */,
 				00AF416815BEFAF0000C1C0D /* Supporting Files */,
 			);
 			path = RSConnection;
@@ -74,6 +114,56 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		00AF417215BEFB5F000C1C0D /* external */ = {
+			isa = PBXGroup;
+			children = (
+				00AF417315BEFB75000C1C0D /* GCDAsyncSocket.h */,
+				00AF417415BEFB75000C1C0D /* GCDAsyncSocket.m */,
+			);
+			name = external;
+			path = RSConnection/external;
+			sourceTree = SOURCE_ROOT;
+		};
+		00AF417715BEFB98000C1C0D /* contexts */ = {
+			isa = PBXGroup;
+			children = (
+				00AF417A15BEFC9F000C1C0D /* RSContext.h */,
+				00AF417B15BEFC9F000C1C0D /* RSContext.m */,
+				00AF417815BEFBE3000C1C0D /* primarycontexts */,
+				00AF417915BEFC04000C1C0D /* secondarycontexts */,
+			);
+			name = contexts;
+			path = RSConnection/contexts;
+			sourceTree = SOURCE_ROOT;
+		};
+		00AF417815BEFBE3000C1C0D /* primarycontexts */ = {
+			isa = PBXGroup;
+			children = (
+				00AF418215BEFCAA000C1C0D /* RSContextPrimary.h */,
+				00AF418315BEFCAA000C1C0D /* RSContextPrimary.m */,
+				00AF417E15BEFCAA000C1C0D /* RSContextArbiter.h */,
+				00AF417F15BEFCAA000C1C0D /* RSContextArbiter.m */,
+				00AF418015BEFCAA000C1C0D /* RSContextMaster.h */,
+				00AF418115BEFCAA000C1C0D /* RSContextMaster.m */,
+			);
+			name = primarycontexts;
+			path = RSConnection/contexts/primarycontexts;
+			sourceTree = SOURCE_ROOT;
+		};
+		00AF417915BEFC04000C1C0D /* secondarycontexts */ = {
+			isa = PBXGroup;
+			children = (
+				00AF418E15BEFCB4000C1C0D /* RSContextSecondary.h */,
+				00AF418F15BEFCB4000C1C0D /* RSContextSecondary.m */,
+				00AF418A15BEFCB4000C1C0D /* RSContextElector.h */,
+				00AF418B15BEFCB4000C1C0D /* RSContextElector.m */,
+				00AF418C15BEFCB4000C1C0D /* RSContextReplica.h */,
+				00AF418D15BEFCB4000C1C0D /* RSContextReplica.m */,
+			);
+			name = secondarycontexts;
+			path = RSConnection/contexts/secondarycontexts;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -81,6 +171,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00AF417515BEFB75000C1C0D /* GCDAsyncSocket.h in Headers */,
+				00AF417C15BEFC9F000C1C0D /* RSContext.h in Headers */,
+				00AF418415BEFCAA000C1C0D /* RSContextArbiter.h in Headers */,
+				00AF418615BEFCAA000C1C0D /* RSContextMaster.h in Headers */,
+				00AF418815BEFCAA000C1C0D /* RSContextPrimary.h in Headers */,
+				00AF419015BEFCB4000C1C0D /* RSContextElector.h in Headers */,
+				00AF419215BEFCB4000C1C0D /* RSContextReplica.h in Headers */,
+				00AF419415BEFCB4000C1C0D /* RSContextSecondary.h in Headers */,
+				00AF419815BEFCF7000C1C0D /* RSPacket.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,6 +234,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				00AF416C15BEFAF0000C1C0D /* RSConnection.m in Sources */,
+				00AF417615BEFB75000C1C0D /* GCDAsyncSocket.m in Sources */,
+				00AF417D15BEFC9F000C1C0D /* RSContext.m in Sources */,
+				00AF418515BEFCAA000C1C0D /* RSContextArbiter.m in Sources */,
+				00AF418715BEFCAA000C1C0D /* RSContextMaster.m in Sources */,
+				00AF418915BEFCAA000C1C0D /* RSContextPrimary.m in Sources */,
+				00AF419115BEFCB4000C1C0D /* RSContextElector.m in Sources */,
+				00AF419315BEFCB4000C1C0D /* RSContextReplica.m in Sources */,
+				00AF419515BEFCB4000C1C0D /* RSContextSecondary.m in Sources */,
+				00AF419915BEFCF7000C1C0D /* RSPacket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,6 +332,7 @@
 				00AF417115BEFAF0000C1C0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
