@@ -93,7 +93,7 @@
     [self.receivedPriorities addObject:strPriority];
   }
   else {
-    NSAssert(NO ,@"Arbiter received from a channel it shouldn't");
+    [NSException raise:kUnknownPacketException format:@"Arbiter received a packet from an unknown channel %@", receivedPacket.channel];
   }
   [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
 }

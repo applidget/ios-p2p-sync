@@ -16,7 +16,12 @@
 #define DEFAULT_REPLICA_SET_NAME @"_DS"
 #define SERVICE_DOMAIN @"local."
 
+//Errors exception
 #define ERROR_DOMAIN @"rsconnection.error"
+
+static NSString *kNoDelegateException = @"NoDelegateSetException";
+static NSString *kUnknownPacketException = @"UnknownPacketException";
+static NSString *kBadContextException = @"BadContextException";
 
 typedef enum {
   kContextTypeReplica,
@@ -43,6 +48,8 @@ typedef enum {
 - (void) connection:(RSConnection *)connection didReceivedObject:(id)objectRead onChannel:(NSString *)channel;
 - (NSInteger) connectionRequestsPriorityOfElector:(RSConnection *)connection;
 - (void) connection:(RSConnection *)connection hasBeenAskedForUpdateSince:(NSTimeInterval)timeStamp onChannel:(NSString*)channel;
+- (void) connection:(RSConnection *)connection failedToOpenSocketWithError:(NSError *)error;
+- (void) connection:(RSConnection *)connection wasUnableToSendObjectDuringElection:(id)objectToSend onChannel:(NSString*)channelName;
 
 @end
 
@@ -59,19 +66,19 @@ typedef enum {
 @property (nonatomic, assign) id<RSConnectionDelegateProtocol> delegate;
 @property (nonatomic, assign) NSInteger port;
 @property (nonatomic, retain) NSString *replicaSetName;
-@property (nonatomic, assign) kContextType currentContextType;
+@property (nonatomic, readonly) kContextType currentContextType;
 
 //Client
-- (void) startSessionWithContextType:(kContextType) contextType;
+- (void) joinReplicaSetWithContextType:(kContextType) contextType;
 - (void) sendObject:(id)object onChannel:(NSString *)channelName;
-- (void) needUpdateSince:(NSTimeInterval) timeStamp forChannel:(NSString *)channelName;
-
+- (void) needUpdateSince:(NSTimeInterval)timeStamp onChannel:(NSString *)channelName;
 
 //Context
 - (void) changeContextWithNewContextType:(kContextType)newContext;
 - (void) didUpdateStateInto:(kConnectionState)newState;
 - (NSInteger) getPriorityOfElector;
 - (void) didReceivedPacket:(RSPacket *)packet;
+- (void) failedToOpenSocketWithError:(NSError *)error;
 
 //Garbage
 - (void) startMaster;

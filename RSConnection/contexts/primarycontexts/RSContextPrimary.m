@@ -19,7 +19,7 @@
   
   NSError *error = nil;
   if (![self.socket acceptOnPort:self.manager.port error:&error]) {
-    NSLog(@"Failed to launch server: %@", error);
+    [self.manager failedToOpenSocketWithError:error];
   }
   self.socket.delegate = self;
   

@@ -39,7 +39,7 @@
     [self.manager didReceivedPacket:receivedPacket];
   }
   else {
-    NSAssert(NO ,@"Master received a packet on a channel he shouldn't");
+    [NSException raise:kUnknownPacketException format:@"Master received a packet from an unknown channel %@", receivedPacket.channel];
   }
   [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
 }

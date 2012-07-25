@@ -49,9 +49,9 @@
   self.socket = contextSocket;
   [contextSocket release];
   self.socket.delegate = self;
-  NSError *err = nil;
-  if (![socket connectToHost:netService.hostName onPort:netService.port error:&err]) {
-    NSLog(@"Error replica connecting to master: %@", err);
+  NSError *error = nil;
+  if (![socket connectToHost:netService.hostName onPort:netService.port error:&error]) {
+    [self.manager failedToOpenSocketWithError:error];
   }
 }
 

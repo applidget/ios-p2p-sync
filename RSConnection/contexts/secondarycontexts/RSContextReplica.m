@@ -35,14 +35,12 @@
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
-
-    NSLog(@"replica received packet on channel: %@", receivedPacket.channel);
   
   if([receivedPacket.channel isEqualToString:kClientPacket]) {
     [self.manager didReceivedPacket:receivedPacket];
   }
   else {
-    NSAssert(NO ,@"Replica received a packet on a channel he shouldn't");
+    [NSException raise:kUnknownPacketException format:@"Replica received a packet from an unknown channel %@", receivedPacket.channel];
   }
   [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
 }

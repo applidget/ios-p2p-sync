@@ -68,7 +68,6 @@
 }
 
 - (void) didReceivedPacket:(RSPacket *)packet {
-  NSLog(@"client packet");
   RSPacket *originalPacket = packet.content;
   if([packet.channel isEqualToString:kClientPacket]) {
     [self.delegate connection:self didReceivedObject:originalPacket.content onChannel:originalPacket.channel];
@@ -78,10 +77,17 @@
   }
 }
 
+- (void) failedToOpenSocketWithError:(NSError *)error {
+  if([self.delegate respondsToSelector:@selector(connection:failedToOpenSocketWithError:)]) {
+    [self.delegate connection:self failedToOpenSocketWithError:error];
+  }
+}
+
+
 #pragma mark - client
-- (void) startSessionWithContextType:(kContextType)contextType {
+- (void) joinReplicaSetWithContextType:(kContextType)contextType {
   if(!self.delegate) {
-    NSAssert(NO, @"RSConnection: delegate is mandatory");
+    [NSException raise:kNoDelegateException format:@"Can't join a replica set without delegate"];
   }
   if(!self.port) {
     self.port = DEFAULT_PORT;
@@ -100,7 +106,9 @@
   //Wrapping original packet to use it within the library
   RSPacket *internalPacket = [RSPacket packetWithContent:clientPacket onChannel:kClientPacket emittingHost:self.context.socket.localHost];
   if([self.context isKindOfClass:[RSContextArbiter class]] || [self.context isKindOfClass:[RSContextElector class]]) {
-    NSLog(@"can't send packet during election");
+    if([self.delegate respondsToSelector:@selector(connection:wasUnableToSendObjectDuringElection:onChannel:)]) {
+      [self.delegate connection:self wasUnableToSendObjectDuringElection:object onChannel:channelName];
+    }
   }
   else {
     [self.context writeData:[internalPacket representingData]];
@@ -108,8 +116,12 @@
   
 }
 
-- (void) needUpdateSince:(NSTimeInterval) timeStamp forChannel:(NSString *)channelName {
-  NSAssert([self.context isKindOfClass:[RSContextReplica class]],@"needUpdateSince is only accessible by replica");
+- (void) needUpdateSince:(NSTimeInterval) timeStamp onChannel:(NSString *)channelName {
+  
+  if(![self.context isKindOfClass:[RSContextReplica class]]) {
+    [NSException raise:kBadContextException format:@"needUpdateSince:onChannel not accessible only available in kContextReplica"];
+  }
+  
   RSPacket *requestPacket = [RSPacket packetWithContent:[NSNumber numberWithDouble:timeStamp]
                                               onChannel:channelName 
                                            emittingHost:self.context.socket.localHost];
