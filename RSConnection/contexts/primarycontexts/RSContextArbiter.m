@@ -42,7 +42,7 @@
 
 - (void) announceNewMaster {
   
-  [self.manager numberOfElectorsForLastElection:self.receivedPriorities.count];
+  [self.manager numberOfElectorsForLastElection:self.receivedPriorities.count+1];
   
   NSInteger highestPrio = 0;
   for (NSString *prio in self.receivedPriorities) {

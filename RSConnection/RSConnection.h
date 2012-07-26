@@ -16,9 +16,6 @@
 #define DEFAULT_REPLICA_SET_NAME @"_DS"
 #define SERVICE_DOMAIN @"local."
 
-//Errors exception
-#define ERROR_DOMAIN @"rsconnection.error"
-
 static NSString *kNoDelegateException = @"NoDelegateSetException";
 static NSString *kUnknownPacketException = @"UnknownPacketException"; //never happens, uses internally
 static NSString *kBadContextException = @"BadContextException";
