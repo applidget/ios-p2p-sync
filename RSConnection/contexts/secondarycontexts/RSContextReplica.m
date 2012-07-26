@@ -36,8 +36,8 @@
   
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
   
-  if([receivedPacket.channel isEqualToString:kClientPacket]) {
-    [self.manager didReceivedPacket:receivedPacket];
+  if([receivedPacket.channel isEqualToString:kClientChannel]) {
+    [self.manager didReceivePacket:receivedPacket];
   }
   else {
     [NSException raise:kUnknownPacketException format:@"Replica received a packet from an unknown channel %@", receivedPacket.channel];

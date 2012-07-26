@@ -51,14 +51,9 @@
 
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
-  if([self.manager shouldAcceptNewReplicaWithIp:newSocket.localHost]) {
-    newSocket.delegate = self;
-    [newSocket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
-    [self.connectedReplicas addObject:newSocket];
-  }
-  else {
-    [newSocket disconnect];
-  }
+  newSocket.delegate = self;
+  [newSocket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
+  [self.connectedReplicas addObject:newSocket];
 } 
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {

@@ -20,8 +20,10 @@
 #define ERROR_DOMAIN @"rsconnection.error"
 
 static NSString *kNoDelegateException = @"NoDelegateSetException";
-static NSString *kUnknownPacketException = @"UnknownPacketException";
+static NSString *kUnknownPacketException = @"UnknownPacketException"; //never happens, uses internally
 static NSString *kBadContextException = @"BadContextException";
+static NSString *kBadChannelNameException = @"BadChannelNameException";
+static NSString *kObjectNotConformToNSCodingProtocol = @"ObjectNotConformToNSCodingProtocol";
 
 typedef enum {
   kContextTypeReplica,
@@ -45,13 +47,12 @@ typedef enum {
 @protocol RSConnectionDelegateProtocol <NSObject>
 
 - (void) connection:(RSConnection *)connection didUpdateStateInto:(kConnectionState)newState;
-- (void) connection:(RSConnection *)connection didReceivedObject:(id)objectRead onChannel:(NSString *)channel;
+- (void) connection:(RSConnection *)connection didReceiveObject:(id)objectRead onChannel:(NSString *)channel;
 - (NSInteger) connectionRequestsPriorityOfElector:(RSConnection *)connection;
 - (void) connection:(RSConnection *)connection hasBeenAskedForUpdateSince:(NSTimeInterval)timeStamp onChannel:(NSString*)channel;
 - (void) connection:(RSConnection *)connection failedToOpenSocketWithError:(NSError *)error;
 - (void) connection:(RSConnection *)connection wasUnableToSendObjectDuringElection:(id)objectToSend onChannel:(NSString*)channelName;
-- (BOOL) connection:(RSConnection *)connection shouldAcceptNewReplicaWithIp:(NSString *)ip; 
-- (void) connectionReplicaDidDisconnect:(RSConnection *)connection;
+- (void) connectionReplicaDidDisconnect:(RSConnection *)connection withError:(NSError *)error;
 - (void) connection:(RSConnection *)connection numberOfElectorsForLastElection:(NSInteger)numberOfElectors;
 
 
@@ -76,15 +77,15 @@ typedef enum {
 - (void) joinReplicaSetWithContextType:(kContextType) contextType;
 - (void) sendObject:(id)object onChannel:(NSString *)channelName;
 - (void) needUpdateSince:(NSTimeInterval)timeStamp onChannel:(NSString *)channelName;
+- (void) forceNewElection;
 
 //Context
 - (void) changeContextWithNewContextType:(kContextType)newContext;
 - (void) didUpdateStateInto:(kConnectionState)newState;
 - (NSInteger) getPriorityOfElector;
-- (void) didReceivedPacket:(RSPacket *)packet;
+- (void) didReceivePacket:(RSPacket *)packet;
 - (void) failedToOpenSocketWithError:(NSError *)error;
-- (BOOL) shouldAcceptNewReplicaWithIp:(NSString *)ip; 
-- (void) replicaDidDisconnect;
+- (void) replicaDidDisconnectWithError:(NSError *)error;
 - (void) numberOfElectorsForLastElection:(NSInteger)numberOfElectors;
 
 //Garbage

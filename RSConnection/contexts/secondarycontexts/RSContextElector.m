@@ -56,7 +56,7 @@
   [self.manager didUpdateStateInto:kConnectionStateElectorConnected];
   priorityForElection = [self.manager getPriorityOfElector];
   RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
-                                           onChannel:kPriorityPacket
+                                           onChannel:kPriorityChannel
                                         emittingHost:self.socket.localHost];
   
   [self writeData:[prioPacket representingData]];
@@ -66,7 +66,7 @@
   
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
   
-  if([receivedPacket.channel isEqualToString:kPriorityPacket]) {
+  if([receivedPacket.channel isEqualToString:kPriorityChannel]) {
     NSString *strPriority = receivedPacket.content;
     NSInteger priority = [strPriority intValue];
     if (priority == priorityForElection) {

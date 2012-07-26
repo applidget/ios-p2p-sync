@@ -10,14 +10,16 @@
 
 #define kPacketSeparator [@"|||" dataUsingEncoding:NSUTF8StringEncoding]
 
-#define kPriorityPacket @"prio_packet"
-#define kClientPacket @"client_packet"
-#define kUpdateRequestPacket @"update_request_packet"
+#define kPrivateChannelPrefix @"_Private"
+#define kPriorityChannel @"_Private_prio"
+#define kClientChannel @"_Private_client"
+#define kUpdateRequestChannel @"_Private_update"
+#define kForceNewElectionChannel @"_Private_election"
 
 @interface RSPacket : NSObject <NSCoding> {
 @private
   NSString *channel;
-  id<NSCoding> content;
+  id content;
   NSString *emittingHost;
 }
 

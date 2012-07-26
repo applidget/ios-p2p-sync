@@ -67,10 +67,10 @@
   return [self.delegate connectionRequestsPriorityOfElector:self];
 }
 
-- (void) didReceivedPacket:(RSPacket *)packet {
+- (void) didReceivePacket:(RSPacket *)packet {
   RSPacket *originalPacket = packet.content;
-  if([packet.channel isEqualToString:kClientPacket]) {
-    [self.delegate connection:self didReceivedObject:originalPacket.content onChannel:originalPacket.channel];
+  if([packet.channel isEqualToString:kClientChannel]) {
+    [self.delegate connection:self didReceiveObject:originalPacket.content onChannel:originalPacket.channel];
   }
   else {
     [self.delegate connection:self hasBeenAskedForUpdateSince:[originalPacket.content doubleValue] onChannel:originalPacket.channel];
@@ -83,19 +83,9 @@
   }
 }
 
-- (BOOL) shouldAcceptNewReplicaWithIp:(NSString *)ip {
-  if([self.delegate respondsToSelector:@selector(connection:shouldAcceptNewReplicaWithIp:)]) {
-    return [self.delegate connection:self shouldAcceptNewReplicaWithIp:ip];
-  }
-  else {
-    //Accept by default
-    return YES;
-  }
-}
-
-- (void) replicaDidDisconnect {
-  if([self.delegate respondsToSelector:@selector(connectionReplicaDidDisconnect:)]) {
-    [self.delegate connectionReplicaDidDisconnect:self];
+- (void) replicaDidDisconnectWithError:(NSError *)error {
+  if([self.delegate respondsToSelector:@selector(connectionReplicaDidDisconnect:withError:)]) {
+    [self.delegate connectionReplicaDidDisconnect:self withError:error];
   }
 }
 
@@ -122,12 +112,23 @@
   [self changeContextWithNewContextType:contextType];
 }
 
+- (BOOL) isChannelNameValid:(NSString *)channelName {
+  //Some channels are private (reserved for library uses)
+  NSRange range = [channelName rangeOfString:kPrivateChannelPrefix];
+  return range.location != 0;
+}
+
 - (void) sendObject:(id)object onChannel:(NSString *)channelName {
+  
+  if(![self isChannelNameValid:channelName]) {
+    [NSException raise:kBadChannelNameException format:@"channel shouldn't start with %@", kPrivateChannelPrefix];
+  }
+  
   //Write operation
   RSPacket *clientPacket = [RSPacket packetWithContent:object onChannel:channelName emittingHost:self.context.socket.localHost];
   
   //Wrapping original packet to use it within the library
-  RSPacket *internalPacket = [RSPacket packetWithContent:clientPacket onChannel:kClientPacket emittingHost:self.context.socket.localHost];
+  RSPacket *internalPacket = [RSPacket packetWithContent:clientPacket onChannel:kClientChannel emittingHost:self.context.socket.localHost];
   if([self.context isKindOfClass:[RSContextArbiter class]] || [self.context isKindOfClass:[RSContextElector class]]) {
     if([self.delegate respondsToSelector:@selector(connection:wasUnableToSendObjectDuringElection:onChannel:)]) {
       [self.delegate connection:self wasUnableToSendObjectDuringElection:object onChannel:channelName];
@@ -141,6 +142,10 @@
 
 - (void) needUpdateSince:(NSTimeInterval) timeStamp onChannel:(NSString *)channelName {
   
+  if(![self isChannelNameValid:channelName]) {
+    [NSException raise:kBadChannelNameException format:@"channel shouldn't start with %@", kPrivateChannelPrefix];
+  }
+  
   if(![self.context isKindOfClass:[RSContextReplica class]]) {
     [NSException raise:kBadContextException format:@"needUpdateSince:onChannel not accessible only available in kContextReplica"];
   }
@@ -149,9 +154,26 @@
                                               onChannel:channelName 
                                            emittingHost:self.context.socket.localHost];
   
-  RSPacket *internalPacket = [RSPacket packetWithContent:requestPacket onChannel:kUpdateRequestPacket emittingHost:self.context.socket.localHost];
+  RSPacket *internalPacket = [RSPacket packetWithContent:requestPacket onChannel:kUpdateRequestChannel emittingHost:self.context.socket.localHost];
   
   [self.context writeData:[internalPacket representingData]];
+}
+
+- (void) forceNewElection {
+  if([self.context isKindOfClass:[RSContextElector class]] || [self.context isKindOfClass:[RSContextArbiter class]]) {
+    [NSException raise:kBadContextException format:@"forceNewElection not accessible only available in kContextMaster / Replica"];
+  }
+  
+  if([self.context isKindOfClass:[RSContextMaster class]]) {
+    //Master wants a new election, just make it arbiter of the election
+    [self changeContextWithNewContextType:kContextTypeArbiter];
+  }
+  else {
+    //Replica context, ask the master to kill himself
+    RSPacket *forceElectionPacket = [RSPacket packetWithContent:nil onChannel:kForceNewElectionChannel emittingHost:self.context.socket.localHost];
+    [self.context writeData:[forceElectionPacket representingData]];
+  }
+  
 }
 
 //Garbage

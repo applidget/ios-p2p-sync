@@ -54,7 +54,7 @@
 
   if(highestPrio > priorityForElection) {
     RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", highestPrio]
-                                             onChannel:kPriorityPacket
+                                             onChannel:kPriorityChannel
                                           emittingHost:self.socket.localHost];
 
     [self writeData:[prioPacket representingData]];
@@ -62,7 +62,7 @@
   }
   else { //Arbiter has highest prio, becomes master
     RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
-                                             onChannel:kPriorityPacket
+                                             onChannel:kPriorityChannel
                                           emittingHost:self.socket.localHost];
     [self writeData:[prioPacket representingData]];
     [self.manager changeContextWithNewContextType:kContextTypeMaster];
@@ -92,7 +92,7 @@
   
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
   
-  if([receivedPacket.channel isEqualToString:kPriorityPacket]) {
+  if([receivedPacket.channel isEqualToString:kPriorityChannel]) {
     NSString *strPriority = receivedPacket.content;
     [self.receivedPriorities addObject:strPriority];
   }

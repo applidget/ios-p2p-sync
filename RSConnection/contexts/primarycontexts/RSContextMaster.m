@@ -29,19 +29,20 @@
 #pragma mark - GCDAsyncSocket delegate
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   [super socketDidDisconnect:sock withError:err];
-  [self.manager replicaDidDisconnect];
+  [self.manager replicaDidDisconnectWithError:err];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
-  
-  NSLog(@"master received packet on channel: %@", receivedPacket.channel);
-  
-  if([receivedPacket.channel isEqualToString:kClientPacket]) {
-    [self.manager didReceivedPacket:receivedPacket];
+    
+  if([receivedPacket.channel isEqualToString:kClientChannel]) {
+    [self.manager didReceivePacket:receivedPacket];
   }
-  else if([receivedPacket.channel isEqualToString:kUpdateRequestPacket]) {
-    [self.manager didReceivedPacket:receivedPacket];
+  else if([receivedPacket.channel isEqualToString:kUpdateRequestChannel]) {
+    [self.manager didReceivePacket:receivedPacket];
+  }
+  else if([receivedPacket.channel isEqualToString:kForceNewElectionChannel]) {
+    [self.manager changeContextWithNewContextType:kContextTypeArbiter];
   }
   else {
     [NSException raise:kUnknownPacketException format:@"Master received a packet from an unknown channel %@", receivedPacket.channel];

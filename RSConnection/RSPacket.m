@@ -7,6 +7,7 @@
 //
 
 #import "RSPacket.h"
+#import "RSConnection.h"
 
 #define kArchiveKey @"archive_key"
 #define kChannelKey @"packet_channel_key"
@@ -20,8 +21,9 @@
 //Constructor
 - (id) initWithContent:(id)packetContent onChannel:(NSString*)packetChannel emittingHost:(NSString *)packetEmittingHost {
   if(self = [super init]) {
-    NSAssert([packetContent respondsToSelector:@selector(encodeWithCoder:)], @"packet content object must implement the NSCoding protocol");
-    NSAssert([packetContent respondsToSelector:@selector(initWithCoder:)], @"packet content object must implement the NSCoding protocol");
+    if(![packetContent conformsToProtocol:@protocol(NSCoding)]) {
+      [NSException raise:kObjectNotConformToNSCodingProtocol format:@"object send must implement the NSCoding protocol"];
+    }
     self.channel = packetChannel;
     self.content = packetContent;
     self.emittingHost = packetEmittingHost;
