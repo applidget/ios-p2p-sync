@@ -83,6 +83,29 @@
   }
 }
 
+- (BOOL) shouldAcceptNewReplicaWithIp:(NSString *)ip {
+  if([self.delegate respondsToSelector:@selector(connection:shouldAcceptNewReplicaWithIp:)]) {
+    return [self.delegate connection:self shouldAcceptNewReplicaWithIp:ip];
+  }
+  else {
+    //Accept by default
+    return YES;
+  }
+}
+
+- (void) replicaDidDisconnect {
+  if([self.delegate respondsToSelector:@selector(connectionReplicaDidDisconnect:)]) {
+    [self.delegate connectionReplicaDidDisconnect:self];
+  }
+}
+
+- (void) numberOfElectorsForLastElection:(NSInteger)numberOfElectors {
+  if([self.delegate respondsToSelector:@selector(connection:numberOfElectorsForLastElection:)]) {
+    [self.delegate connection:self numberOfElectorsForLastElection:numberOfElectors];
+  }
+}
+
+
 
 #pragma mark - client
 - (void) joinReplicaSetWithContextType:(kContextType)contextType {

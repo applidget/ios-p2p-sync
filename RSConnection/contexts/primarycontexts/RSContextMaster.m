@@ -27,6 +27,11 @@
 }
 
 #pragma mark - GCDAsyncSocket delegate
+- (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+  [super socketDidDisconnect:sock withError:err];
+  [self.manager replicaDidDisconnect];
+}
+
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
   

@@ -41,6 +41,9 @@
 }
 
 - (void) announceNewMaster {
+  
+  [self.manager numberOfElectorsForLastElection:self.receivedPriorities.count];
+  
   NSInteger highestPrio = 0;
   for (NSString *prio in self.receivedPriorities) {
     NSInteger currentPrio = [prio intValue];
@@ -64,6 +67,7 @@
     [self writeData:[prioPacket representingData]];
     [self.manager changeContextWithNewContextType:kContextTypeMaster];
   }
+  [self.receivedPriorities removeAllObjects];
 }
 
 #pragma mark - NSNetServiceDelegate protocol

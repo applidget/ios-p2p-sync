@@ -50,6 +50,10 @@ typedef enum {
 - (void) connection:(RSConnection *)connection hasBeenAskedForUpdateSince:(NSTimeInterval)timeStamp onChannel:(NSString*)channel;
 - (void) connection:(RSConnection *)connection failedToOpenSocketWithError:(NSError *)error;
 - (void) connection:(RSConnection *)connection wasUnableToSendObjectDuringElection:(id)objectToSend onChannel:(NSString*)channelName;
+- (BOOL) connection:(RSConnection *)connection shouldAcceptNewReplicaWithIp:(NSString *)ip; 
+- (void) connectionReplicaDidDisconnect:(RSConnection *)connection;
+- (void) connection:(RSConnection *)connection numberOfElectorsForLastElection:(NSInteger)numberOfElectors;
+
 
 @end
 
@@ -79,6 +83,9 @@ typedef enum {
 - (NSInteger) getPriorityOfElector;
 - (void) didReceivedPacket:(RSPacket *)packet;
 - (void) failedToOpenSocketWithError:(NSError *)error;
+- (BOOL) shouldAcceptNewReplicaWithIp:(NSString *)ip; 
+- (void) replicaDidDisconnect;
+- (void) numberOfElectorsForLastElection:(NSInteger)numberOfElectors;
 
 //Garbage
 - (void) startMaster;
