@@ -83,12 +83,6 @@
   }
 }
 
-- (void) replicaDidDisconnectWithError:(NSError *)error {
-  if([self.delegate respondsToSelector:@selector(connectionReplicaDidDisconnect:withError:)]) {
-    [self.delegate connectionReplicaDidDisconnect:self withError:error];
-  }
-}
-
 - (void) numberOfElectorsForLastElection:(NSInteger)numberOfElectors {
   if([self.delegate respondsToSelector:@selector(connection:numberOfElectorsForLastElection:)]) {
     [self.delegate connection:self numberOfElectorsForLastElection:numberOfElectors];
@@ -170,7 +164,7 @@
   }
   else {
     //Replica context, ask the master to kill himself
-    RSPacket *forceElectionPacket = [RSPacket packetWithContent:nil onChannel:kForceNewElectionChannel emittingHost:self.context.socket.localHost];
+    RSPacket *forceElectionPacket = [RSPacket packetWithContent:@"unused" onChannel:kForceNewElectionChannel emittingHost:self.context.socket.localHost];
     [self.context writeData:[forceElectionPacket representingData]];
   }
   
