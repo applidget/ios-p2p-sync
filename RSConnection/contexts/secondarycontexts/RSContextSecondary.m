@@ -34,6 +34,8 @@
 - (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
   [self.serviceBrowser stop];
   [self.socket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
+  self.manager.nbConnections ++;
+
 }
 
 #pragma mark - NSNetServiceBrowserDelegate

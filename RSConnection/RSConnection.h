@@ -53,7 +53,7 @@ typedef enum {
 - (void) connection:(RSConnection *)connection failedToOpenSocketWithError:(NSError *)error;
 - (void) connection:(RSConnection *)connection wasUnableToSendObjectDuringElection:(id)objectToSend onChannel:(NSString*)channelName;
 - (void) connection:(RSConnection *)connection numberOfElectorsForLastElection:(NSInteger)numberOfElectors;
-
+- (void) connection:(RSConnection *)connection replicaDidDisconnectWithError:(NSError *)error;
 
 @end
 
@@ -65,12 +65,14 @@ typedef enum {
   NSInteger port;
   NSString *replicaSetName;
   kContextType currentContextType;
+  NSInteger nbConnections;
 }
 
 @property (nonatomic, assign) id<RSConnectionDelegateProtocol> delegate;
 @property (nonatomic, assign) NSInteger port;
 @property (nonatomic, retain) NSString *replicaSetName;
 @property (nonatomic, readonly) kContextType currentContextType;
+@property (nonatomic, assign) NSInteger nbConnections;
 
 //Client
 - (void) joinReplicaSetWithContextType:(kContextType) contextType;
@@ -85,6 +87,7 @@ typedef enum {
 - (void) didReceivePacket:(RSPacket *)packet;
 - (void) failedToOpenSocketWithError:(NSError *)error;
 - (void) numberOfElectorsForLastElection:(NSInteger)numberOfElectors;
+- (void) replicaDidDisconnectWithError:(NSError *)error;
 
 //Garbage
 - (void) startMaster;

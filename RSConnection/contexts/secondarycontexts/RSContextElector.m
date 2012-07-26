@@ -47,6 +47,7 @@
     default:
       break;
   }
+  self.manager.nbConnections --;
   [self.manager changeContextWithNewContextType:newContextType];
 }
 

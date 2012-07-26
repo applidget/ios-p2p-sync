@@ -20,10 +20,11 @@
 
 @implementation RSConnection
 
-@synthesize delegate, port, replicaSetName, context, currentContextType;
+@synthesize delegate, port, replicaSetName, context, currentContextType, nbConnections;
 
 #pragma mark - Context
 - (void) activateContext:(RSContext *) newContext {
+  self.nbConnections = 0;
   self.context = newContext;
   [self.context activate];
 }
@@ -86,6 +87,12 @@
 - (void) numberOfElectorsForLastElection:(NSInteger)numberOfElectors {
   if([self.delegate respondsToSelector:@selector(connection:numberOfElectorsForLastElection:)]) {
     [self.delegate connection:self numberOfElectorsForLastElection:numberOfElectors];
+  }
+}
+
+- (void) replicaDidDisconnectWithError:(NSError *)error {
+  if([self.delegate respondsToSelector:@selector(connection:replicaDidDisconnectWithError:)]){
+    [self.delegate connection:self replicaDidDisconnectWithError:error];
   }
 }
 

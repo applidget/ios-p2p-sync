@@ -54,11 +54,13 @@
   newSocket.delegate = self;
   [newSocket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
   [self.connectedReplicas addObject:newSocket];
+  self.manager.nbConnections = self.connectedReplicas.count;
 } 
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   [sock setDelegate:nil delegateQueue:NULL];
   [self.connectedReplicas removeObject:sock];
+  self.manager.nbConnections = self.connectedReplicas.count;
 }
 
 #pragma mark - memory management
