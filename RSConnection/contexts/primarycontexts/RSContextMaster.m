@@ -23,7 +23,10 @@
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
   //maybe another master service already exist (a tie in the election ??)
   if([[errorDict objectForKey:NSNetServicesErrorCode] intValue] == NSNetServicesCollisionError) {
-    [self.manager changeContextWithNewContextType:kContextTypeReplica];
+    if(!self.delegateAlreadyAwareOfCurrentState) {
+      //someone launched a master service while real master was sleeping. DO not disconnect everyone !!
+      [self.manager changeContextWithNewContextType:kContextTypeReplica];
+    }
   }
 }
 
