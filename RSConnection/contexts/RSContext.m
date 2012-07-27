@@ -15,6 +15,10 @@
 - (id) initWithManager:(RSConnection *)contextManager {
   if(self = [super init]) {
     self.manager = contextManager;
+
+    if(&UIApplicationDidEnterBackgroundNotification != nil) {
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    }
     if(&UIApplicationWillEnterForegroundNotification != nil) {
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appLeftBackground) name:UIApplicationWillEnterForegroundNotification object:nil];
     }

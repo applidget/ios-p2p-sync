@@ -51,6 +51,7 @@
   }
 }
 
+
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
   newSocket.delegate = self;
@@ -66,13 +67,24 @@
 }
 
 #pragma mark - backgrounding management
+- (void) appDidEnterBackground {
+  if(self.manager.closeConnectionWhenBackgrounded) {
+    [self unactivate];
+  }
+}
+
 - (void) appLeftBackground {
-  self.delegateAlreadyAwareOfCurrentState = YES; //No need to tell the delegate
-  /*
-   need delay because the delegate must have the time to call the method that indicate that the service stopped published when the app
-   went in background. Otherwise, it crashes
-  */
-  [self.netService performSelector:@selector(publish) withObject:nil afterDelay:0.1];
+  if(self.manager.closeConnectionWhenBackgrounded) {
+    [self.manager changeContextWithNewContextType:[self.manager contextTypeToUseAfterBackground]];
+  }
+  else {
+    self.delegateAlreadyAwareOfCurrentState = YES; //No need to tell the delegate
+    /*
+     need delay because the delegate must have the time to call the method that indicate that the service stopped published when the app
+     went in background. Otherwise, it crashes
+     */
+    [self.netService performSelector:@selector(publish) withObject:nil afterDelay:0.1];
+  }
 }
 
 #pragma mark - memory management

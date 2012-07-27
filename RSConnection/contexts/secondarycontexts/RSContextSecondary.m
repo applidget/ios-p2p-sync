@@ -59,17 +59,28 @@
 }
 
 #pragma mark - backgrounding management
+- (void) appDidEnterBackground {
+  if(self.manager.closeConnectionWhenBackgrounded) {
+    [self unactivate];
+  }
+}
+
 - (void) relaunchServiceSearch {
   [self.serviceBrowser searchForServicesOfType:self.searchedServiceType inDomain:SERVICE_DOMAIN];
 }
 
 - (void) appLeftBackground {
-  if(self.manager.nbConnections == 0) {
-    //Not connected, look for service
-    /*
-     Need delay to let the delegate method called of stop search to be called
-    */
-    [self performSelector:@selector(relaunchServiceSearch) withObject:nil afterDelay:0.1];
+  if(self.manager.closeConnectionWhenBackgrounded) {
+    [self.manager changeContextWithNewContextType:[self.manager contextTypeToUseAfterBackground]];
+  }
+  else {
+    if(self.manager.nbConnections == 0) {
+      //Not connected, look for service
+      /*
+       Need delay to let the delegate method called of stop search to be called
+       */
+      [self performSelector:@selector(relaunchServiceSearch) withObject:nil afterDelay:0.1]; 
+    }
   }
 }
 

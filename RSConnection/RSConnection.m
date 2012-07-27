@@ -20,7 +20,7 @@
 
 @implementation RSConnection
 
-@synthesize delegate, port, replicaSetName, context, currentContextType, nbConnections;
+@synthesize delegate, port, replicaSetName, context, currentContextType, nbConnections, closeConnectionWhenBackgrounded;
 
 #pragma mark - Context
 - (void) activateContext:(RSContext *) newContext {
@@ -96,6 +96,16 @@
   }
 }
 
+- (kContextType) contextTypeToUseAfterBackground {
+  if([self.delegate respondsToSelector:@selector(connectionContextTypeToUseAfterBackground:)]) {
+    return [self.delegate connectionContextTypeToUseAfterBackground:self];
+  }
+  else {
+    //By default become a replica
+    return kContextTypeReplica;
+  }
+}
+
 
 
 #pragma mark - client
@@ -109,7 +119,10 @@
   if(!self.replicaSetName) {
     self.replicaSetName = DEFAULT_REPLICA_SET_NAME;
   }
-  
+  if(!self.closeConnectionWhenBackgrounded) {
+    NSLog(@"setting background mode");
+    self.closeConnectionWhenBackgrounded = NO;
+  }
   [self changeContextWithNewContextType:contextType];
 }
 
