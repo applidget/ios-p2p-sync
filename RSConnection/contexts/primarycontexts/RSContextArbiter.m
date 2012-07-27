@@ -43,7 +43,7 @@
 
 - (void) announceNewMaster {
   
-  [self.manager numberOfElectorsForLastElection:self.receivedPriorities.count+1];
+  [self.manager numberOfParticipantsForLastElection:self.receivedPriorities.count+1];
   
   NSInteger highestPrio = 0;
   for (NSString *prio in self.receivedPriorities) {
@@ -97,14 +97,32 @@
   
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
   
+  if([self.waitingConnections containsObject:sock] && ![receivedPacket.channel isEqualToString:kPasswordChannel]) {
+    //Received a packet from a not yet authorized device
+    NSLog(@"not allowed");
+    return;
+  }
+  
   if([receivedPacket.channel isEqualToString:kPriorityChannel]) {
     NSString *strPriority = receivedPacket.content;
     [self.receivedPriorities addObject:strPriority];
+    NSLog(@"received prio");
+  }
+  else if([receivedPacket.channel isEqualToString:kPasswordChannel]) {
+    NSLog(@"received pass");
+    if([receivedPacket.content isEqualToString:[self.manager requestPassword]]) {
+      [self socketAnsweredPasswordSuccessfully:sock];
+    }
+    else {
+      [sock disconnect];
+      [waitingConnections removeObject:sock];
+    }
   }
   else {
     [NSException raise:kUnknownPacketException format:@"Arbiter received a packet from an unknown channel %@", receivedPacket.channel];
   }
   [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
+
 }
 
 #pragma mark - memory management

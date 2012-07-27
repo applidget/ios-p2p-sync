@@ -25,11 +25,12 @@
 #pragma mark - GCDAsyncSocketDelegate protocol
 - (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
   [super socket:sender didConnectToHost:host port:port];
-  [self.manager didUpdateStateInto:kConnectionStateReplicaConnected];
+  if(self.manager.usePasswordForConnection) {
+    [self.manager didUpdateStateInto:kConnectionStateReplicaConnected];
+  }
 }
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {  
-  //Lost connection to master -> trying to launch arbiter context
   [self.socket setDelegate:nil delegateQueue:NULL];
   self.manager.nbConnections --;
   [self.manager changeContextWithNewContextType:kContextTypeArbiter];
@@ -41,6 +42,12 @@
   
   if([receivedPacket.channel isEqualToString:kClientChannel]) {
     [self.manager didReceivePacket:receivedPacket];
+  }
+  else if([receivedPacket.channel isEqualToString:kPasswordChannel]) {
+    //check success
+    if([receivedPacket.content isEqualToString:kPasswordSuccess]) {
+      [self.manager didUpdateStateInto:kConnectionStateReplicaConnected];
+    }
   }
   else {
     [NSException raise:kUnknownPacketException format:@"Replica received a packet from an unknown channel %@", receivedPacket.channel];

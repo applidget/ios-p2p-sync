@@ -42,7 +42,8 @@
 
 #pragma mark - GCDAsyncSocketDelegate protocol
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-  self.socket.delegate = nil;
+
+  [self.socket setDelegate:nil delegateQueue:NULL];
   kContextType newContextType;
   switch (self.electionResult) {
     case kElectionResultWon:
@@ -61,16 +62,22 @@
   [self.manager changeContextWithNewContextType:newContextType];
 }
 
-- (void) socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
-  [super socket:sock didConnectToHost:host port:port];
-  [self.timeOutTimer invalidate];
-  [self.manager didUpdateStateInto:kConnectionStateElectorConnected];
-  self.priorityForElection = [self.manager getPriorityOfElector];
+- (void) sendPriorityPacket {
   RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
                                            onChannel:kPriorityChannel
                                         emittingHost:self.socket.localHost];
   
   [self writeData:[prioPacket representingData]];
+}
+
+- (void) socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
+  [super socket:sock didConnectToHost:host port:port];
+  [self.timeOutTimer invalidate];
+  if(!self.manager.usePasswordForConnection) {
+    [self.manager didUpdateStateInto:kConnectionStateElectorConnected];
+  }
+  
+  self.priorityForElection = [self.manager getPriorityOfElector];
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
@@ -85,6 +92,12 @@
     }
     else {
       self.electionResult = kElectionResultLost;
+    }
+  }
+  else if([receivedPacket.channel isEqualToString:kPasswordChannel]) {
+    //check success
+    if([receivedPacket.content isEqualToString:kPasswordSuccess]) {
+      [self.manager didUpdateStateInto:kConnectionStateElectorConnected];
     }
   }
   else {

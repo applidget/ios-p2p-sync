@@ -38,6 +38,10 @@
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {}
 
+- (void) socketDidSecure:(GCDAsyncSocket *)sock {
+  NSLog(@"secured socket");
+}
+
 #pragma mark - memory management
 - (void) dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];

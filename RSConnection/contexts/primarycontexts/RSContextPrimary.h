@@ -18,14 +18,17 @@
 @interface RSContextPrimary : RSContext {
 @protected
   NSMutableArray *connectedReplicas;
+  NSMutableArray *waitingConnections;
   NSNetService *netService;
   BOOL delegateAlreadyAwareOfCurrentState;
 }
 
 @property (nonatomic, retain) NSMutableArray *connectedReplicas;
+@property (nonatomic, retain) NSMutableArray *waitingConnections;
 @property (nonatomic, retain) NSNetService *netService;
 @property (nonatomic, assign) BOOL delegateAlreadyAwareOfCurrentState;
 
 - (void) activateWithServiceType:(NSString *)type andName:(NSString *) name;
+- (void) socketAnsweredPasswordSuccessfully:(GCDAsyncSocket *)sock;
 
 @end

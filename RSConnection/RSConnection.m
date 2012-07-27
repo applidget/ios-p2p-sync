@@ -20,7 +20,7 @@
 
 @implementation RSConnection
 
-@synthesize delegate, port, replicaSetName, context, currentContextType, nbConnections, closeConnectionWhenBackgrounded;
+@synthesize delegate, port, replicaSetName, context, currentContextType, nbConnections, closeConnectionWhenBackgrounded, usePasswordForConnection;
 
 #pragma mark - Context
 - (void) activateContext:(RSContext *) newContext {
@@ -84,9 +84,9 @@
   }
 }
 
-- (void) numberOfElectorsForLastElection:(NSInteger)numberOfElectors {
-  if([self.delegate respondsToSelector:@selector(connection:numberOfElectorsForLastElection:)]) {
-    [self.delegate connection:self numberOfElectorsForLastElection:numberOfElectors];
+- (void) numberOfParticipantsForLastElection:(NSInteger)numberOfElectors {
+  if([self.delegate respondsToSelector:@selector(connection:numberOfParticipantsForLastElection:)]) {
+    [self.delegate connection:self numberOfParticipantsForLastElection:numberOfElectors];
   }
 }
 
@@ -106,7 +106,9 @@
   }
 }
 
-
+- (NSString *) requestPassword {
+  return [self.delegate connectionRequestsPassword:self];
+}
 
 #pragma mark - client
 - (void) joinReplicaSetWithContextType:(kContextType)contextType {
@@ -120,7 +122,6 @@
     self.replicaSetName = DEFAULT_REPLICA_SET_NAME;
   }
   if(!self.closeConnectionWhenBackgrounded) {
-    NSLog(@"setting background mode");
     self.closeConnectionWhenBackgrounded = NO;
   }
   [self changeContextWithNewContextType:contextType];

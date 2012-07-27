@@ -35,6 +35,10 @@
 - (void)socket:(GCDAsyncSocket *)sender didConnectToHost:(NSString *)host port:(UInt16)port {
   [self.serviceBrowser stop];
   [self.socket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
+  if(self.manager.usePasswordForConnection) {
+    RSPacket *passwordPacket = [RSPacket packetWithContent:[self.manager requestPassword] onChannel:kPasswordChannel emittingHost:self.socket.localHost];
+    [self writeData:[passwordPacket representingData]];
+  }
   self.manager.nbConnections ++;
 
 }

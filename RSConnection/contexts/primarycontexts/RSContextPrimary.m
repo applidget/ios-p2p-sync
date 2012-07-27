@@ -10,7 +10,7 @@
 
 @implementation RSContextPrimary
 
-@synthesize connectedReplicas, netService, delegateAlreadyAwareOfCurrentState;
+@synthesize connectedReplicas, netService, delegateAlreadyAwareOfCurrentState, waitingConnections;
 
 - (void) activateWithServiceType:(NSString *) type andName:(NSString *) name {
   GCDAsyncSocket *contextSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
@@ -51,13 +51,26 @@
   }
 }
 
+- (void) socketAnsweredPasswordSuccessfully:(GCDAsyncSocket *)sock {
+  [self.connectedReplicas addObject:sock];
+  [self.waitingConnections removeObject:sock];
+  self.manager.nbConnections = self.connectedReplicas.count;
+  RSPacket *connectionACK = [RSPacket packetWithContent:kPasswordSuccess onChannel:kPasswordChannel emittingHost:self.socket.localHost];
+  [sock writeData:[connectionACK representingData] withTimeout:DEFAULT_TIMEOUT tag:0];
+}
 
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sender didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
   newSocket.delegate = self;
   [newSocket readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
-  [self.connectedReplicas addObject:newSocket];
-  self.manager.nbConnections = self.connectedReplicas.count;
+  if(self.manager.usePasswordForConnection) {
+    [self.waitingConnections addObject:newSocket];
+  }
+  else {
+    [self.connectedReplicas addObject:newSocket];
+    self.manager.nbConnections = self.connectedReplicas.count;
+  }
+
 } 
 
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {

@@ -15,6 +15,9 @@
 #define kClientChannel @"_Private_client"
 #define kUpdateRequestChannel @"_Private_update"
 #define kForceNewElectionChannel @"_Private_election"
+#define kPasswordChannel @"_Private_pass"
+
+#define kPasswordSuccess @"pass-success"
 
 @interface RSPacket : NSObject <NSCoding> {
 @private

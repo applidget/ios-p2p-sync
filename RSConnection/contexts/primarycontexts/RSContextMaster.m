@@ -37,7 +37,15 @@
 }
 
 - (void) socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
+  
   RSPacket *receivedPacket = [RSPacket packetFromData:data];
+  
+  if([self.waitingConnections containsObject:sock] && ![receivedPacket.channel isEqualToString:kPasswordChannel]) {
+    //Received a packet from a not yet authorized device
+    NSLog(@"not allowed");
+    return;
+  }
+  
     
   if([receivedPacket.channel isEqualToString:kClientChannel]) {
     [self.manager didReceivePacket:receivedPacket];
@@ -48,10 +56,21 @@
   else if([receivedPacket.channel isEqualToString:kForceNewElectionChannel]) {
     [self.manager changeContextWithNewContextType:kContextTypeArbiter];
   }
+  else if([receivedPacket.channel isEqualToString:kPasswordChannel]) {
+    NSLog(@"password received");
+    if([receivedPacket.content isEqualToString:[self.manager requestPassword]]) {
+      [self socketAnsweredPasswordSuccessfully:sock];
+    }
+    else {
+      [sock disconnect];
+      [waitingConnections removeObject:sock];
+    }
+  }
   else {
     [NSException raise:kUnknownPacketException format:@"Master received a packet from an unknown channel %@", receivedPacket.channel];
   }
   [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
+
 }
 
 @end
