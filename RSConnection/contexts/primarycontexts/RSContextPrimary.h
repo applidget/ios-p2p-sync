@@ -19,10 +19,12 @@
 @protected
   NSMutableArray *connectedReplicas;
   NSNetService *netService;
+  BOOL delegateAlreadyAwareOfCurrentState;
 }
 
 @property (nonatomic, retain) NSMutableArray *connectedReplicas;
 @property (nonatomic, retain) NSNetService *netService;
+@property (nonatomic, assign) BOOL delegateAlreadyAwareOfCurrentState;
 
 - (void) activateWithServiceType:(NSString *)type andName:(NSString *) name;
 

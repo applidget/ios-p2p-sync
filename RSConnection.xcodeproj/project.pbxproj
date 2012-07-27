@@ -29,6 +29,7 @@
 		00AF419915BEFCF7000C1C0D /* RSPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF419715BEFCF7000C1C0D /* RSPacket.m */; };
 		00BB4C4D15BFF11C0026499F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BB4C4C15BFF11C0026499F /* Security.framework */; };
 		00BB4C4F15BFF1220026499F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BB4C4E15BFF1220026499F /* CFNetwork.framework */; };
+		00D10A3815C28EEF00214252 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00D10A3715C28EEF00214252 /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		00AF419715BEFCF7000C1C0D /* RSPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSPacket.m; sourceTree = "<group>"; };
 		00BB4C4C15BFF11C0026499F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		00BB4C4E15BFF1220026499F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		00D10A3715C28EEF00214252 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00D10A3815C28EEF00214252 /* UIKit.framework in Frameworks */,
 				00BB4C4F15BFF1220026499F /* CFNetwork.framework in Frameworks */,
 				00BB4C4D15BFF11C0026499F /* Security.framework in Frameworks */,
 				00AF416615BEFAF0000C1C0D /* Foundation.framework in Frameworks */,
@@ -76,8 +79,6 @@
 		00AF415715BEFAF0000C1C0D = {
 			isa = PBXGroup;
 			children = (
-				00BB4C4E15BFF1220026499F /* CFNetwork.framework */,
-				00BB4C4C15BFF11C0026499F /* Security.framework */,
 				00AF416715BEFAF0000C1C0D /* RSConnection */,
 				00AF416415BEFAF0000C1C0D /* Frameworks */,
 				00AF416315BEFAF0000C1C0D /* Products */,
@@ -95,6 +96,9 @@
 		00AF416415BEFAF0000C1C0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00D10A3715C28EEF00214252 /* UIKit.framework */,
+				00BB4C4E15BFF1220026499F /* CFNetwork.framework */,
+				00BB4C4C15BFF11C0026499F /* Security.framework */,
 				00AF416515BEFAF0000C1C0D /* Foundation.framework */,
 			);
 			name = Frameworks;

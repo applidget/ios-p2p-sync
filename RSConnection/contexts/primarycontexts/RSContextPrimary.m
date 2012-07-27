@@ -10,7 +10,7 @@
 
 @implementation RSContextPrimary
 
-@synthesize connectedReplicas, netService;
+@synthesize connectedReplicas, netService, delegateAlreadyAwareOfCurrentState;
 
 - (void) activateWithServiceType:(NSString *) type andName:(NSString *) name {
   GCDAsyncSocket *contextSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
@@ -24,6 +24,8 @@
   self.socket.delegate = self;
   
   self.connectedReplicas = [NSMutableArray array];
+  
+  self.delegateAlreadyAwareOfCurrentState = NO;
   
   NSNetService *contextService = [[NSNetService alloc] initWithDomain:SERVICE_DOMAIN type:type name:name port:self.manager.port];
   self.netService = contextService;
@@ -61,6 +63,16 @@
   [sock setDelegate:nil delegateQueue:NULL];
   [self.connectedReplicas removeObject:sock];
   self.manager.nbConnections = self.connectedReplicas.count;
+}
+
+#pragma mark - backgrounding management
+- (void) appLeftBackground {
+  self.delegateAlreadyAwareOfCurrentState = YES; //No need to tell the delegate
+  /*
+   need delay because the delegate must have the time to call the method that indicate that the service stopped published when the app
+   went in background. Otherwise, it crashes
+  */
+  [self.netService performSelector:@selector(publish) withObject:nil afterDelay:0.1];
 }
 
 #pragma mark - memory management

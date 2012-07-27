@@ -73,6 +73,9 @@
 
 #pragma mark - NSNetServiceDelegate protocol
 - (void) netServiceDidPublish:(NSNetService *)sender {
+  
+  if(self.delegateAlreadyAwareOfCurrentState) return;
+  
   //Succeded to be arbiter, cancelling timer
   tookTooLongToLaunchService = NO;
   NSMutableArray *contextReceivedPriorities = [[NSMutableArray alloc] init];
@@ -84,8 +87,9 @@
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
-  //an other arbiter service is already launched
-  [self.manager changeContextWithNewContextType:kContextTypeElector];
+  if([[errorDict objectForKey:NSNetServicesErrorCode] intValue] == NSNetServicesCollisionError) {
+    [self.manager changeContextWithNewContextType:kContextTypeElector];
+  }
 }
 
 #pragma mark GCDAsyncSocketDelegate protocol

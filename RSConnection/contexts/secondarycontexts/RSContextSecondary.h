@@ -17,10 +17,12 @@
 @protected
   NSNetServiceBrowser *serviceBrowser;
   NSNetService *foundService;
+  NSString *searchedServiceType;
 }
 
 @property (nonatomic, retain) NSNetServiceBrowser *serviceBrowser;
 @property (nonatomic, retain) NSNetService *foundService;
+@property (nonatomic, retain) NSString *searchedServiceType;
 
 - (void) activateWithServiceType:(NSString *) type;
 

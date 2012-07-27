@@ -10,9 +10,10 @@
 
 @implementation RSContextSecondary
 
-@synthesize serviceBrowser, foundService;
+@synthesize serviceBrowser, foundService, searchedServiceType;
 
 - (void) activateWithServiceType:(NSString *)type {
+  self.searchedServiceType = type;
   NSNetServiceBrowser *contextServiceBrowser = [[NSNetServiceBrowser alloc] init];
   self.serviceBrowser = contextServiceBrowser;
   [contextServiceBrowser release];
@@ -57,8 +58,24 @@
   }
 }
 
+#pragma mark - backgrounding management
+- (void) relaunchServiceSearch {
+  [self.serviceBrowser searchForServicesOfType:self.searchedServiceType inDomain:SERVICE_DOMAIN];
+}
+
+- (void) appLeftBackground {
+  if(self.manager.nbConnections == 0) {
+    //Not connected, look for service
+    /*
+     Need delay to let the delegate method called of stop search to be called
+    */
+    [self performSelector:@selector(relaunchServiceSearch) withObject:nil afterDelay:0.1];
+  }
+}
+
 #pragma mark - memory management
 - (void) dealloc {
+  [searchedServiceType release];
   [serviceBrowser release];
   [foundService release];
   [super dealloc];

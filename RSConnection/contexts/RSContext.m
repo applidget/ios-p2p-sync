@@ -15,6 +15,9 @@
 - (id) initWithManager:(RSConnection *)contextManager {
   if(self = [super init]) {
     self.manager = contextManager;
+    if(&UIApplicationWillEnterForegroundNotification != nil) {
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appLeftBackground) name:UIApplicationWillEnterForegroundNotification object:nil];
+    }
   }
   return self;
 }
@@ -23,6 +26,8 @@
 - (void) activate {}
 - (void) unactivate {}
 - (void) writeData:(NSData *)data {}
+- (void) appDidEnterBackground {}
+- (void) appLeftBackground {}
 
 #pragma mark - GCDAsyncSocketDelegateProtcol
 - (void) socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {}
@@ -31,6 +36,7 @@
 
 #pragma mark - memory management
 - (void) dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
   [socket release];
   [super dealloc];
 }

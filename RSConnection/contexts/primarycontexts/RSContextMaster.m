@@ -8,8 +8,6 @@
 
 #import "RSContextMaster.h"
 
-#define HEART_BEAT_FREQUENCY 2
-
 @implementation RSContextMaster
 
 - (void) activate {  
@@ -18,12 +16,15 @@
 
 #pragma mark - NSNetServiceDelegate protocol
 - (void) netServiceDidPublish:(NSNetService *)sender {  
+  if(self.delegateAlreadyAwareOfCurrentState) return;
   [self.manager didUpdateStateInto:kConnectionStateMaster];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
   //maybe another master service already exist (a tie in the election ??)
-  [self.manager changeContextWithNewContextType:kContextTypeReplica];
+  if([[errorDict objectForKey:NSNetServicesErrorCode] intValue] == NSNetServicesCollisionError) {
+    [self.manager changeContextWithNewContextType:kContextTypeReplica];
+  }
 }
 
 #pragma mark - GCDAsyncSocket delegate

@@ -32,5 +32,7 @@
 - (void) activate;
 - (void) unactivate;
 - (void) writeData:(NSData *)data;
+- (void) appDidEnterBackground;
+- (void) appLeftBackground;
 
 @end
