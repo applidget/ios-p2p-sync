@@ -12,7 +12,17 @@
 
 #define ELECTOR_TIMEOUT 20
 
+@interface RSContextElector()
+
+@property (nonatomic, assign) kElectionResult electionResult;
+@property (nonatomic, retain) NSTimer *timeOutTimer;
+@property (nonatomic, assign) NSInteger priorityForElection;
+
+@end
+
 @implementation RSContextElector
+
+@synthesize electionResult, timeOutTimer, priorityForElection;
 
 - (void) electorContextTimedOut {
   //Manage the case where the network was shut down for a sec but the master didn't crash
@@ -21,8 +31,8 @@
 
 - (void) activate {
   [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.replicaSetName, ARBITER_SERVICE]];
-  electionResult = kElectionResultUnknown;
-  timeOutTimer = [NSTimer scheduledTimerWithTimeInterval:ELECTOR_TIMEOUT target:self selector:@selector(electorContextTimedOut) userInfo:nil repeats:NO];
+  self.electionResult = kElectionResultUnknown;
+  self.timeOutTimer = [NSTimer scheduledTimerWithTimeInterval:ELECTOR_TIMEOUT target:self selector:@selector(electorContextTimedOut) userInfo:nil repeats:NO];
 }
 
 #pragma mark - NSNetServiceBrowserDelegate
@@ -34,7 +44,7 @@
 - (void) socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
   self.socket.delegate = nil;
   kContextType newContextType;
-  switch (electionResult) {
+  switch (self.electionResult) {
     case kElectionResultWon:
       newContextType = kContextTypeMaster;
       break;
@@ -53,9 +63,9 @@
 
 - (void) socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
   [super socket:sock didConnectToHost:host port:port];
-  [timeOutTimer invalidate];
+  [self.timeOutTimer invalidate];
   [self.manager didUpdateStateInto:kConnectionStateElectorConnected];
-  priorityForElection = [self.manager getPriorityOfElector];
+  self.priorityForElection = [self.manager getPriorityOfElector];
   RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
                                            onChannel:kPriorityChannel
                                         emittingHost:self.socket.localHost];
@@ -71,16 +81,22 @@
     NSString *strPriority = receivedPacket.content;
     NSInteger priority = [strPriority intValue];
     if (priority == priorityForElection) {
-      electionResult = kElectionResultWon;
+      self.electionResult = kElectionResultWon;
     }
     else {
-      electionResult = kElectionResultLost;
+      self.electionResult = kElectionResultLost;
     }
   }
   else {
     [NSException raise:kUnknownPacketException format:@"Elector received a packet from an unknown channel %@", receivedPacket.channel];
   }
   [sock readDataToData:kPacketSeparator withTimeout:DEFAULT_TIMEOUT tag:0];
+}
+
+#pragma mark -memory management
+- (void) dealloc {
+  [timeOutTimer release];
+  [super dealloc];
 }
 
 @end

@@ -17,6 +17,7 @@
 
 @property (nonatomic, retain) NSMutableArray *receivedPriorities;
 @property (nonatomic, assign) BOOL tookTooLongToLaunchService;
+@property (nonatomic, assign) NSInteger priorityForElection;
 
 - (void) announceNewMaster;
 
@@ -24,7 +25,7 @@
 
 @implementation RSContextArbiter
 
-@synthesize receivedPriorities, tookTooLongToLaunchService;
+@synthesize receivedPriorities, tookTooLongToLaunchService, priorityForElection;
 
 - (void) didLaunchService {
   if(self.tookTooLongToLaunchService) {
@@ -52,7 +53,7 @@
     }
   }
 
-  if(highestPrio > priorityForElection) {
+  if(highestPrio > self.priorityForElection) {
     RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", highestPrio]
                                              onChannel:kPriorityChannel
                                           emittingHost:self.socket.localHost];
@@ -61,7 +62,7 @@
     [self.manager changeContextWithNewContextType:kContextTypeReplica];
   }
   else { //Arbiter has highest prio, becomes master
-    RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
+    RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", self.priorityForElection]
                                              onChannel:kPriorityChannel
                                           emittingHost:self.socket.localHost];
     [self writeData:[prioPacket representingData]];
@@ -79,7 +80,7 @@
   [contextReceivedPriorities release];
   [self performSelector:@selector(announceNewMaster) withObject:nil afterDelay:ELECTION_TIME];
   [self.manager didUpdateStateInto:kConnectionStateArbiter];
-  priorityForElection = [self.manager getPriorityOfElector];
+  self.priorityForElection = [self.manager getPriorityOfElector];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
