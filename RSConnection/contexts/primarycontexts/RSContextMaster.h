@@ -6,9 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-/*
- Master context got incoming connection from devices in a replica context
- It sends an heartbeat every 2 seconds to every replicas connected to it.
+/**
+ Master context
 */
 
 #import "RSContextPrimary.h"

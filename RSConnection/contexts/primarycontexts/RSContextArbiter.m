@@ -15,10 +15,14 @@
 
 @interface RSContextArbiter()
 
-@property (nonatomic, retain) NSMutableArray *receivedPriorities;
-@property (nonatomic, assign) BOOL tookTooLongToLaunchService;
-@property (nonatomic, assign) NSInteger priorityForElection;
+///Arbiter will receive electors priorities and stock it into an array
+@property (nonatomic, retain) NSMutableArray *receivedPriorities;   
+///If the arbiter can't be launched within a certain interval, it means that one already exists
+@property (nonatomic, assign) BOOL tookTooLongToLaunchService;      
+///Arbiter's own priority
+@property (nonatomic, assign) NSInteger priorityForElection;        
 
+/** Method called when the election time is elapsed */
 - (void) announceNewMaster;
 
 @end

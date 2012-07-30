@@ -7,17 +7,17 @@
 //
 
 /*
- Arbiter context got incoming connection from device in elector context. This context is only used to allow devices to
- communicate when the previous master device crashed. Its role is to manage the election of the new master. For that, 
- every elector devices that connect send their priority. The arbiter stores each priority in the reiceivedPriority array.
- When ELECTION_TIME has been elapsed:
- - if arbiter has the highest priority, it becomes the master (change its context to master)
- - else it sends to every elector the winning priority and change its context to replica.
+ Arbiter context is launched automatically by all replicas which lost master connection. Only one will succeed to become arbiter. 
 */
 
 #import "RSContextPrimary.h"
 
-#define ELECTION_TIME 7
+/** 
+ Define the election time in seconds. This can be shorter if the number of device in the replica set is low. 
+ @warning : if the connection uses password, election time might need to be higher. This need to be tested but 7 seconds was
+ widely enough for 12 devices.
+*/
+#define ELECTION_TIME 7 
 
 @interface RSContextArbiter : RSContextPrimary {
 @private

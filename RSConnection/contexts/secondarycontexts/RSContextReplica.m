@@ -13,8 +13,6 @@
 
 - (void) activate {
   [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.replicaSetName, MASTER_SERVICE]];
-  NSLog(@"activated replica");
-
 }
 
 #pragma mark - NSNetServiceBrowserDelegate

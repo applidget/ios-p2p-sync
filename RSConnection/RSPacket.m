@@ -22,7 +22,7 @@
 - (id) initWithContent:(id)packetContent onChannel:(NSString*)packetChannel emittingHost:(NSString *)packetEmittingHost {
   if(self = [super init]) {
     if(![packetContent conformsToProtocol:@protocol(NSCoding)]) {
-      [NSException raise:kObjectNotConformToNSCodingProtocol format:@"object send must implement the NSCoding protocol"];
+      [NSException raise:kObjectNotConformToNSCodingProtocolException format:@"object send must implement the NSCoding protocol"];
     }
     self.channel = packetChannel;
     self.content = packetContent;
@@ -39,13 +39,18 @@
 
 + (RSPacket *) packetFromData:(NSData *) data {
   //Remove data separator
-  NSMutableData *mutableData = [NSMutableData dataWithData:data];
-  [mutableData setLength:(data.length - kPacketSeparator.length)];
-  NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mutableData];
-  RSPacket *packet = [[unarchiver decodeObjectForKey:kArchiveKey] retain];
-  [unarchiver finishDecoding];
-  [unarchiver release];
-  return packet;
+  @try {
+    NSMutableData *mutableData = [NSMutableData dataWithData:data];
+    [mutableData setLength:(data.length - kPacketSeparator.length)];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mutableData];
+    RSPacket *packet = [[unarchiver decodeObjectForKey:kArchiveKey] retain];
+    [unarchiver finishDecoding];
+    [unarchiver release];
+    return packet;
+  }
+  @catch (NSException *exception) {
+    [NSException raise:kReceivedBadDataException format:@"Received a packet that can't be unarchived"];
+  }
 }
 
 - (NSData *) representingData {

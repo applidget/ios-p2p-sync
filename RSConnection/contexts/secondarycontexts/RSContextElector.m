@@ -14,9 +14,12 @@
 
 @interface RSContextElector()
 
-@property (nonatomic, assign) kElectionResult electionResult;
-@property (nonatomic, retain) NSTimer *timeOutTimer;
-@property (nonatomic, assign) NSInteger priorityForElection;
+///Result of the election
+@property (nonatomic, assign) kElectionResult electionResult;   
+///If no result within 30 seconds, the elector becomes replica
+@property (nonatomic, retain) NSTimer *timeOutTimer;            
+///Priority of self for the election
+@property (nonatomic, assign) NSInteger priorityForElection;    
 
 @end
 
