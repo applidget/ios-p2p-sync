@@ -9,23 +9,23 @@
 /* Begin PBXBuildFile section */
 		00AF416615BEFAF0000C1C0D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AF416515BEFAF0000C1C0D /* Foundation.framework */; };
 		00AF416C15BEFAF0000C1C0D /* RSConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF416B15BEFAF0000C1C0D /* RSConnection.m */; };
-		00AF417515BEFB75000C1C0D /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417315BEFB75000C1C0D /* GCDAsyncSocket.h */; };
+		00AF417515BEFB75000C1C0D /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417315BEFB75000C1C0D /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		00AF417615BEFB75000C1C0D /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF417415BEFB75000C1C0D /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		00AF417C15BEFC9F000C1C0D /* RSContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417A15BEFC9F000C1C0D /* RSContext.h */; };
+		00AF417C15BEFC9F000C1C0D /* RSContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417A15BEFC9F000C1C0D /* RSContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00AF417D15BEFC9F000C1C0D /* RSContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF417B15BEFC9F000C1C0D /* RSContext.m */; };
-		00AF418415BEFCAA000C1C0D /* RSContextArbiter.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417E15BEFCAA000C1C0D /* RSContextArbiter.h */; };
+		00AF418415BEFCAA000C1C0D /* RSContextArbiter.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF417E15BEFCAA000C1C0D /* RSContextArbiter.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		00AF418515BEFCAA000C1C0D /* RSContextArbiter.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF417F15BEFCAA000C1C0D /* RSContextArbiter.m */; };
-		00AF418615BEFCAA000C1C0D /* RSContextMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418015BEFCAA000C1C0D /* RSContextMaster.h */; };
+		00AF418615BEFCAA000C1C0D /* RSContextMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418015BEFCAA000C1C0D /* RSContextMaster.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		00AF418715BEFCAA000C1C0D /* RSContextMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418115BEFCAA000C1C0D /* RSContextMaster.m */; };
-		00AF418815BEFCAA000C1C0D /* RSContextPrimary.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418215BEFCAA000C1C0D /* RSContextPrimary.h */; };
+		00AF418815BEFCAA000C1C0D /* RSContextPrimary.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418215BEFCAA000C1C0D /* RSContextPrimary.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		00AF418915BEFCAA000C1C0D /* RSContextPrimary.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418315BEFCAA000C1C0D /* RSContextPrimary.m */; };
-		00AF419015BEFCB4000C1C0D /* RSContextElector.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418A15BEFCB4000C1C0D /* RSContextElector.h */; };
+		00AF419015BEFCB4000C1C0D /* RSContextElector.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418A15BEFCB4000C1C0D /* RSContextElector.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		00AF419115BEFCB4000C1C0D /* RSContextElector.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418B15BEFCB4000C1C0D /* RSContextElector.m */; };
-		00AF419215BEFCB4000C1C0D /* RSContextReplica.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418C15BEFCB4000C1C0D /* RSContextReplica.h */; };
+		00AF419215BEFCB4000C1C0D /* RSContextReplica.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418C15BEFCB4000C1C0D /* RSContextReplica.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		00AF419315BEFCB4000C1C0D /* RSContextReplica.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418D15BEFCB4000C1C0D /* RSContextReplica.m */; };
-		00AF419415BEFCB4000C1C0D /* RSContextSecondary.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418E15BEFCB4000C1C0D /* RSContextSecondary.h */; };
+		00AF419415BEFCB4000C1C0D /* RSContextSecondary.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF418E15BEFCB4000C1C0D /* RSContextSecondary.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		00AF419515BEFCB4000C1C0D /* RSContextSecondary.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF418F15BEFCB4000C1C0D /* RSContextSecondary.m */; };
-		00AF419815BEFCF7000C1C0D /* RSPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF419615BEFCF7000C1C0D /* RSPacket.h */; };
+		00AF419815BEFCF7000C1C0D /* RSPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AF419615BEFCF7000C1C0D /* RSPacket.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		00AF419915BEFCF7000C1C0D /* RSPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AF419715BEFCF7000C1C0D /* RSPacket.m */; };
 		00BB4C4D15BFF11C0026499F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BB4C4C15BFF11C0026499F /* Security.framework */; };
 		00BB4C4F15BFF1220026499F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BB4C4E15BFF1220026499F /* CFNetwork.framework */; };
@@ -183,8 +183,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00AF417515BEFB75000C1C0D /* GCDAsyncSocket.h in Headers */,
 				00AF417C15BEFC9F000C1C0D /* RSContext.h in Headers */,
+				00AF417515BEFB75000C1C0D /* GCDAsyncSocket.h in Headers */,
 				00AF418415BEFCAA000C1C0D /* RSContextArbiter.h in Headers */,
 				00AF418615BEFCAA000C1C0D /* RSContextMaster.h in Headers */,
 				00AF418815BEFCAA000C1C0D /* RSContextPrimary.h in Headers */,

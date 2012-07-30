@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "RSPacket.h"
 
 //Network information
 #define MASTER_SERVICE @"M._tcp."
@@ -69,7 +68,7 @@ typedef enum {
   kConnectionStateElectorConnected        ///the elector is now connected to the arbiter and can will soon send its priority to become master
 } kConnectionState;
 
-@class RSConnection, RSContext;
+@class RSConnection, RSContext, RSPacket;
 
 /** RSConnectionDelegateProtocol */
 @protocol RSConnectionDelegateProtocol <NSObject>

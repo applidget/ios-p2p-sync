@@ -11,6 +11,7 @@
 #import "RSContextElector.h"
 #import "RSContextMaster.h"
 #import "RSContextReplica.h"
+#import "RSPacket.h"
 
 @interface RSConnection()
 
