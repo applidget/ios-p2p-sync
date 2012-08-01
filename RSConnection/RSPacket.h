@@ -29,9 +29,9 @@
 
 @interface RSPacket : NSObject <NSCoding> {
 @private
-  NSString *channel;
-  id content;
-  NSString *emittingHost;
+  NSString *_channel;
+  id _content;
+  NSString *_emittingHost;
 }
 
 ///Name of the channel the packet is sent on

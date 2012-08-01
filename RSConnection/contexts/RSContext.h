@@ -21,8 +21,8 @@
 
 @interface RSContext : NSObject <GCDAsyncSocketDelegate, NSNetServiceDelegate> {
 @protected
-  RSConnection *manager;
-  GCDAsyncSocket *socket;
+  RSConnection *_manager;
+  GCDAsyncSocket *_socket;
 }
 
 ///Context manager, RSConnection instance

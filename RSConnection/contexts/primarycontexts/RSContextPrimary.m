@@ -10,7 +10,7 @@
 
 @implementation RSContextPrimary
 
-@synthesize connectedReplicas, netService, delegateAlreadyAwareOfCurrentState, waitingConnections;
+@synthesize connectedReplicas=_connectedReplicas, netService=_netService, delegateAlreadyAwareOfCurrentState=_delegateAlreadyAwareOfCurrentState, waitingConnections=_waitingConnections;
 
 - (void) activateWithServiceType:(NSString *) type andName:(NSString *) name {
   GCDAsyncSocket *contextSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
@@ -102,8 +102,9 @@
 
 #pragma mark - memory management
 - (void) dealloc {
-  [connectedReplicas release];
-  [netService release];
+  [_connectedReplicas release];
+  [_waitingConnections release];
+  [_netService release];
   [super dealloc];
 }
 

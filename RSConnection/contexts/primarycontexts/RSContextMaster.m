@@ -63,7 +63,7 @@
     }
     else {
       [sock disconnect];
-      [waitingConnections removeObject:sock];
+      [self.waitingConnections removeObject:sock];
     }
   }
   else {

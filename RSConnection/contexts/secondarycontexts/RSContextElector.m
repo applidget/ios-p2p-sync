@@ -25,7 +25,7 @@
 
 @implementation RSContextElector
 
-@synthesize electionResult, timeOutTimer, priorityForElection;
+@synthesize electionResult=_electionResult, timeOutTimer=_timeOutTimer, priorityForElection=_priorityForElection;
 
 - (void) electorContextTimedOut {
   //Manage the case where the network was shut down for a sec but the master didn't crash
@@ -66,7 +66,7 @@
 }
 
 - (void) sendPriorityPacket {
-  RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", priorityForElection]
+  RSPacket *prioPacket = [RSPacket packetWithContent:[NSString stringWithFormat:@"%i", self.priorityForElection]
                                            onChannel:kPriorityChannel
                                         emittingHost:self.socket.localHost];
   
@@ -90,7 +90,7 @@
   if([receivedPacket.channel isEqualToString:kPriorityChannel]) {
     NSString *strPriority = receivedPacket.content;
     NSInteger priority = [strPriority intValue];
-    if (priority == priorityForElection) {
+    if (priority == self.priorityForElection) {
       self.electionResult = kElectionResultWon;
     }
     else {
@@ -111,7 +111,7 @@
 
 #pragma mark -memory management
 - (void) dealloc {
-  [timeOutTimer release];
+  [_timeOutTimer release];
   [super dealloc];
 }
 

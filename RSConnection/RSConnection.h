@@ -108,14 +108,14 @@ typedef enum {
 
 @interface RSConnection : NSObject {
 @private
-  id<RSConnectionDelegateProtocol> delegate;
-  RSContext *context;
-  NSInteger port;
-  NSString *replicaSetName;
-  kContextType currentContextType;
-  NSInteger nbConnections;
-  BOOL closeConnectionWhenBackgrounded;
-  BOOL usePasswordForConnection;
+  id<RSConnectionDelegateProtocol> _delegate;
+  RSContext *_context;
+  NSInteger _port;
+  NSString *_replicaSetName;
+  kContextType _currentContextType;
+  NSInteger _nbConnections;
+  BOOL _closeConnectionWhenBackgrounded;
+  BOOL _usePasswordForConnection;
 }
 ///RSConnection delegate. Must be set before joining a rpelica set
 @property (nonatomic, assign) id<RSConnectionDelegateProtocol> delegate; 

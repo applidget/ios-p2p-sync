@@ -21,7 +21,7 @@
 
 @implementation RSConnection
 
-@synthesize delegate, port, replicaSetName, context, currentContextType, nbConnections, closeConnectionWhenBackgrounded, usePasswordForConnection;
+@synthesize delegate=_delegate, port=_port, replicaSetName=_replicaSetName, context=_context, currentContextType=_currentContextType, nbConnections=_nbConnections, closeConnectionWhenBackgrounded=_closeConnectionWhenBackgrounded, usePasswordForConnection=_usePasswordForConnectione;
 
 #pragma mark - Context
 - (void) activateContext:(RSContext *) newContext {
@@ -37,19 +37,19 @@
   
   switch (newContextType) {
     case kContextTypeReplica:
-      currentContextType = kContextTypeReplica;
+      _currentContextType = kContextTypeReplica;
       newContext = [[RSContextReplica alloc] initWithManager:self];
       break;
     case kContextTypeMaster:
-      currentContextType = kContextTypeMaster;
+      _currentContextType = kContextTypeMaster;
       newContext = [[RSContextMaster alloc] initWithManager:self];
       break;
     case kContextTypeArbiter:
-      currentContextType = kContextTypeArbiter;
+      _currentContextType = kContextTypeArbiter;
       newContext = [[RSContextArbiter alloc] initWithManager:self];
       break;
     case kContextTypeElector:
-      currentContextType = kContextTypeElector;
+      _currentContextType = kContextTypeElector;
       newContext = [[RSContextElector alloc] initWithManager:self];
     default:
       break;
@@ -198,9 +198,9 @@
 }
 
 - (void) dealloc {
-  [replicaSetName release];
-  [context unactivate];
-  [context release];
+  [_replicaSetName release];
+  [_context unactivate];
+  [_context release];
   [super dealloc];
 }
 

@@ -21,9 +21,9 @@
 
 @interface RSContextArbiter : RSContextPrimary {
 @private
-  NSMutableArray *receivedPriorities;
-  BOOL tookTooLongToLaunchService;
-  NSInteger priorityForElection;
+  NSMutableArray *_receivedPriorities;
+  BOOL _tookTooLongToLaunchService;
+  NSInteger _priorityForElection;
 }
 
 @end

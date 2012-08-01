@@ -15,9 +15,9 @@
 
 @interface RSContextSecondary : RSContext <NSNetServiceBrowserDelegate> {
 @protected
-  NSNetServiceBrowser *serviceBrowser;
-  NSNetService *foundService;
-  NSString *searchedServiceType;
+  NSNetServiceBrowser *_serviceBrowser;
+  NSNetService *_foundService;
+  NSString *_searchedServiceType;
 }
 
 ///Used to search for Bonjour services on the network

@@ -29,7 +29,7 @@
 
 @implementation RSContextArbiter
 
-@synthesize receivedPriorities, tookTooLongToLaunchService, priorityForElection;
+@synthesize receivedPriorities=_receivedPriorities, tookTooLongToLaunchService=_tookTooLongToLaunchService, priorityForElection=_priorityForElection;
 
 - (void) didLaunchService {
   if(self.tookTooLongToLaunchService) {
@@ -40,7 +40,7 @@
 - (void) activate {  
   [super activateWithServiceType:[NSString stringWithFormat:@"%@%@", self.manager.replicaSetName ,ARBITER_SERVICE] andName:@"arbiter"];
   
-  tookTooLongToLaunchService = YES;
+  self.tookTooLongToLaunchService = YES;
   [self performSelector:@selector(didLaunchService) withObject:nil afterDelay:MAX_TIME_TO_ACTIVE];
   [self.manager didUpdateStateInto:kConnectionStateFightingToBeArbiter];
 }
@@ -81,7 +81,7 @@
   if(self.delegateAlreadyAwareOfCurrentState) return;
   
   //Succeded to be arbiter, cancelling timer
-  tookTooLongToLaunchService = NO;
+  self.tookTooLongToLaunchService = NO;
   NSMutableArray *contextReceivedPriorities = [[NSMutableArray alloc] init];
   self.receivedPriorities = contextReceivedPriorities;
   [contextReceivedPriorities release];
@@ -119,7 +119,7 @@
     }
     else {
       [sock disconnect];
-      [waitingConnections removeObject:sock];
+      [self.waitingConnections removeObject:sock];
     }
   }
   else {
@@ -131,7 +131,7 @@
 
 #pragma mark - memory management
 - (void) dealloc {
-  [receivedPriorities release];
+  [self.receivedPriorities release];
   [super dealloc];
 }
 

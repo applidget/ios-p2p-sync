@@ -16,7 +16,7 @@
 
 @implementation RSPacket
 
-@synthesize channel, content, emittingHost;
+@synthesize channel=_channel, content=_content, emittingHost=_emittingHost;
 
 //Constructor
 - (id) initWithContent:(id)packetContent onChannel:(NSString*)packetChannel emittingHost:(NSString *)packetEmittingHost {
@@ -82,8 +82,8 @@
 
 #pragma mark - memory management
 - (void) dealloc {
-  [channel release];
-  [emittingHost release];
+  [_channel release];
+  [_emittingHost release];
   [super dealloc];
 }
 

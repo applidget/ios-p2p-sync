@@ -10,7 +10,7 @@
 
 @implementation RSContextSecondary
 
-@synthesize serviceBrowser, foundService, searchedServiceType;
+@synthesize serviceBrowser=_serviceBrowser, foundService=_foundService, searchedServiceType=_searchedServiceType;
 
 - (void) activateWithServiceType:(NSString *)type {
   self.searchedServiceType = type;
@@ -57,7 +57,7 @@
   [contextSocket release];
   self.socket.delegate = self;
   NSError *error = nil;
-  if (![socket connectToHost:netService.hostName onPort:netService.port error:&error]) {
+  if (![self.socket connectToHost:netService.hostName onPort:netService.port error:&error]) {
     [self.manager failedToOpenSocketWithError:error];
   }
 }
@@ -90,9 +90,9 @@
 
 #pragma mark - memory management
 - (void) dealloc {
-  [searchedServiceType release];
-  [serviceBrowser release];
-  [foundService release];
+  [_searchedServiceType release];
+  [_serviceBrowser release];
+  [_foundService release];
   [super dealloc];
 }
 

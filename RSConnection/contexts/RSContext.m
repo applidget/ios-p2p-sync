@@ -10,7 +10,7 @@
 
 @implementation RSContext
 
-@synthesize manager, socket;
+@synthesize manager=_manager, socket=_socket;
 
 - (id) initWithManager:(RSConnection *)contextManager {
   if(self = [super init]) {
@@ -45,7 +45,7 @@
 #pragma mark - memory management
 - (void) dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [socket release];
+  [_socket release];
   [super dealloc];
 }
 

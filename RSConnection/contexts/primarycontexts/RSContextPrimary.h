@@ -15,10 +15,10 @@
 
 @interface RSContextPrimary : RSContext {
 @protected
-  NSMutableArray *connectedReplicas;
-  NSMutableArray *waitingConnections;
-  NSNetService *netService;
-  BOOL delegateAlreadyAwareOfCurrentState;
+  NSMutableArray *_connectedReplicas;
+  NSMutableArray *_waitingConnections;
+  NSNetService *_netService;
+  BOOL _delegateAlreadyAwareOfCurrentState;
 }
 
 ///Array of socket allowed to send data

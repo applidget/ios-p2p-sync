@@ -21,9 +21,9 @@ typedef enum {
 
 @interface RSContextElector : RSContextSecondary {
 @private
-  kElectionResult electionResult;
-  NSTimer *timeOutTimer;
-  NSInteger priorityForElection;
+  kElectionResult _electionResult;
+  NSTimer *_timeOutTimer;
+  NSInteger _priorityForElection;
 }
 
 @end
